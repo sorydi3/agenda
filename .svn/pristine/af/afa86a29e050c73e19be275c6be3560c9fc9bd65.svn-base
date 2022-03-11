@@ -1,0 +1,7 @@
+package agendaproduccio.utils;
+
+public class MyTimer {
+   public MyTimer() {
+	   
+   }
+}

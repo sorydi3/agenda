@@ -1,0 +1,25 @@
+package agendaproduccio.utils;
+import java.awt.Color;
+import java.awt.Graphics;
+
+import javax.swing.JComboBox;
+
+public class JComboBoxPersonalitzat extends JComboBox<Object> 
+{	
+	public JComboBoxPersonalitzat(String[] l_llistaSetmanes)
+	{
+		super( l_llistaSetmanes );
+	}
+
+	public JComboBoxPersonalitzat()
+	{
+		super();
+	}
+	
+	public void paint(Graphics g) 
+    {
+        setBackground(Color.WHITE);
+        setForeground(Color.BLACK);
+        super.paint(g);
+    }
+}

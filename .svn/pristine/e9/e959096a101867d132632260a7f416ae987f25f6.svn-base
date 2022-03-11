@@ -1,0 +1,139 @@
+package agendaproduccio.models.entitatsbddAgenda.model;
+
+public class OrderLiniaRutaPNavison {
+
+	// ----- COLUMNES ORDER_P_NAVISION
+	public String m_nI_Num_Orden_Produccion_o;
+	public String m_nI_Descripcion_2_o;
+	public String m_nI_Data_Prevista_Original_o;
+	public String m_nI_Hora_Prevista_Original_o;
+	public String m_nI_Ample_Bobina_o;
+	public boolean m_terminada_Navision_o;
+	public String m_uI_Estado_CP_o;
+	public boolean m_nM_Repas_Informacio_o;
+	public boolean m_numComandes_o;
+	public boolean m_signada_o;
+	public String m_nI_Data_Prevista_Cobertes_o;
+	public String m_nI_Hora_Prevista_Cobertes_o;
+
+	// ----- COLUMNES TAULA RUTA_ORDER_P_NAVISION
+	public String m_uI_Estado_r;
+
+	// ----- COLUMNES TAULA LINIA_ORDER_P_NAVISION
+	public String m_nI_Num_Orden_Produccion_l;
+	public int m_nI_Identificador_Tiratge_l;
+	public String m_nI_Cantidad_l;
+	public String m_nI_No_Planes_Totals_Tiratge_l;
+	public String m_nI_Format_Tiratge_l;
+	public String m_nI_Plegat_Tiratge_l;
+	public String m_nI_Nom_Maquina_l;
+	public String m_nI_Codi_Grup_Producto_l;
+	public boolean m_planificat_l;
+	public int m_uI_Id_Lin_Ordre_P_Navision_l;
+	public String m_dataEntregaManipuladorExtern_l;
+	public boolean m_planificat_Manipulat_Extern_l;
+
+	public OrderLiniaRutaPNavison() {
+		this.setDefault();
+	}
+
+	public void setDefault() {
+		// COLUMNES TAULA ORDER_P_NAVISION
+		m_nI_Num_Orden_Produccion_o = "";
+		m_nI_Descripcion_2_o = "";
+		m_nI_Data_Prevista_Original_o = "";
+		m_nI_Hora_Prevista_Original_o = "";
+		m_nI_Ample_Bobina_o = "";
+		m_terminada_Navision_o = false;
+		m_uI_Estado_CP_o = "";
+		m_nM_Repas_Informacio_o = false;
+		m_numComandes_o = false;
+		m_signada_o = false;
+		m_nI_Data_Prevista_Cobertes_o = "";
+		m_nI_Hora_Prevista_Cobertes_o = "";
+
+		// ----- COLUMNES TAULA RUTA_ORDER_P_NAVISION
+		m_uI_Estado_r = "";
+
+		// ----- COLUMNES TAULA LINIA_ORDER_P_NAVISION
+		m_nI_Num_Orden_Produccion_l = "";
+		m_nI_Identificador_Tiratge_l = 0;
+		m_nI_Cantidad_l = "";
+		m_nI_No_Planes_Totals_Tiratge_l = "";
+		m_nI_Format_Tiratge_l = "";
+		m_nI_Plegat_Tiratge_l = "";
+		m_nI_Nom_Maquina_l = "";
+		m_nI_Codi_Grup_Producto_l = "";
+		m_planificat_l = false;
+		m_uI_Id_Lin_Ordre_P_Navision_l = 0;
+		m_dataEntregaManipuladorExtern_l = "";
+		m_planificat_Manipulat_Extern_l = false;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("OrderLiniaRutaPNavison [m_nI_Num_Orden_Produccion_o=");
+		builder.append(m_nI_Num_Orden_Produccion_o);
+		builder.append(", m_nI_Descripcion_2_o=");
+		builder.append(m_nI_Descripcion_2_o);
+		builder.append(", m_nI_Data_Prevista_Original_o=");
+		builder.append(m_nI_Data_Prevista_Original_o);
+		builder.append(", m_nI_Hora_Prevista_Original_o=");
+		builder.append(m_nI_Hora_Prevista_Original_o);
+		builder.append(", m_nI_Ample_Bobina_o=");
+		builder.append(m_nI_Ample_Bobina_o);
+		builder.append(", m_terminada_Navision_o=");
+		builder.append(m_terminada_Navision_o);
+		builder.append(", m_uI_Estado_CP_o=");
+		builder.append(m_uI_Estado_CP_o);
+		builder.append(", m_nM_Repas_Informacio_o=");
+		builder.append(m_nM_Repas_Informacio_o);
+		builder.append(", m_numComandes_o=");
+		builder.append(m_numComandes_o);
+		builder.append(", m_signada_o=");
+		builder.append(m_signada_o);
+		builder.append(", m_nI_Data_Prevista_Cobertes_o=");
+		builder.append(m_nI_Data_Prevista_Cobertes_o);
+		builder.append(", m_nI_Hora_Prevista_Cobertes_o=");
+		builder.append(m_nI_Hora_Prevista_Cobertes_o);
+		builder.append(", m_uI_Estado_r=");
+		builder.append(m_uI_Estado_r);
+		builder.append(", m_nI_Num_Orden_Produccion_l=");
+		builder.append(m_nI_Num_Orden_Produccion_l);
+		builder.append(", m_nI_Identificador_Tiratge_l=");
+		builder.append(m_nI_Identificador_Tiratge_l);
+		builder.append(", m_nI_Cantidad_l=");
+		builder.append(m_nI_Cantidad_l);
+		builder.append(", m_nI_No_Planes_Totals_Tiratge_l=");
+		builder.append(m_nI_No_Planes_Totals_Tiratge_l);
+		builder.append(", m_nI_Format_Tiratge_l=");
+		builder.append(m_nI_Format_Tiratge_l);
+		builder.append(", m_nI_Plegat_Tiratge_l=");
+		builder.append(m_nI_Plegat_Tiratge_l);
+		builder.append(", m_nI_Nom_Maquina_l=");
+		builder.append(m_nI_Nom_Maquina_l);
+		builder.append(", m_nI_Codi_Grup_Producto_l=");
+		builder.append(m_nI_Codi_Grup_Producto_l);
+		builder.append(", m_planificat_l=");
+		builder.append(m_planificat_l);
+		builder.append(", m_uI_Id_Lin_Ordre_P_Navision_l=");
+		builder.append(m_uI_Id_Lin_Ordre_P_Navision_l);
+		builder.append(", m_dataEntregaManipuladorExtern_l=");
+		builder.append(m_dataEntregaManipuladorExtern_l);
+		builder.append(", m_planificat_Manipulat_Extern_l=");
+		builder.append(m_planificat_Manipulat_Extern_l);
+		builder.append("]");
+		return builder.toString();
+	}
+
+}

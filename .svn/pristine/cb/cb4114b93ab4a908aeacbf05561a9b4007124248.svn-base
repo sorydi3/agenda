@@ -1,0 +1,373 @@
+package agendaproduccio.utils;
+
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
+
+import agendaproduccio.views.renderers.HighlightRenderer;
+import agendaproduccio.views.renderers.IntegerRenderer;
+
+/** Classe que ens implementa una Taula el m�s gen�rica possible per poder-la utilitzar en diversos lloc */
+
+@SuppressWarnings("serial")
+public class JTaula extends JTable
+{	
+	private DefaultTableModel m_dtmModel;
+	private TableRowSorter<DefaultTableModel> m_rwsModelOrdenat;
+	
+public JTaula(String p_columnes[])
+{	
+	m_dtmModel = new DefaultTableModel(p_columnes,0)				
+	{	
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		public Class getColumnClass(int c)
+		{
+			return String.class;  				
+		}
+		public boolean isCellEditable(int row, int col)
+		{	
+			return false;
+		}
+		public void setValueAt(Object obj, int row, int col) 
+		{
+			super.setValueAt(obj, row, col); 
+		}
+		public Object getValueAt(int row, int col) 
+		{
+			return(super.getValueAt(row, col)); 
+		}      	
+	};
+	
+	this.setModel(m_dtmModel);
+	this.getTableHeader().setReorderingAllowed(false);
+	this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
+	this.setRowHeight(18);
+	
+	// Aquest sent�ncia �s per poder corregir el problema de la perdua de focus quan est�s editant una CELL
+	this.putClientProperty("terminateEditOnFocusLost", true);
+	
+    m_rwsModelOrdenat = new TableRowSorter<DefaultTableModel>(m_dtmModel);
+	this.setRowSorter(m_rwsModelOrdenat);
+}
+
+public JTaula( DefaultTableModel p_dtmModel)
+{
+	m_dtmModel = p_dtmModel;
+	this.setModel(m_dtmModel);
+	this.getTableHeader().setReorderingAllowed(false);
+	this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
+	this.setRowHeight(18);
+	
+	this.putClientProperty("terminateEditOnFocusLost", true);
+	
+    m_rwsModelOrdenat = new TableRowSorter<DefaultTableModel>(m_dtmModel);
+	this.setRowSorter(m_rwsModelOrdenat);	
+}
+
+//M�tode que mostra un Tooltip de les dades que hi ha a la Taula. D'aquesta manera es poden veure dades que normalment quedarien tapades.
+public Component prepareRenderer(TableCellRenderer renderer,int rowIndex, int vColIndex) 
+ {
+   Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+   if (c instanceof JComponent) 
+   {
+     JComponent jc = (JComponent)c;
+     try {jc.setToolTipText((String) getValueAt(rowIndex, vColIndex));}
+     catch (Exception e){}
+   }
+   return c;
+}
+
+/** M�TODE: M�tode per redefinir el comparador d'una colmuna en format DD/MM/AAAA HH:NNN:SS */
+public void SetColumnComparadorDates( int p_column )
+{
+	m_rwsModelOrdenat.setComparator( p_column, new Comparator<String>() 
+	{	 
+	    @Override
+	    public int compare( String name1, String name2 ) 
+	    {
+	    	String l_data1, l_data2;
+	    	
+	        try 
+	        {
+	        	String l_hora;
+				l_hora = ( name1.substring( name1.indexOf(" ")+1, name1.length() ) ).trim();
+				l_data1 = ( name1.substring( 0, name1.indexOf(" ") ) ).trim();
+				
+				String l_data[] = l_data1.split( "/" );
+				l_data1 = l_data[2] +"-"+l_data[1]+"-"+l_data[0]+" "+l_hora;
+			}
+	        catch (Exception e) 
+	        {
+	        	l_data1 = "";
+			}
+	        
+	        try 
+	        {
+	        	String l_hora;
+				l_hora = ( name2.substring( name2.indexOf(" ")+1, name2.length() ) ).trim();
+				l_data2 = ( name2.substring( 0, name2.indexOf(" ") ) ).trim();
+				
+				String l_data[] = l_data2.split( "/" );
+				l_data2 = l_data[2] +"-"+l_data[1]+"-"+l_data[0]+" "+l_hora;
+			}
+	        catch (Exception e) 
+	        {
+	        	l_data2 = "";
+			}
+	        
+	    	return l_data1.compareTo( l_data2 );
+	    }
+	});
+}
+
+/** M�TODE: M�tode que ens permet definir la mida m�xima i m�nima d'una columna determinada de la taula (A trav�s del n�mero de Columna)*/
+public void SetColumnSize(int p_columnNumber, int p_minim, int p_maxim)
+{
+	TableColumn	l_modelColumn = this.getColumnModel().getColumn(p_columnNumber);	
+	l_modelColumn.setMinWidth(p_minim); l_modelColumn.setMaxWidth(p_maxim);  l_modelColumn.setPreferredWidth(p_maxim);
+	l_modelColumn = null;
+}
+
+public void SetColumnSize(int p_columnNumber, int p_minim, int p_maxim, int p_preferred)
+{
+	TableColumn	l_modelColumn = this.getColumnModel().getColumn(p_columnNumber);	
+	l_modelColumn.setMinWidth(p_minim); l_modelColumn.setMaxWidth(p_maxim);  l_modelColumn.setPreferredWidth(p_preferred);
+	l_modelColumn = null;
+}
+
+/** M�TODE: M�tode que ens permet definir la mida Prefered d'una columna determinada de la taula (A trav�s del n�mero de Columna)*/
+public void SetColumnPreferedSize( int p_columnNumber, int p_mida )
+{
+	TableColumn	l_modelColumn = this.getColumnModel().getColumn(p_columnNumber);
+	l_modelColumn.setPreferredWidth(p_mida);
+	l_modelColumn = null;
+}
+
+/** M�TODE: M�tode que ens permet definir la mida m�xima i m�nima d'una columna determinada de la taula (A trav�s del Nom de la Columna)*/
+public void SetColumnSize(String p_columnName, int p_minim, int p_maxim)
+{
+	try 
+	{
+		TableColumn l_modelColumn = this.getColumnModel().getColumn( this.getColumnModel().getColumnIndex(p_columnName) );
+		l_modelColumn.setMinWidth(p_minim); l_modelColumn.setMaxWidth(p_maxim);  l_modelColumn.setPreferredWidth(p_maxim);
+		l_modelColumn = null;
+	}
+	catch (Exception e) 
+	{
+		System.out.println("jtTaula: Columna amb nom "+p_columnName+" no trobada");
+	}
+}
+
+public void SetValueAt( Object p_value, int p_row, String p_columName )
+{
+	this.setValueAt( p_value, p_row, this.getColumnModel().getColumnIndex(p_columName) );
+}
+
+/** M�TODE: M�tode que neteja la taula */
+public void SetDefault()
+{
+	m_dtmModel.setRowCount(0);
+	//m_rwsModelOrdenat.setRowFilter(null);
+}
+
+/** M�TODE: M�tode que ens permet definir els nom de les columnes de manera din�mica */
+public void SetColumnNames( String[] p_columnNames )
+{
+	m_dtmModel.setRowCount(0);
+	m_dtmModel.setColumnIdentifiers( p_columnNames );
+}
+
+/** M�TODE: M�tode que s'utiltiza per afegir una fila */
+public void AddRow(String[] p_row)
+{
+	m_dtmModel.addRow(p_row);	
+}
+
+/** M�TODE: M�tode que s'utilitza per afegir una fila a la posici� p_index */
+public void AddRow(String[] p_row, int p_index)
+{
+	m_dtmModel.insertRow(p_index, p_row);
+}
+
+/** M�TODE: M�tode que s'utilitza per afegir una fila a la posici� p_index */
+public void AddRow(Object[] p_row, int p_index)
+{
+	m_dtmModel.insertRow(p_index, p_row);
+}
+
+public void AddRow( Object[] p_row )
+{
+	m_dtmModel.addRow( p_row );
+}
+
+/** M�TODE: M�tode que s'utilitza per afegir una fila buida */
+public void AddEmptyRow( )
+{
+	String l_row[] = new String[m_dtmModel.getColumnCount()];
+	m_dtmModel.addRow( l_row );
+}
+
+/** M�TODE: M�tode que s'utilitza per afegir una fila buida a la posici� p_index */
+public void AddEmptyRow( int p_index )
+{
+	String l_row[] = new String[m_dtmModel.getColumnCount()];
+	m_dtmModel.insertRow( p_index, l_row );
+}
+
+/** M�TODE: M�tode que esborra la Fila que est� a la posici� l_index */
+public void DeleteRow(int p_index)
+{
+	((DefaultTableModel)this.getModel()).removeRow( this.convertRowIndexToModel( p_index ) );
+}
+
+/** M�TODE: M�tode que ens retorna una taula d'Objects amb el valor que cont� una determinada fila */ 
+public Object[] GetRow(int p_index)
+{
+	int l_numeroColumnes;
+	Object[] l_row;
+	
+	l_numeroColumnes = m_dtmModel.getColumnCount();
+	l_row = new Object[l_numeroColumnes];
+	
+	for( int i = 0; i < l_numeroColumnes; i++ )
+	{
+		l_row[i] = m_dtmModel.getValueAt( p_index, i ); 
+	}
+	
+	return l_row;
+}
+
+/** M�TODE: M�tode 	que permet ordenar la columna n�mero l_index */
+public void SortColumn(int p_index)
+{
+	m_rwsModelOrdenat.toggleSortOrder( p_index );
+}
+
+/** M�TODE: M�tode 	que permet ordenar la columna que s'anomena p_columnName */
+public void SortColumn(String p_columnName)
+{
+	try
+	{
+		m_rwsModelOrdenat.toggleSortOrder( this.getColumnModel().getColumnIndex(p_columnName) );
+	}
+	catch (Exception e) 
+	{
+		System.out.println("jtTaula: Columna amb nom "+p_columnName+" no trobada");
+	}
+}
+
+/** M�TODE: M�tode que permet definir si les columnes s�n ordenables o no */
+public void SetSortAllowed( boolean p_isAllow )
+{	
+	for( int i = 0; i < this.getColumnCount(); i++ )
+	{
+		m_rwsModelOrdenat.setSortable( i, p_isAllow );	
+	}
+}
+
+/** M�TODE: M�tode que permet definir una columna si es pot ordenar o no a partir del n�mero de columna */
+public void SetSortAllowed( boolean p_isAllow, int p_columnNumber )
+{
+	m_rwsModelOrdenat.setSortable( p_columnNumber, p_isAllow );	
+}
+
+/** M�TODE: M�tode que permet definir una columna es pot ordenar o no a partir de nom de la columna */
+public void SetSortAllowed( boolean p_isAllow, String p_columnName )
+{
+	this.SetSortAllowed( p_isAllow, this.getColumnModel().getColumnIndex(p_columnName) );
+}
+
+/** M�TODE: M�tode que retorna el n�mero de files que t� realment la taula */
+public int GetRowCount()
+{	
+	return m_rwsModelOrdenat.getModel().getRowCount();
+}
+
+/** M�TODE: M�tode que retorna el valor d'una cela de la taula a partir de la fila i el nom de la columna */
+public Object GetValueAt( int p_row, String p_columnName )
+{
+	return this.getValueAt( p_row, this.getColumnModel().getColumnIndex( p_columnName ) );
+}
+
+/** M�TODE: M�tode que retorna el valor d'una cela de la taula a partir de la fila i el nom de la columna */
+public Object GetValueAt( int p_row, int p_column )
+{
+	return ((DefaultTableModel)this.getModel()).getValueAt(p_row, p_column );	
+}
+
+/** M�TODE: M�tode que afegeix un Filtre OR a la Taula */
+@SuppressWarnings({ "unchecked" })
+public void SetRowFilterOr(@SuppressWarnings("rawtypes") ArrayList p_llistaFiltre)
+{
+	m_rwsModelOrdenat.setRowFilter(RowFilter.orFilter(p_llistaFiltre));
+}
+
+/** M�TODE: M�tode que afegeix un Filtre AND a la Taula */
+@SuppressWarnings("unchecked")
+public void SetRowFilterAND(@SuppressWarnings("rawtypes") ArrayList p_llistaFiltre)
+{
+	m_rwsModelOrdenat.setRowFilter(RowFilter.andFilter(p_llistaFiltre));
+}
+
+/** M�TODE: M�tode que afegeix un Filtre a la Taula */
+public void SetRowFilter(String p_filtre, int p_columna)
+{	
+	m_rwsModelOrdenat.setRowFilter(RowFilter.regexFilter(".*(?i)" + p_filtre + ".*",p_columna));
+}
+
+public void SetDefaultColumnSortAscending( int p_columna )
+{
+	List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+	 sortKeys.add(new RowSorter.SortKey(p_columna, SortOrder.ASCENDING));
+	m_rwsModelOrdenat.setSortKeys( sortKeys );
+}
+
+public void SetDefaultColumnSortDescending( int p_columna )
+{
+	List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+	 sortKeys.add(new RowSorter.SortKey(p_columna, SortOrder.DESCENDING));
+	m_rwsModelOrdenat.setSortKeys( sortKeys );
+}
+
+public int GetRealRow( int p_row )
+{
+	return this.convertRowIndexToModel( p_row );
+}
+
+/** M�TODE: M�tode que esborra un Filtre a la Taula */
+public void DetelteRowFilter()
+{
+	m_rwsModelOrdenat.setRowFilter(null);
+}
+
+/** M�TODE: M�tode que permet assignar un renderer personalitzat a la Taula */
+public void SetDefaultRenderer( DefaultTableCellRenderer p_defaultRenderer)
+{
+	setDefaultRenderer(String.class, new  HighlightRenderer(JPanelBuilder.m_jtextField));
+	setDefaultRenderer(Integer.class, new IntegerRenderer());
+}
+
+public DefaultTableModel GetTableModel()
+{
+	return m_dtmModel;
+}
+
+public TableRowSorter<DefaultTableModel> getSorter(){
+	return this.m_rwsModelOrdenat;
+}
+
+
+}

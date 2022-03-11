@@ -1,0 +1,275 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import java.awt.Color;
+//import java.awt.Dimension;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
+//import java.util.Calendar;
+//import java.util.GregorianCalendar;
+//
+//import javax.swing.JButton;
+//import javax.swing.JMenuItem;
+//import javax.swing.JPopupMenu;
+//import javax.swing.border.LineBorder;
+//
+//import antic.entitatbdd.controlplanta.dao.RecepcioComandesCalendariSetmanalDAO;
+//import antic.entitatbdd.controlplanta.model.RecepcioComandesCalendariSetmanal;
+//import antic.entitatbdd.planificacio.dao.PlanningFestiusDAO;
+//import antic.entitatbdd.planificacio.model.PlanningFestius;
+//import antic.partesproduccioantics.JPanellFestiusAvisComanda;
+//import net.sf.jasperreports.repo.ResourceBundlePersistenceService;
+//
+//public class JPopUpCreacioEliminacioFestius extends JPopupMenu
+//{
+//	private static JPopUpCreacioEliminacioFestius m_singleton = null;
+//	
+//	private JMenuItem m_jmiCrearFrances;
+//	private JMenuItem m_jmiCrearNacional;
+//	private JMenuItem m_jmiCrearNacionaliFrances;
+//	private JMenuItem m_jmiEliminar;
+//	
+//	private Calendar m_calendariActual;
+//	private JButton m_jbDia;
+//	
+//	private PlanningFestiusDAO m_daoPlanningFestius = PlanningFestiusDAO.GetInstance( );
+//	private RecepcioComandesCalendariSetmanalDAO m_daoRecepcioComandesCalendariSetmanal = RecepcioComandesCalendariSetmanalDAO.GetInstance();
+//	
+//	public static JPopUpCreacioEliminacioFestius GetInstance()
+//	{
+//		if (m_singleton==null)
+//		{
+//			m_singleton = new JPopUpCreacioEliminacioFestius( );
+//		}
+//		return m_singleton;
+//	}
+//	
+//	private JPopUpCreacioEliminacioFestius()
+//	{
+//		setSize(new Dimension(150,120));
+//		setPreferredSize(new Dimension(150,120));
+//		setLayout(null);
+//		setBackground( Color.white );
+//		setBorder(new LineBorder(GUIDefinition.GetInstance( ).m_colorBorderPanell, 1));
+//		
+//		m_jmiCrearFrances = new JMenuItem("Crear Festiu Franc�s");
+//		m_jmiCrearFrances.addActionListener(new ActionListener() 
+//		{
+//		   public void actionPerformed(ActionEvent e) 
+//		   {
+//			   CrearFestiu(true,false);
+//		   }
+//		});
+//		
+//		m_jmiCrearNacional = new JMenuItem( "Crear Festiu Nacional" );
+//		m_jmiCrearNacional.addActionListener(new ActionListener() 
+//		{
+//		   public void actionPerformed(ActionEvent e) 
+//		   {
+//			   CrearFestiu(false,true);
+//		   }
+//		});
+//		
+//		m_jmiCrearNacionaliFrances = new JMenuItem( "Crear Festiu Nacional i Franc�s" );
+//		m_jmiCrearNacionaliFrances.addActionListener(new ActionListener() 
+//		{
+//		   public void actionPerformed(ActionEvent e) 
+//		   {
+//			   CrearFestiu(true,true);
+//		   }
+//		});
+//		
+//		m_jmiEliminar = new JMenuItem( "Eliminar Festiu" );
+//		m_jmiEliminar.addActionListener(new ActionListener() 
+//		{
+//		   public void actionPerformed(ActionEvent e) 
+//		   {
+//			   EliminarFestiu();
+//		   }
+//		});
+//		
+//		m_calendariActual = new GregorianCalendar();
+//		setVisible( false );
+//	}
+//
+//	public void Activar (Calendar p_cal, JButton p_jbDia)
+//	{
+//		m_calendariActual.setTime( p_cal.getTime() );
+//		m_jbDia = p_jbDia;
+//		removeAll();
+//		
+//		PlanningFestius l_festiuData = m_daoPlanningFestius.Get( m_calendariActual );
+//		if (l_festiuData==null)
+//		{
+//			add(m_jmiCrearFrances);
+//			add(m_jmiCrearNacional);
+//			add(m_jmiCrearNacionaliFrances);
+//			
+//			setSize(new Dimension(200,130));
+//			setPreferredSize(new Dimension(200,130));
+//		}
+//		else
+//		{
+//			add(m_jmiEliminar);
+//			
+//			setSize(new Dimension(150,20));
+//			setPreferredSize(new Dimension(150,30));
+//		}
+//	}
+//	
+//	public void CrearFestiu( boolean p_frances, boolean p_nacional )
+//	{
+//		// Afegim nova entrada al Planning
+//		PlanningFestius l_nouPlanning = new PlanningFestius();
+//		l_nouPlanning.m_data = m_calendariActual;
+//		l_nouPlanning.m_francesa = p_frances;
+//		l_nouPlanning.m_nacional = p_nacional;
+//		m_daoPlanningFestius.Save(l_nouPlanning);
+//		
+//		
+//		
+//		if (p_nacional && m_daoRecepcioComandesCalendariSetmanal.EsLaboral( m_calendariActual ))
+//		{
+//			// Busquem Dia Anterior
+//			
+//			Calendar l_diaAnterior = new GregorianCalendar( );
+//			l_diaAnterior.setTime( m_calendariActual.getTime( ) );
+//			
+//			do 
+//			{
+//				l_diaAnterior.add( Calendar.DAY_OF_MONTH, -1 );
+//			} while ( !m_daoRecepcioComandesCalendariSetmanal.EsLaboral(l_diaAnterior) || m_daoPlanningFestius.GetNacional( l_diaAnterior )!=null );	// Si �s dia No Laboral o �s Festa, retrocedim
+//			
+//			// Busquem Dia Seguent
+//			
+//			Calendar l_diaSeguent = new GregorianCalendar( );
+//			l_diaSeguent.setTime( m_calendariActual.getTime( ) );
+//			
+//			do
+//			{
+//				l_diaSeguent.add( Calendar.DAY_OF_MONTH, 1 );
+//			} while ( !m_daoRecepcioComandesCalendariSetmanal.EsLaboral(l_diaSeguent) || m_daoPlanningFestius.GetNacional( l_diaSeguent )!=null );	// Si �s dia No Laboral o �s Festa, avancem
+//			
+//			// Posem Hora i Minut a les Dates
+//			
+//			l_diaAnterior = m_daoRecepcioComandesCalendariSetmanal.GetDataFinalJornada(l_diaAnterior);	// Ens retorna la mateixa data, amb hora de final del dia
+//			l_diaAnterior.add( Calendar.MINUTE, 1 );	// Afegim un minut
+//			
+//			l_diaSeguent  = m_daoRecepcioComandesCalendariSetmanal.getDataIniciJornada(l_diaSeguent);		// Ens retorna la mateixa data, amb hora de inici del dia
+//			l_diaSeguent.add( Calendar.MINUTE, -1 );	// Treiem un minut
+//			
+//			// Esborrem els festius parcials entre les dates
+//			
+//			m_daoRecepcioComandesCalendariSetmanal.EsborrarEntreMig(l_diaAnterior,l_diaSeguent);
+//			
+//			// Creem el festiu total entre les dates
+//			
+//			RecepcioComandesCalendariSetmanal l_nouFestiu = new RecepcioComandesCalendariSetmanal( );
+//			l_nouFestiu.m_dataHoraIniciFestiu = l_diaAnterior;
+//			l_nouFestiu.m_dataHoraFiFestiu = l_diaSeguent;
+//			m_daoRecepcioComandesCalendariSetmanal.SaveFestiu(l_nouFestiu);
+//		}
+//		
+//		// Actualitzem el color del bot�
+//		EstablirColorFinal(p_frances, p_nacional);
+//		JPanellFestiusAvisComanda.GetInstance( ).ActualitzarTaula( );
+//	}
+//	
+//	public void EliminarFestiu()
+//	{
+//		// Obtenim l'entrada del planning i l'eliminem
+//		
+//		PlanningFestius l_planningAntic = m_daoPlanningFestius.Get( m_calendariActual );
+//		m_daoPlanningFestius.Delete( l_planningAntic );
+//		
+//		if (l_planningAntic.m_nacional && m_daoRecepcioComandesCalendariSetmanal.EsLaboral( m_calendariActual ))
+//		{
+//			// Busquem Dia Anterior
+//			
+//			Calendar l_diaAnterior = new GregorianCalendar( );
+//			l_diaAnterior.setTime( m_calendariActual.getTime( ) );
+//			
+//			do 
+//			{
+//				l_diaAnterior.add( Calendar.DAY_OF_MONTH, -1 );
+//			} while ( !m_daoRecepcioComandesCalendariSetmanal.EsLaboral(l_diaAnterior) );	// Si �s dia No Laboral, retrocedim
+//			
+//			// Busquem Dia Seguent
+//			
+//			Calendar l_diaSeguent = new GregorianCalendar( );
+//			l_diaSeguent.setTime( m_calendariActual.getTime( ) );
+//			
+//			do
+//			{
+//				l_diaSeguent.add( Calendar.DAY_OF_MONTH, 1 );
+//			} while ( !m_daoRecepcioComandesCalendariSetmanal.EsLaboral(l_diaSeguent));	// Si �s dia No Laboral, avancem
+//				
+//
+//			// Posem Hora i Minut a les Dates
+//			
+//			Calendar l_iniciActual = new GregorianCalendar( );
+//			l_iniciActual.setTime( m_calendariActual.getTime( ) );
+//			l_iniciActual = m_daoRecepcioComandesCalendariSetmanal.getDataIniciJornada(l_iniciActual);	// Ens retorna la mateixa data, amb hora de final del dia
+//			l_iniciActual.add( Calendar.MINUTE, -1 );	// Afegim un minut
+//			
+//			Calendar l_finalActual = new GregorianCalendar( );
+//			l_finalActual.setTime( m_calendariActual.getTime( ) );
+//			l_finalActual = m_daoRecepcioComandesCalendariSetmanal.GetDataFinalJornada(l_finalActual);	// Ens retorna la mateixa data, amb hora de final del dia
+//			l_finalActual.add( Calendar.MINUTE, 1 );	// Afegim un minut
+//			
+//			l_diaAnterior = m_daoRecepcioComandesCalendariSetmanal.GetDataFinalJornada(l_diaAnterior);	// Ens retorna la mateixa data, amb hora de final del dia
+//			l_diaAnterior.add( Calendar.MINUTE, 1 );	// Afegim un minut
+//			
+//			l_diaSeguent  = m_daoRecepcioComandesCalendariSetmanal.getDataIniciJornada(l_diaSeguent);		// Ens retorna la mateixa data, amb hora de inici del dia
+//			l_diaSeguent.add( Calendar.MINUTE, -1 );	// Treiem un minut
+//					
+//			// Eliminem el festiu
+//			
+//			PlanningFestius l_planningAnterior = m_daoPlanningFestius.GetNacional( l_diaAnterior );
+//			PlanningFestius l_planningSeguent = m_daoPlanningFestius.GetNacional( l_diaSeguent );		
+//			
+//			if (l_planningAnterior==null && l_planningSeguent==null)	// Si �s un dia isolat (o entre no laborables), eliminem entre Anterior i Seguent
+//			{
+//				m_daoRecepcioComandesCalendariSetmanal.EsborrarEntreMig( l_diaAnterior, l_diaSeguent );
+//			}
+//			else
+//			{
+//				if (l_planningAnterior!=null && l_planningSeguent!=null)	// Si �s un festiu entre festius, dividirem la cadena en dues parts
+//				{
+//					m_daoRecepcioComandesCalendariSetmanal.PartirFestius(l_iniciActual,l_finalActual);
+//				}
+//				else if (l_planningAnterior!=null)	// Si es troba en el final d'una cadena, desplacem el final a l'inici del dia actual
+//				{
+//					m_daoRecepcioComandesCalendariSetmanal.CanviarFinalDeFestius(l_diaSeguent,l_iniciActual);
+//				}
+//				else if (l_planningSeguent!=null)	// Si es troba en el principi d'una cadena, desplacem aquest inici al final del dia actual
+//				{
+//					m_daoRecepcioComandesCalendariSetmanal.CanviarIniciDeFestius(l_diaAnterior,l_finalActual);
+//				}			
+//			}
+//		}
+//		
+//		EstablirColorFinal(false,false);
+//		JPanellFestiusAvisComanda.GetInstance( ).ActualitzarTaula( );
+//	}
+//
+//	private void EstablirColorFinal(boolean p_festiuF, boolean p_festiuN)
+//	{
+//		if (p_festiuF && p_festiuN)
+//		{
+//			m_jbDia.setBackground( GUIDefinition.GetInstance( ).m_colorPlanificacioFestiuNacionaliFrances );
+//		}
+//		else if (!p_festiuF && !p_festiuN)
+//		{
+//			m_jbDia.setBackground( new Color(61,65,69) );
+//		}
+//		else if (p_festiuF)
+//		{
+//			m_jbDia.setBackground( GUIDefinition.GetInstance( ).m_colorPlanificacioFestiuFrances );
+//		}
+//		else if (p_festiuN)
+//		{
+//			m_jbDia.setBackground( GUIDefinition.GetInstance( ).m_colorPlanificacioFestiuNacional );
+//		}
+//	}
+//}

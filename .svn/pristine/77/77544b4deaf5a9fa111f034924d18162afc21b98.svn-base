@@ -1,0 +1,262 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import java.awt.Color;
+//import java.awt.Dimension;
+//import java.awt.Font;
+//import java.awt.Insets;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
+//import java.util.Calendar;
+//import java.util.Date;
+//import java.util.GregorianCalendar;
+//import java.util.Vector;
+//
+//import javax.swing.JButton;
+//import javax.swing.JLabel;
+//import javax.swing.JPanel;
+//import javax.swing.SwingConstants;
+//import javax.swing.border.EmptyBorder;
+//
+//import entitatbdd.planificacio.dao.PlanningFestiusDAO;
+//import antic.entitatbdd.planificacio.model.PlanningFestius;
+//
+//public class JPanellCalendariFestius extends JPanel
+//{	
+//	private Vector<JButton> dies;
+//	private Calendar m_dataTemporal;
+//	
+//	private JLabel textdl, textdm, textdme, textdj, textdv, textds, textdg;
+//	private JLabel textMes;
+//	private Color m_colorFons;
+//	private Font m_font;
+//	
+//	private PlanningFestiusDAO m_daoPlanningFestius = PlanningFestiusDAO.GetInstance( );
+//	
+//	public JPanellCalendariFestius()
+//	{
+//		dies=new Vector<JButton>(5,1);
+//		
+//		setLayout(new MiLayout());
+//		setSize(new Dimension(145,164));
+//		setPreferredSize(new Dimension(145,164));
+//		setBorder(new EmptyBorder(0,0,0,0));
+//		setOpaque(false);
+//		
+//		m_colorFons = new Color(61,65,69);
+//		m_font = new Font("Arial",Font.BOLD,12); 	
+//			
+//		textMes=new JLabel("");
+//		textMes.setLocation(27,2);
+//		textMes.setForeground(Color.black);
+//		textMes.setFont(m_font);
+//		add(textMes);
+//		
+//		textdl=new JLabel("dl");
+//		textdl.setFont(m_font);
+//		textdl.setForeground(Color.black);
+//		textdl.setLocation(6,18);
+//		add(textdl);
+//		
+//		textdm=new JLabel("dm");
+//		textdm.setFont(m_font);
+//		textdm.setLocation(24,18);
+//		textdm.setForeground(Color.black);
+//		add(textdm);
+//		
+//		textdme=new JLabel("dc");
+//		textdme.setFont(m_font);
+//		textdme.setLocation(46,18);
+//		textdme.setForeground(Color.black);
+//		add(textdme);
+//		
+//		textdj=new JLabel("dj");
+//		textdj.setFont(m_font);
+//		textdj.setLocation(66,18);
+//		textdj.setForeground(Color.black);
+//		add(textdj);
+//		
+//		textdv=new JLabel("dv");
+//		textdv.setFont(m_font);
+//		textdv.setLocation(85,18);
+//		textdv.setForeground(Color.black);
+//		add(textdv);
+//		
+//		textds=new JLabel("ds");
+//		textds.setFont(m_font);
+//		textds.setLocation(105,18);
+//		textds.setForeground(Color.black);
+//		add(textds);
+//		
+//		textdg=new JLabel("dg");
+//		textdg.setFont(m_font);
+//		textdg.setLocation(125,18);
+//		textdg.setForeground(Color.black);
+//		add(textdg);		
+//			
+//		int dia=1;
+//		for (int y=0;y<6;y++)
+//		{
+//			for (int x=0;x<7;x++)
+//			{
+//				if (dia<=31)
+//				{
+//					
+//					JButton but=new JButton("<html><font face='Arial' align='center' size=2><b>"+dia+"</b></font></html>");
+//					but.setName(""+dia);
+//					but.setHorizontalAlignment(SwingConstants.RIGHT);
+//					but.setIconTextGap(9);
+//			        if (dia>=10) but.setMargin(new Insets(-2,-9,0,0));
+//			        else but.setMargin(new Insets(-2,-4,0,0));
+//					but.setBackground(m_colorFons);
+//					but.setForeground(Color.white);
+//					but.setLocation(3+x*20,33+y*20);
+//					but.setSize(new Dimension(20,20));
+//					but.setPreferredSize(new Dimension(20,20));
+//					but.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e){ClicarDia( e );}});
+//					but.setVisible(false);
+//					dies.add(dia-1,but);
+//					add(but);
+//				}
+//				dia++;					
+//			}			
+//		}
+//		
+//		Date l_date = new Date();
+//		
+//		m_dataTemporal = new GregorianCalendar();
+//		m_dataTemporal.setTime( l_date );
+//		
+//		setVisible(true);
+//	}
+//	
+//	public void SetMesAny(int p_mes,int p_any)
+//	{
+//		try
+//		{
+//			m_dataTemporal.set( Calendar.DAY_OF_MONTH, 1 );
+//			m_dataTemporal.set( Calendar.YEAR, p_any );
+//			m_dataTemporal.set( Calendar.MONTH, p_mes );
+//		}
+//		catch (Exception e)
+//		{
+//			Calendar l_calendar = Calendar.getInstance( );
+//			m_dataTemporal.set( Calendar.DAY_OF_MONTH, 1 );
+//			m_dataTemporal.set( Calendar.YEAR, l_calendar.get( Calendar.YEAR ) );
+//			m_dataTemporal.set( Calendar.MONTH, l_calendar.get( Calendar.MONTH ) );
+//		}
+//	
+//		this.ShowData( );
+//	}
+//	
+//	private void ShowData()
+//	{
+//		int numDies = m_dataTemporal.getActualMaximum( Calendar.DAY_OF_MONTH );
+//		int x = 0;
+//		int numdia = m_dataTemporal.get( Calendar.DAY_OF_WEEK );
+//		int l_setmana = m_dataTemporal.get( Calendar.WEEK_OF_YEAR );
+//	
+//		if ( numdia == 1 )
+//		{
+//			numdia = 7;
+//		}
+//		else
+//		{
+//			numdia--;
+//		}
+//	
+//		int y = 0;
+//		while (x < numDies)
+//		{
+//			((JButton) dies.get( x )).setLocation( 3 + (numdia - 1) * 20, 33 + y * 20 );
+//			((JButton) dies.get( x )).setVisible( true );
+//			
+//			((JButton) dies.get( x )).setBackground( m_colorFons );
+//			
+//			numdia++;
+//	
+//			if ( numdia == 8 )
+//			{
+//				if ( l_setmana == 52 )
+//				{
+//					l_setmana = 0;
+//				}
+//	
+//				l_setmana++;
+//				numdia = 1;
+//				y++;
+//			}
+//			
+//			// Marcar com a festiu, si �s que ho �s
+//			
+//			Calendar l_calendariAux = new GregorianCalendar();
+//			l_calendariAux.setTime( m_dataTemporal.getTime( ));
+//			l_calendariAux.set( Calendar.DAY_OF_MONTH, x+1 );
+//			
+//			PlanningFestius l_festiuDelDia = m_daoPlanningFestius.Get(l_calendariAux);	
+//			
+//			if (l_festiuDelDia!=null)
+//			{
+//				if (l_festiuDelDia.m_francesa && l_festiuDelDia.m_nacional)
+//				{
+//					((JButton) dies.get( x )).setBackground( GUIDefinition.GetInstance( ).m_colorPlanificacioFestiuNacionaliFrances );
+//				}
+//				else if (l_festiuDelDia.m_francesa)
+//				{
+//					((JButton) dies.get( x )).setBackground( GUIDefinition.GetInstance( ).m_colorPlanificacioFestiuFrances );
+//				}
+//				else if (l_festiuDelDia.m_nacional)
+//				{
+//					((JButton) dies.get( x )).setBackground( GUIDefinition.GetInstance( ).m_colorPlanificacioFestiuNacional );
+//				}
+//			}
+//			
+//			x++;
+//		}
+//	
+//		for ( int z = x; z < 31; z++ )
+//		{
+//			((JButton) dies.get( z )).setVisible( false );
+//		}
+//	
+//		String mes = new String( "" );
+//		int m = m_dataTemporal.get( Calendar.MONTH );
+//		if ( m == 0 )
+//			mes = "Gener";
+//		if ( m == 1 )
+//			mes = "Febrer";
+//		if ( m == 2 )
+//			mes = "Mar�";
+//		if ( m == 3 )
+//			mes = "Abril";
+//		if ( m == 4 )
+//			mes = "Maig";
+//		if ( m == 5 )
+//			mes = "Juny";
+//		if ( m == 6 )
+//			mes = "Juliol";
+//		if ( m == 7 )
+//			mes = "Agost";
+//		if ( m == 8 )
+//			mes = "Setembre";
+//		if ( m == 9 )
+//			mes = "Octubre";
+//		if ( m == 10 )
+//			mes = "Novembre";
+//		if ( m == 11 )
+//			mes = "Desembre";
+//	
+//		textMes.setText( mes );
+//	}
+//	
+//	protected void ClicarDia( MouseEvent e )
+//	{
+//		// Data del Seleccionat
+//		Calendar l_dataSeleccionada  = new GregorianCalendar();
+//		l_dataSeleccionada.set( m_dataTemporal.get(Calendar.YEAR), m_dataTemporal.get(Calendar.MONTH) , Integer.parseInt( ((JButton)e.getComponent()).getName() ), 0, 0 , 0 );
+//		
+//		// Obrir PopUp
+//		JPopUpCreacioEliminacioFestius.GetInstance().Activar( l_dataSeleccionada, (JButton)e.getComponent( ) );
+//		JPopUpCreacioEliminacioFestius.GetInstance().show(e.getComponent(), e.getX(), e.getY());
+//	}
+//}

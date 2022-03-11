@@ -1,0 +1,101 @@
+package agendaproduccio.utils;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+public class JPanelBuilder {
+	private static final int DIMENTION_CONTAINER_CALENDAR = 180;
+	public static int DIMENTION_WIDTH_CALENDAR;
+	public static int DIMENTION_WIDTH_BUTTONS = 100;
+	public static int DIMENTION_HEIGHT_BUTTONS = 80;
+	public static MyJTextField m_jtextField;
+	public static JPanellCalendari m_calendari_inici;
+	public static JPanellCalendari m_calendari_final;
+	public static JComboBox<String> m_jcombo;
+	public static JButton m_jButtonXml;
+	public static JButton m_imprimir;
+	public static JButton m_refresh;
+	public static JPanel m_pPanel;
+
+	public static JPanel BuildHeader(JPanel p_panel) {
+		m_pPanel = p_panel;
+		JPanel l_jpanel = new JPanel(new BorderLayout());
+		Dimension l_dim = new Dimension(p_panel.getWidth(), DIMENTION_CONTAINER_CALENDAR);
+		l_jpanel.setPreferredSize(l_dim);
+		l_jpanel.setBackground(Color.gray);
+		JPanel l_calendarJpanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 90, 30));
+		m_calendari_final.setTitle("Data fin.");
+		m_calendari_inici.setTitle("Data ini.");
+		// l_calendarJpanel.setBackground(Color.LIGHT_GRAY);
+		l_calendarJpanel.add(m_calendari_inici);
+		l_calendarJpanel.add(m_calendari_final);
+		l_jpanel.add(l_calendarJpanel, BorderLayout.WEST);
+		
+		JPanel l_JPanelRightSide = BuildRightSide();
+		l_jpanel.add(l_JPanelRightSide, BorderLayout.CENTER);
+		setPreferredSize();
+		return l_jpanel;
+	}
+
+	private static JPanel BuildRightSide() {
+		JPanel l_jpanel = new JPanel(new BorderLayout());
+		JPanel l_search = BuildSearchBart();
+		JPanel l_right = BuildComboButtons();
+		l_jpanel.add(l_search, BorderLayout.NORTH);
+		l_jpanel.add(l_right, BorderLayout.CENTER);
+		return l_jpanel;
+	}
+
+	private static JPanel BuildComboButtons() {
+		addItemsCombo();
+		setImageIconsButtons();
+		JPanel l_jpanel = new JPanel(new BorderLayout());
+		l_jpanel.setBackground(Color.green);
+		JPanel l_jpanelCombo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel l_jpanelButtons = new JPanel(new FlowLayout(FlowLayout.TRAILING, 10, 40));
+		l_jpanelCombo.add(m_jcombo);
+		l_jpanel.add(l_jpanelCombo, BorderLayout.WEST);
+
+		l_jpanelButtons.add(m_jButtonXml);
+		l_jpanelButtons.add(m_imprimir);
+		l_jpanelButtons.add(m_refresh);
+		l_jpanel.add(l_jpanelButtons, BorderLayout.CENTER);
+		return l_jpanel;
+	}
+
+	private static JPanel BuildSearchBart() {
+		JPanel l_jpanelSearchBar = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5)); // JPanel SearchBart
+		l_jpanelSearchBar.setPreferredSize(new Dimension(m_pPanel.getWidth(), 50));
+		l_jpanelSearchBar.add(m_jtextField);
+		return l_jpanelSearchBar;
+	}
+
+	private static void addItemsCombo() {
+		m_jcombo.addItem("hola");
+		m_jcombo.addItem("whatsapp");
+		m_jcombo.addItem("lalala");
+	}
+
+	private static void setPreferredSize() {
+		m_jtextField.setPreferredSize(new Dimension(400, 30));
+		m_jcombo.setPreferredSize(new Dimension(200, 30));
+		m_jButtonXml.setPreferredSize(new Dimension(DIMENTION_WIDTH_BUTTONS, DIMENTION_HEIGHT_BUTTONS));
+		m_imprimir.setPreferredSize(new Dimension(DIMENTION_WIDTH_BUTTONS, DIMENTION_HEIGHT_BUTTONS));
+		m_refresh.setPreferredSize(new Dimension(DIMENTION_WIDTH_BUTTONS, DIMENTION_HEIGHT_BUTTONS));
+	}
+
+	private static void setImageIconsButtons() {
+		m_jButtonXml.setIcon(GUIDefinition.GetInstance().img_xml);
+		m_imprimir.setIcon(GUIDefinition.GetInstance().img_printer);
+		m_refresh.setIcon(GUIDefinition.GetInstance().img_reload);
+	}
+
+}

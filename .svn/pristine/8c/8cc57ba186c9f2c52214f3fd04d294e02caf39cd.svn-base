@@ -1,0 +1,8 @@
+package agendaproduccio.utils;
+
+public interface InterfaceArxiuAdjunt
+{
+	public String GetFolderPath();
+	public String GetFilePath();
+	public String GetFileName();	
+}

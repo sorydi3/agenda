@@ -1,0 +1,167 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import java.io.IOException;
+//
+//import org.openqa.selenium.By;
+//import org.openqa.selenium.WebDriver;
+//import org.openqa.selenium.WebElement;
+//import org.openqa.selenium.chrome.ChromeDriver;
+//import org.openqa.selenium.firefox.FirefoxDriver;
+//
+//public class GestorSelenium
+//{
+//	// [ATR] Inst�ncia
+//		static private GestorSelenium m_singleton = null;
+//		
+//	// [ATR] Constants Est�tiques
+//		final private String PROPIETAT_FIREFOX = "webdriver.gecko.driver";
+//		static final public String PATH_DRIVER_FIREFOX = "./resources/geckodriver.exe";
+//		final private String PROPIETAT_CHROME = "webdriver.chrome.driver";
+//		static final public String PATH_DRIVER_CHROME = "./resources/chromedriver.exe";
+//
+//	// [MTD] Inst�ncia i Creaci�
+//		static public GestorSelenium GetInstance()
+//		{
+//			if ( m_singleton==null )
+//			{
+//				m_singleton = new GestorSelenium( );
+//			}
+//			return m_singleton;
+//		}
+//		
+//		private GestorSelenium()
+//		{
+//			// DE MOMENT RES
+//		}
+//		
+//	// [MTD] Obtenir Web Driver
+//		public WebDriver GetWebDriver()
+//		{
+//			WebDriver l_wd = GetWebDriver( PATH_DRIVER_FIREFOX );
+//			if ( l_wd==null )
+//			{
+//				l_wd = GetWebDriver( PATH_DRIVER_CHROME );
+//			}
+//			return l_wd;		
+//		}
+//		
+//		public WebDriver GetWebDriver( String p_pathWebDriver )
+//		{
+//			WebDriver l_wd = null;
+//			
+//			try
+//			{
+//				if ( p_pathWebDriver.equals( PATH_DRIVER_FIREFOX ) )
+//				{
+//					System.setProperty( PROPIETAT_FIREFOX, p_pathWebDriver );											
+//					l_wd = new FirefoxDriver( );
+//				}
+//				else if ( p_pathWebDriver.equals( PATH_DRIVER_CHROME ) )
+//				{
+//					System.setProperty( PROPIETAT_CHROME, p_pathWebDriver );											
+//					l_wd = new ChromeDriver( );
+//				}
+//			}
+//			catch ( Exception exc ) {}
+//			
+//			return l_wd;
+//		}
+//		
+//	// [MTD] Navegaci�
+//		public void GoTo( WebDriver p_wd, String p_link )
+//		{
+//			p_wd.navigate().to(p_link);
+//		}
+//		
+//	// [MTD] Obtenci� d'elements
+//		public WebElement ObtenirElementPerId( WebDriver p_wd, String p_id )
+//		{
+//			WebElement l_we = null;
+//			try
+//			{
+//				l_we = p_wd.findElement( By.id( p_id ) ); 
+//			}
+//			catch ( Exception exc ) {}
+//						 
+//			return l_we;		
+//		}
+//		
+//	// [MTD] Terminar Drivers
+//		public void TerminarDriver( WebDriver p_wd )
+//		{
+//			try
+//			{
+//				if ( p_wd instanceof FirefoxDriver )
+//				{
+//					Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+//				}
+//				else if ( p_wd instanceof ChromeDriver )
+//				{
+//					Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
+//				}
+//				else
+//				{
+//					TerminarDrivers( );
+//				}
+//			}	
+//			catch ( IOException ioe ){}
+//		}
+//		
+//		public void TerminarDrivers()
+//		{
+//			try
+//			{
+//				Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+//			}
+//			catch (IOException e){}
+//			
+//			try
+//			{
+//				Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
+//			}
+//			catch (IOException e){}
+//			
+//			try
+//			{
+//				Runtime.getRuntime().exec("taskkill /F /IM IEDriverServer.exe");
+//			}
+//			catch (IOException e){}
+//		}
+//		
+//	// [MTD] Espera
+//		
+//		/*
+//		private void EsperaWaitForElementStaleness(String p_webElementCssSelector) 
+//		{
+//			try
+//			{
+//				WebDriverWait wait = new WebDriverWait(m_driver, 10);
+//				WebElement oldHtml = m_driver.findElement(By.cssSelector(p_webElementCssSelector));
+//				wait.until(ExpectedConditions.stalenessOf(oldHtml));
+//			}
+//			catch (NoSuchElementException|TimeoutException e)
+//			{
+//				WaitFixedTime();
+//			}
+//		}	
+//		
+//		//Esperar a que hi hagi el nombre indicat de pestanyes
+//		@SuppressWarnings("deprecation")
+//		private void WaitForNumberOfWindows(int l_numberOfWindows) 
+//		{
+//			try 
+//			{
+//				WebDriverWait wait = new WebDriverWait(m_driver, 10);
+//				wait.until(ExpectedConditions.numberOfwindowsToBe(l_numberOfWindows));
+//			}
+//			catch (Exception e)
+//			{
+//				WaitFixedTime();
+//			}
+//			
+//		}
+//		*/
+//		//Esperar el temps prefixat
+//		
+//}

@@ -1,0 +1,23 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
+
+public class CellRendererRightBorder extends DefaultTableCellRenderer
+{
+	public CellRendererRightBorder()
+	{
+		super();
+		setHorizontalAlignment(DefaultTableCellRenderer.LEFT);
+	}
+	
+	@Override
+    public Border getBorder() 
+	{
+      return BorderFactory.createMatteBorder(0, 0, 0, 1, new Color(175,175,175));
+    }
+
+}

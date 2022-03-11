@@ -1,0 +1,29 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.border.Border;
+
+public class CellEditorComboBox extends DefaultCellEditor
+{
+	private JComboBox <String> m_jcb;
+	
+	public CellEditorComboBox(JComboBox<String> comboBox)
+	{
+		super( comboBox );
+		m_jcb = comboBox;
+		m_jcb.setVisible( true );
+	}
+	
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,  int row, int column)
+	{ 	
+		m_jcb.setSelectedItem( "" + value);
+		m_jcb.setVisible( true );
+		return m_jcb;
+	}
+}

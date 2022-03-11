@@ -1,0 +1,309 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.RandomAccessFile;
+import java.util.Vector;
+import java.util.logging.Logger;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
+
+public class JPopupConfigColumnesTaula extends JPopupMenu
+	{
+	String m_taula ="";
+	TableColumnModel m_modelColumna;
+	JTableHeader m_headerTaula;
+	Vector<DefinicioCamp> m_llCamps;
+	JPopupConfigColumnesTaula m_joMateix;
+	
+	public JPopupConfigColumnesTaula()
+		{
+		}
+
+
+	public JPopupConfigColumnesTaula(Vector<DefinicioCamp> p_llCamps,String p_taula,TableColumnModel p_modelColumna,JTableHeader p_headerTaula)
+		{
+		m_joMateix = this;
+		m_headerTaula = p_headerTaula;
+		m_modelColumna = p_modelColumna;
+		//p_modelColumna.addColumnModelListener(new SColumnListener());
+		m_headerTaula.addMouseListener(new SColumnListener());
+		m_llCamps = p_llCamps;
+		setLayout(null);
+		setBackground( Color.white );
+		setBorder(new LineBorder( GUIDefinition.GetInstance( ).m_colorBorderPanell , 1));		
+		LlegirInformacioCamps(p_llCamps,p_taula);
+		for (int i=0;i<p_llCamps.size( );i++)
+			{
+			DefinicioCamp l_camp = p_llCamps.get( i );
+			if (l_camp.m_modificable)
+				{
+				JMenuItem l_item = new JMenuItem(l_camp.m_nomCamp);
+				l_item.setName( ""+l_camp.m_numeroColumna );
+				l_item.setFont( GUIDefinition.GetInstance( ).m_fontNegreta12 );
+				if (l_camp.m_visible) l_item.setIcon( GUIDefinition.GetInstance( ).m_iconVerificar12x12);
+					else l_item.setIcon(null); 
+				l_item.setText( l_camp.m_nomCamp );
+				l_item.addActionListener( new ActionListener() 
+					{
+					public void actionPerformed( ActionEvent e )
+						{
+						JMenuItem l_item = (JMenuItem)e.getSource( );
+						int l_columna = Integer.parseInt( l_item.getName( ) );
+						DefinicioCamp l_camp = RetornaDefinicioCamp(l_columna);
+						if (l_item.getIcon( )==null)
+							{
+							m_modelColumna.getColumn(l_columna).setMinWidth(10);
+							m_modelColumna.getColumn(l_columna).setMaxWidth(150);
+							m_modelColumna.getColumn(l_columna).setPreferredWidth(80);
+							m_modelColumna.getColumn(l_columna).setWidth(80);							
+							l_item.setIcon( GUIDefinition.GetInstance( ).m_iconVerificar12x12);
+							l_camp.m_visible=true;
+							l_camp.m_mida=80;
+							}
+							else
+							{
+							m_modelColumna.getColumn(l_columna).setMinWidth(0);
+							m_modelColumna.getColumn(l_columna).setMaxWidth(0);
+							m_modelColumna.getColumn(l_columna).setPreferredWidth(0);
+							m_modelColumna.getColumn(l_columna).setWidth(0);
+							l_item.setIcon( null );
+							l_camp.m_visible=false;
+							l_camp.m_mida=0;
+							}
+						GuardarInformacioCamps(m_llCamps,m_taula);
+						}
+					});
+				add(l_item);
+				}
+			}
+		//GuardarInformacioCamps(p_llCamps,p_taula);
+		setSize(new Dimension(250,p_llCamps.size( )*20));
+		setPreferredSize(new Dimension(250,p_llCamps.size( )*20));
+		}
+	
+	public DefinicioCamp RetornaDefinicioCamp(int p_columna)
+		{
+		DefinicioCamp l_camp = null;
+		int i=0;
+		boolean l_trobat = false;
+		while ((!l_trobat)&&(i<m_llCamps.size( )))
+			{
+			l_camp = m_llCamps.get( i );
+			if (p_columna == l_camp.m_numeroColumna) l_trobat = true;
+				else i++;
+			}
+		if (!l_trobat) l_camp = null;
+		return (l_camp);
+		}
+	
+	
+	public void LlegirInformacioCamps(Vector<DefinicioCamp> p_llCamps,String p_taula)
+		{
+		m_taula = p_taula;
+		try 
+			{
+			int l_cont=0;
+			System.out.println("Llegim arxiu: "+"./config/taules/"+p_taula+".txt");
+			RandomAccessFile l_fd = new RandomAccessFile("./config/taules/"+p_taula+".txt", "r");
+			String l_registre = "";
+			while ((l_registre = l_fd.readLine( ))!=null)
+				{
+				//l_registre = l_fd.readLine();
+				String l_camps[] = l_registre.split( "\\|" );				
+				if (l_camps.length==4)
+					{
+					boolean l_trobat=false;
+					int j=0;
+					while ((!l_trobat)&&(j<p_llCamps.size( )))
+						{
+						DefinicioCamp l_campTemp = p_llCamps.get( j );
+						if (l_campTemp.m_nomCamp.equals( l_camps[0] ))
+							{
+							l_trobat = true;
+							l_campTemp.m_trobat = true;
+							l_campTemp.m_mida = Integer.parseInt( l_camps[1]);
+							if (Integer.parseInt( l_camps[2]) == 1) l_campTemp.m_visible = true;
+								else l_campTemp.m_visible = false;
+							System.out.println( ""+l_cont+" -> "+l_campTemp.m_nomCamp+" - "+l_campTemp.m_visible+" "+l_campTemp.m_mida);
+							}
+							else j++;
+						}
+					}
+				l_cont++;
+				}
+			l_fd.close();
+			l_fd = null;
+			}		
+			catch (Exception e) 
+			{			
+				System.out.println("Petada: "+e);
+			}
+		}
+
+	public void GuardarInformacioCamps(Vector<DefinicioCamp> p_llCamps,String p_taula)
+		{
+		File l_flArxiu=new File("./config/taules/"+p_taula+".txt");
+		try
+			{
+			BufferedWriter l_bw = new BufferedWriter(new FileWriter( l_flArxiu ));
+		
+			for (int i=0;i<p_llCamps.size( );i++)
+				{
+				DefinicioCamp l_camp = p_llCamps.get( i );
+				l_bw.write( l_camp.m_nomCamp+"|"+l_camp.m_mida+"|"+(l_camp.m_visible?"1":"0")+"|"+(l_camp.m_modificable?"1":"0"));
+				if (i<p_llCamps.size( )-1) l_bw.newLine( );
+				}
+			l_bw.close( );
+			}
+			catch (Exception e)
+			{
+				
+			}
+		}
+	
+	public void ActualitzarMidaCamps()
+		{
+		for (int i=0;i<m_llCamps.size( );i++)
+			{
+			DefinicioCamp l_camp = m_llCamps.get( i );
+			int l_mida = m_modelColumna.getColumn( l_camp.m_numeroColumna ).getWidth( );
+			l_camp.m_mida = l_mida;
+			}
+		GuardarInformacioCamps( m_llCamps, m_taula );
+		}
+	
+	/*interface SGridModel 
+		{
+    	public void columnMoved(int oldLocation, int newLocation);
+    	public void columnResized(int column, int newWidth);
+		}*/     
+	
+	public class SColumnListener extends MouseAdapter implements TableColumnModelListener 
+		{
+    	//private final Logger log = Logger.getLogger(getClass());
+    	//private final SGridModel model;
+
+		//private TableColumnModel m_model;
+    	private int oldIndex = -1;
+    	private int newIndex = -1;
+    	private boolean dragging = false;
+
+    	private boolean resizing = false;
+    	private int resizingColumn = -1;
+    	private int oldWidth = -1;
+
+    	public SColumnListener()
+    		{
+    		//m_model = p_model;
+    		}
+
+    	@Override
+    	public void mousePressed(MouseEvent e) 
+    		{
+    		// capture start of resize
+    		if(e.getSource() instanceof JTableHeader) 
+    			{
+    			TableColumn tc = ((JTableHeader)e.getSource()).getResizingColumn();
+    			if(tc != null) 
+    				{
+    				resizing = true;
+    				resizingColumn = tc.getModelIndex();
+    				oldWidth = tc.getPreferredWidth();
+    				}
+    				else 
+    				{
+    				resizingColumn = -1;
+    				oldWidth = -1;
+    				}
+    			}   
+    		}
+
+    	@Override
+    	public void mouseReleased(MouseEvent e) 
+    		{
+    		// column moved
+    		System.out.println("Mouse released");
+    		if ((e.getButton( )==MouseEvent.BUTTON2)||(e.getButton( )==MouseEvent.BUTTON3))
+    			{
+		        m_joMateix.show((JTableHeader) e.getSource(), e.getPoint().x,e.getPoint().y );
+    			}
+    			else
+    			{
+    			if(dragging && oldIndex != newIndex) 
+    				{
+    				//m_model.columnMoved(oldIndex, newIndex);
+    				//log.info("column moved: " +oldIndex+" -> "+newIndex);
+    				}
+    			dragging = false;
+    			oldIndex = -1;
+    			newIndex = -1;
+
+
+    			// column resized
+    			if(resizing) 
+    				{
+    				if(e.getSource() instanceof JTableHeader) 
+    					{
+    					TableColumn tc = ((JTableHeader)e.getSource()).getColumnModel().getColumn(resizingColumn);
+    					if(tc != null) 
+    						{
+    						int newWidth = tc.getPreferredWidth();
+    						if(newWidth != oldWidth) 
+    							{
+    							//model.columnResized(resizingColumn, newWidth);
+    							ActualitzarMidaCamps();
+    							//log.info("column resized: " +resizingColumn+" -> "+newWidth);
+    							}
+    						}
+    					}   
+    				}
+    			resizing = false;
+    			resizingColumn = -1;
+    			oldWidth = -1;
+    			}
+    		}
+
+    	@Override
+    	public void columnAdded(TableColumnModelEvent e) {}
+
+    	@Override
+    	public void columnRemoved(TableColumnModelEvent e) {}
+
+    	@Override
+    	public void columnMoved(TableColumnModelEvent e) 
+    		{
+    		// capture dragging
+    		dragging = true;
+    		if(oldIndex == -1)
+    			{
+    			oldIndex = e.getFromIndex();
+    			}
+    		newIndex = e.getToIndex();  
+    		}
+
+    	@Override
+    	public void columnMarginChanged(ChangeEvent e) {}
+
+    	@Override
+    	public void columnSelectionChanged(ListSelectionEvent e) {}
+		}	
+	
+}

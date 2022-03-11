@@ -1,0 +1,276 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import java.awt.Color;
+//import java.awt.Dimension;
+//import java.awt.Font;
+//import java.awt.Graphics;
+//import java.awt.event.ComponentEvent;
+//import java.awt.event.ComponentListener;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
+//import java.awt.event.WindowAdapter;
+//import java.awt.event.WindowEvent;
+//
+//import javax.swing.BorderFactory;
+//import javax.swing.JButton;
+//import javax.swing.JDialog;
+//import javax.swing.JLabel;
+//import javax.swing.JPanel;
+//import javax.swing.JTextField;
+//import javax.swing.SwingConstants;
+//import javax.swing.border.LineBorder;
+//
+//import antic.entitatbdd.crm.dao.ArxiuAdjuntDAO;
+//import antic.entitatbdd.crm.model.ArxiuAdjunt;
+//import antic.entitatbdd.crm.model.Negoci;
+//
+//
+//public class JDialogArxiuAdjunt extends JDialog implements ComponentListener
+//	{		
+//	
+//	private static JDialogArxiuAdjunt m_singleton;
+//	int tamanyX=800;
+//	int tamanyY=200;
+//	JPanel m_jpDialog;
+//	Color colorBarres = new Color(243,245,246);
+//	Color colorPanell = new Color(255,255,255);
+//	Color colorBorderPanells=new Color(194,200,205);
+//	Color colorFont=new Color(90,90,90);
+//	Font m_fontOpcions =new Font("Arial",Font.BOLD,14);
+//	Font m_fontCamps =new Font("Arial",Font.BOLD,12);
+//	Font m_fontLabel =new Font("Arial",Font.BOLD,13);
+//	//JPanellEmbut m_panell;
+//	Color colorVerd= new Color(67,195,94);
+//	Color colorVerdBorder= new Color(31,110,66);
+//	Negoci negociSeleccionat;
+//	ArxiuAdjunt arxiuSeleccionat;
+//	JButton butGuardar;
+//	
+//	JLabel labArxiuAdjunt;
+//	JTextField jtfArxiuAdjunt;
+//	JLabel labDescripcio;
+//	JTextField jtfDescripcio;	
+//	
+//  public static JDialogArxiuAdjunt getInstance()
+//    {
+//        if( m_singleton == null )
+//        {
+//            m_singleton = new JDialogArxiuAdjunt ();
+//        }
+//        return m_singleton;
+//    }  
+//	
+//	
+//	private JDialogArxiuAdjunt()
+//		{				
+//		setTitle("Arxiu adjunt");
+//		addComponentListener(this);
+//		setModal(true);					   
+//		setSize(new Dimension(tamanyX,tamanyY));
+//		setPreferredSize(new Dimension(tamanyX,tamanyY));		
+//		m_jpDialog=new JPanel()
+//			{
+//			protected void paintComponent(Graphics g) 
+//				{ 
+//				super.paintComponent(g);		
+//				g.setColor(colorBarres);
+//				int tamanyXPanell=this.getWidth();
+//				int tamanyYPanell=this.getHeight();
+//				g.fillRect(0, 0, tamanyXPanell,30);
+//				g.fillRect(0, tamanyYPanell-50, tamanyXPanell,tamanyYPanell);
+//				g.setColor(colorBorderPanells);
+//				g.drawLine (0, 30,tamanyXPanell,30);
+//				g.drawLine (0, tamanyYPanell-50,tamanyXPanell,tamanyYPanell-50);
+//				}
+//			};
+//		setContentPane(m_jpDialog);
+//		m_jpDialog.setBackground(colorPanell);
+//		m_jpDialog.setBorder(BorderFactory.createLineBorder(colorBorderPanells,1));
+//		m_jpDialog.setLayout(null);
+//		setUndecorated(true);
+//
+//		JLabel m_jlProgramarActivitat = new JLabel("Gesti� arxiu adjunt");
+//		m_jlProgramarActivitat.setFont(m_fontOpcions);
+//		m_jlProgramarActivitat.setSize(new Dimension(180,25));
+//		m_jlProgramarActivitat.setPreferredSize(new Dimension(180,25));
+//		m_jlProgramarActivitat.setLocation(7,4);
+//		m_jlProgramarActivitat.setVisible(true);
+//		m_jpDialog.add(m_jlProgramarActivitat);	
+//		
+//		JButton butTancar=new JButton("X");
+//		butTancar.setLocation(this.getWidth()-30,1);
+//		butTancar.setBorder(BorderFactory.createEmptyBorder());
+//		butTancar.setSize(new Dimension(22,30));
+//		butTancar.setPreferredSize(new Dimension(22,30));
+//		butTancar.setOpaque(false);
+//		butTancar.setContentAreaFilled(false);
+//		butTancar.setBorderPainted(false);		
+//		butTancar.setBackground(colorBorderPanells);
+//		butTancar.setFont(m_fontOpcions);
+//		m_jpDialog.add(butTancar);
+//		butTancar.addMouseListener(new MouseAdapter() 
+//			{
+//			public void mouseReleased(MouseEvent e)
+//				{
+//				//System.out.println("Id cat: "+tascaSeleccionada.m_idCategoriaTasca+" Id cat clonat: "+tascaClonada.m_idCategoriaTasca);
+//				//if ((tascaSeleccionada!=null)&&(tascaClonada!=null)) tascaSeleccionada.clone(tascaClonada);
+//				Desactivar();
+//				}
+//			});
+//
+//
+//		setLayout(null);     		
+//		
+//		labArxiuAdjunt=new JLabel("Arxiu Adjunt");		
+//		//labAssumpte.setOpaque(true);
+//		labArxiuAdjunt.setLocation(12,35);
+//		labArxiuAdjunt.setFont(m_fontLabel);
+//		labArxiuAdjunt.setSize(new Dimension(80,30));
+//		labArxiuAdjunt.setPreferredSize(new Dimension(80,30));
+//		labArxiuAdjunt.setBackground(Color.white);		
+//		labArxiuAdjunt.setForeground(Color.black);
+//		add(labArxiuAdjunt);		
+//
+//		jtfArxiuAdjunt = new JTextField();
+//		//jtfArxiuAdjunt.setEditable(true);
+//		jtfArxiuAdjunt.setLocation(10,60);
+//		jtfArxiuAdjunt.setSize(new Dimension(tamanyX-20,30));
+//		jtfArxiuAdjunt.setPreferredSize(new Dimension(tamanyX-20,30));	
+//		jtfArxiuAdjunt.setEditable(false);
+//		jtfArxiuAdjunt.setBackground(colorBarres);
+//		jtfArxiuAdjunt.setOpaque(true);
+//		add(jtfArxiuAdjunt);		
+//
+//		labDescripcio=new JLabel("Descripci�");		
+//		//labAssumpte.setOpaque(true);
+//		labDescripcio.setLocation(12,85);
+//		labDescripcio.setFont(m_fontLabel);
+//		labDescripcio.setSize(new Dimension(80,30));
+//		labDescripcio.setPreferredSize(new Dimension(80,30));
+//		labDescripcio.setBackground(Color.white);		
+//		labDescripcio.setForeground(Color.black);
+//		add(labDescripcio);		
+//		
+//		
+//		jtfDescripcio = new JTextField();
+//		jtfDescripcio.setEditable(true);
+//		jtfDescripcio.setLocation(10,110);
+//		jtfDescripcio.setSize(new Dimension(tamanyX-20,30));
+//		jtfDescripcio.setPreferredSize(new Dimension(tamanyX-20,30));	
+//		add(jtfDescripcio);		
+//		
+//		butGuardar=new JButton("Guardar");
+//		butGuardar.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e){butGuardar_mouseReleased();}});
+//		butGuardar.setBorderPainted(true);
+//		butGuardar.setFocusPainted(false);
+//		butGuardar.setContentAreaFilled(false);
+//		butGuardar.setOpaque(true);
+//		butGuardar.setVerticalAlignment(SwingConstants.CENTER);
+//		butGuardar.setLocation(690,160);
+//		butGuardar.setFont(m_fontOpcions);
+//		butGuardar.setSize(new Dimension(100,30));
+//		butGuardar.setPreferredSize(new Dimension(100,30));
+//		butGuardar.setBackground(colorVerd);		
+//		butGuardar.setForeground(Color.white);
+//		butGuardar.setToolTipText("Guanyats");		
+//		butGuardar.setBorder(new LineBorder(colorVerdBorder, 1));
+//		m_jpDialog.add(butGuardar);	
+//		
+//		addWindowListener(new  WindowAdapter()
+//			{
+//			public void windowClosing(WindowEvent we)
+//	    		{	 				
+//	    		}
+//			});				
+//		}
+//	
+//	public void butGuardar_mouseReleased()
+//		{
+//		if (arxiuSeleccionat!=null)
+//			{
+//			arxiuSeleccionat.m_descripcio=jtfDescripcio.getText();
+//			ArxiuAdjuntDAO.GetInstance().ActualitzarArxiuAdjunt(arxiuSeleccionat);
+//			}
+//		
+//		/*if (tascaSeleccionada.m_id>0)
+//			{			
+//			tascaSeleccionada.m_tasca=panPlanificar.labTasca.getText();
+//			tascaSeleccionada.m_descripcioTasca=panPlanificar.editor.getText();			
+//			tascaSeleccionada.m_dataTasca=DataHora.getInstance().StringEuropeuToCalendar(panPlanificar.jtfData.getText()+" 00:00:00");
+//			tascaSeleccionada.m_horaTasca=panPlanificar.jtfHora.getText()+":00";
+//			tascaSeleccionada.m_duradaTasca=panPlanificar.jtfDurada.getText()+":00";
+//			tascaSeleccionada.m_tascaAcabada=panPlanificar.chkMarcarComAAcabada.isSelected();	
+//			tascaSeleccionada.m_assumpte=panPlanificar.jtfAssumpte.getText();
+//			TascaDAO.GetInstance().ActualitzarTasca(tascaSeleccionada);
+//			negociSeleccionat.m_tascaActiva=TascaDAO.GetInstance().HiHaAlgunaTascaActiva(negociSeleccionat.m_id);
+//			NegociDAO.GetInstance().ActualitzarNegoci(negociSeleccionat);			
+//			}
+//			else
+//			{
+//			//Tasca tasca=new Tasca();
+//			tascaSeleccionada.m_idNegoci=negociSeleccionat.m_id;
+//			tascaSeleccionada.m_nomNegoci=negociSeleccionat.m_empresa;
+//			//tasca.m_nomContacte=negociSeleccionat.m_contacte;
+//			tascaSeleccionada.m_descripcioIdeia=negociSeleccionat.m_descripcioIdea;		
+//			tascaSeleccionada.m_esIdeia=negociSeleccionat.m_esIdea;
+//			tascaSeleccionada.m_tasca=panPlanificar.labTasca.getText();
+//			tascaSeleccionada.m_descripcioTasca=panPlanificar.editor.getText();
+//			tascaSeleccionada.m_idUsuari=MainGUI.m_suite.usuariActual.m_id;
+//			tascaSeleccionada.m_dataTasca=DataHora.getInstance().StringEuropeuToCalendar(panPlanificar.jtfData.getText()+" 00:00:00");
+//			tascaSeleccionada.m_horaTasca=panPlanificar.jtfHora.getText()+":00";
+//			tascaSeleccionada.m_duradaTasca=panPlanificar.jtfDurada.getText()+":00";
+//			//tascaSeleccionada.m_tascaAcabada=false;			
+//			tascaSeleccionada.m_tascaAcabada=panPlanificar.chkMarcarComAAcabada.isSelected();
+//			tascaSeleccionada.m_assumpte=panPlanificar.jtfAssumpte.getText();
+//			TascaDAO.GetInstance().CrearTasca(tascaSeleccionada);
+//			negociSeleccionat.m_tascaActiva=true;
+//			NegociDAO.GetInstance().ActualitzarNegoci(negociSeleccionat);
+//			}*/
+//		Desactivar();
+//		}
+//			
+//	public void Activar(Negoci negoci,ArxiuAdjunt arxiu)
+//		{				
+//		//m_panell=p_panell;
+//		negociSeleccionat=negoci;
+//		arxiuSeleccionat=arxiu;
+//		jtfArxiuAdjunt.setText(arxiuSeleccionat.m_arxiuAdjuntNomOriginal);
+//		jtfDescripcio.setText(arxiuSeleccionat.m_descripcio);
+//		DisablePanel.GetInstance().SetEnablePanel( false );
+//		setLocationRelativeTo(null);	
+//		setAlwaysOnTop(true);
+//		setVisible(true);	
+//		}				
+//	
+//	public void Desactivar()
+//		{
+//		DisablePanel.GetInstance().SetEnablePanel( true );
+//		setVisible(false);	
+//		setAlwaysOnTop(false);			
+//		}			
+//		
+//	 public void componentHidden(ComponentEvent e) 
+//	 	{
+//	 	
+//	 	}
+//
+//	 public void componentMoved(ComponentEvent e)  
+//	 	{
+//	 	
+//	 	}
+//
+//	 public void componentResized(ComponentEvent e)
+//	 	{
+//		int tamanyX=this.getWidth();	
+//		int tamanyY=this.getHeight();
+//		//if (panPlanificar!=null) panPlanificar.ActualitzarResize(tamanyX, tamanyY);
+//	 	}
+//	 
+//
+//	 public void componentShown(ComponentEvent e)
+//	 	{
+//
+//	 	}
+//	
+//	}

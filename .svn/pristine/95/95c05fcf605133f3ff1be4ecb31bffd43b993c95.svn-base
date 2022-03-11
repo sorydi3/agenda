@@ -1,0 +1,46 @@
+package agendaproduccio.utils;
+
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JTable;
+
+public class CopyCellTable implements ActionListener
+{  
+	private JTable m_jtaula;
+	private StringSelection m_selection;
+	private Clipboard m_clipboard;
+	
+	public CopyCellTable( JTable p_jtable )
+	{	
+		m_jtaula = p_jtable;
+	}
+	
+	public void actionPerformed(ActionEvent e) 
+	{
+	    int l_selectedColumn = m_jtaula.getSelectedColumn();
+	    int l_selectedRow = m_jtaula.getSelectedRow();
+	    
+	    if ( l_selectedColumn != -1 && l_selectedRow != -1 ) 
+	    {
+	        Object value = m_jtaula.getValueAt( l_selectedRow, l_selectedColumn);
+	        String data;
+	        if ( value == null ) 
+	        {
+	            data = "";
+	        }
+	        else
+	        {
+	            data = value.toString();
+	        }
+	        
+	        m_selection = new StringSelection( data );
+	        m_clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+	        m_clipboard.setContents(m_selection, m_selection);
+	    }
+	}
+}

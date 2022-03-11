@@ -1,0 +1,135 @@
+package agendaproduccio.models.entitatsbddAgenda.daos;
+
+import java.util.Calendar;
+import java.util.Vector;
+
+import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
+import agendaproduccio.utils.DataHora;
+import connexioBDD.ConnexionsBdd;
+import connexioBDD.DataAccessLayer;
+
+public class OrdreLiniaRutaDAO {
+
+	private static OrdreLiniaRutaDAO m_singleton;
+	private DataAccessLayer m_bdd;
+	private String m_sentencia;
+	private Object[][] m_camps;
+	private DataHora m_dh = DataHora.getInstance();
+	private final int NUM_FILAS = 34;
+	private final int NUM_COLUMNAS = 2;
+
+	private OrdreLiniaRutaDAO() {
+		m_bdd = ConnexionsBdd.getInstance().m_bddMySqlControlPlanta;
+		/*
+		*/
+		m_camps = new String[NUM_FILAS][NUM_COLUMNAS];
+		m_camps[0][0] = "o.NI_Num_Orden_Produccion";
+		m_camps[1][0] = "o.NI_Descripcion_2";
+		m_camps[2][0] = "o.NI_Data_Prevista_Original";
+		m_camps[3][0] = "o.NI_Hora_Prevista_Original";
+		m_camps[4][0] = "o.NI_Ample_Bobina";
+		m_camps[5][0] = "o.Terminada_Navision";
+		m_camps[6][0] = "o.UI_Estado_CP";
+		m_camps[7][0] = " o.NM_Repas_Informacio";
+		m_camps[8][0] = "o.NumComandes";
+		m_camps[9][0] = "o.Signada";
+		m_camps[10][0] = "o.NI_Data_Prevista_Cobertes";
+		m_camps[11][0] = "o.NI_Hora_Prevista_Cobertes";
+		m_camps[12][0] = "r.UI_Estado";
+		m_camps[29][0] = "r.NI_Num_Centro_Trabajo";
+		m_camps[13][0] = "l.NI_Num_Orden_Produccion";
+		m_camps[14][0] = "l.NI_Identificador_Tiratge";
+		m_camps[15][0] = "l.NI_Cantidad";
+		m_camps[16][0] = " l.NI_No_Planes_Totals_Tiratge";
+		m_camps[17][0] = " l.NI_Format_Tiratge";
+		m_camps[18][0] = "l.NI_Plegat_Tiratge";
+		m_camps[19][0] = " l.NI_Nom_Maquina";
+		m_camps[20][0] = "l.NI_Codi_Grup_Producto";
+		m_camps[21][0] = "l.Planificat";
+		m_camps[22][0] = "l.UI_Id_Lin_Ordre_P_Navision";
+		m_camps[23][0] = "l.DataEntregaManipuladorExtern";
+		m_camps[24][0] = "l.Planificat_Manipulat_Extern";
+		m_camps[25][0] = "l.NI_Tipus_Papel_Bobina_Entera_1";
+		m_camps[26][0] = "l.NI_Tipus_Papel_Bobina_Entera_2";
+		m_camps[27][0] = "l.NI_Tipus_Papel_Bobina_Entera_3";
+		m_camps[28][0] = "l.QualitatPaperMaquinaFulla";
+		m_camps[30][0] = "l.CaraODorsMaquinaFulla";
+		m_camps[31][0] = "l.GramatgePaperMaquinaFulla";
+		m_camps[33][0] = "l.TipusProducteMaquinaFulla";
+		m_camps[32][0] = "c.Id";
+		m_sentencia = "";
+		for (int i = 0; i < m_camps.length; i++) {
+			m_sentencia += i > 0 ? "," : " ";
+			m_sentencia += m_camps[i][0];
+		}
+
+	}
+
+	public static OrdreLiniaRutaDAO GetInstance() {
+		if (m_singleton == null) {
+			m_singleton = new OrdreLiniaRutaDAO();
+		}
+		return m_singleton;
+	}
+
+	public OrderLiniaRutaPNavison Fill(Object[] p_fila) {
+		OrderLiniaRutaPNavison l_res = new OrderLiniaRutaPNavison();
+		l_res.m_nI_Num_Orden_Produccion_o = p_fila[0] == null ? "" : (String) p_fila[0];
+		l_res.m_nI_Descripcion_2_o = p_fila[1] == null ? "" : (String) p_fila[1];
+		l_res.m_nI_Data_Prevista_Original_o = p_fila[2] == null ? "" : (String) p_fila[2];
+		l_res.m_nI_Hora_Prevista_Original_o = p_fila[3] == null ? "" : (String) p_fila[3];
+		l_res.m_nI_Ample_Bobina_o = p_fila[4] == null ? "" : (String) p_fila[4];
+		l_res.m_terminada_Navision_o = p_fila[5] == null ? false : p_fila[5].equals("1");
+		l_res.m_uI_Estado_CP_o = p_fila[6] == null ? "" : (String) p_fila[6];
+		l_res.m_nM_Repas_Informacio_o = p_fila[7] == null ? false : p_fila[7].equals("1");
+		l_res.m_numComandes_o = p_fila[8] == null ? false : p_fila[8].equals("1");
+		l_res.m_signada_o = p_fila[9] == null ? false : p_fila[9].equals("1");
+		l_res.m_nI_Data_Prevista_Cobertes_o = p_fila[10] == null ? "" : (String) p_fila[10];
+		l_res.m_nI_Hora_Prevista_Cobertes_o = p_fila[11] == null ? "" : (String) p_fila[11];
+		l_res.m_uI_Estado_r = p_fila[12] == null ? "" : (String) p_fila[12];
+		l_res.m_nI_Num_Orden_Produccion_l = p_fila[13] == null ? "" : (String) p_fila[13];
+		l_res.m_nI_Identificador_Tiratge_l = p_fila[14] == null ? 0 : Integer.parseInt((String) p_fila[14]);
+		l_res.m_nI_Cantidad_l = p_fila[15] == null ? "" : (String) p_fila[15];
+		l_res.m_nI_No_Planes_Totals_Tiratge_l = p_fila[16] == null ? "" : (String) p_fila[16];
+		l_res.m_nI_Format_Tiratge_l = p_fila[17] == null ? "" : (String) p_fila[17];
+		l_res.m_nI_Plegat_Tiratge_l = p_fila[18] == null ? "" : (String) p_fila[18];
+		l_res.m_nI_Nom_Maquina_l = p_fila[19] == null ? "" : (String) p_fila[19];
+		l_res.m_nI_Codi_Grup_Producto_l = p_fila[20] == null ? "" : (String) p_fila[20];
+		l_res.m_planificat_l = p_fila[21] == null ? false : p_fila[21].equals("1");
+		l_res.m_uI_Id_Lin_Ordre_P_Navision_l = p_fila[22] == null ? 0 : Integer.parseInt((String) p_fila[22]);
+		l_res.m_dataEntregaManipuladorExtern_l = p_fila[23] == null ? "" : (String) p_fila[23];
+		l_res.m_planificat_Manipulat_Extern_l = p_fila[24] == null ? false : p_fila[24].equals("1");
+		l_res.m_nI_Tipus_Papel_Bobina_Entera_1_l = p_fila[25] == null ? "" : (String) p_fila[25];
+		l_res.m_nI_Tipus_Papel_Bobina_Entera_2_l = p_fila[26] == null ? "" : (String) p_fila[26];
+		l_res.m_nI_Tipus_Papel_Bobina_Entera_3_l = p_fila[27] == null ? "" : (String) p_fila[27];
+		l_res.m_qualitatPaperMaquinaFulla_l = p_fila[28] == null ? "" : (String) p_fila[28];
+		l_res.m_NI_Num_Centro_Trabajo_r = p_fila[29] == null ? "" : (String) p_fila[29];
+		l_res.m_CaraODorsMaquinaFulla_l = p_fila[30] == null ? "" : (String) p_fila[30];
+		l_res.m_GramatgePaperMaquinaFulla_l = p_fila[31] == null ? "" : (String) p_fila[31];
+		l_res.m_idComanda_c = p_fila[32] == null ? 0 : Integer.parseInt((String) p_fila[32]);
+		l_res.m_tipusProducteMaquinaFulla_l = p_fila[33] == null ? " " : (String) p_fila[33];
+		l_res.setTipus();
+		return l_res;
+	}
+
+	public Vector<OrderLiniaRutaPNavison> GetEntreDates(Calendar p_dataInici, Calendar p_dataFinal) {
+		Vector<OrderLiniaRutaPNavison> l_vRes = new Vector<>();
+		if (p_dataInici != null && p_dataFinal != null) {
+			String l_strDini = m_dh.CalendarToStringAmericaAADDMM(p_dataInici);
+			String l_strDfin = m_dh.CalendarToStringAmericaAADDMM(p_dataFinal);
+			String l_query = Sentencias.buildSentenciaJoinSELECT(m_sentencia, l_strDini, l_strDfin);
+			System.out.println(l_query);
+			if (m_bdd.executaSQLSELECT(l_query) > 0) {
+				String l_initialResult[][] = m_bdd.recuperaSQLSelect();
+				for (int i = 0; i < l_initialResult.length; i++) {
+
+					l_vRes.add(Fill(l_initialResult[i]));
+				}
+			}
+		} else {
+			System.out.println("DATE IS NULL!!!!");
+		}
+		return l_vRes;
+	}
+
+}

@@ -1,0 +1,34 @@
+package agendaproduccio.models;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JTable;
+
+import agendaproduccio.models.entitatsbddAgenda.daos.OrdreLiniaRutaDAO;
+import agendaproduccio.models.entitatsbddAgenda.daos.OrdrePNavisionDAO;
+import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
+import agendaproduccio.models.entitatsbddAgenda.model.OrdrePNavision;
+import agendaproduccio.views.renderers.jtables.MyJTable;
+
+public class ControllerAgenda {
+	private OrdreLiniaRutaDAO m_dadesBddDao;
+	private final JTable m_jtable;
+	private final Map<String,OrdrePNavision> m_dades;
+	public ControllerAgenda (JTable view) {
+		this.m_jtable = view;
+		this.m_dades = new HashMap<>();
+		m_dadesBddDao = OrdreLiniaRutaDAO.GetInstance();
+	}
+	
+	public void populateViewJTable(MyJTable view,Calendar p_dataInici,Calendar p_dataFinal) {
+		if (p_dataInici.before(p_dataFinal)) {
+			for (OrderLiniaRutaPNavison l_capcelera : m_dadesBddDao.GetEntreDates(p_dataInici, p_dataFinal)) {
+				System.out.println(l_capcelera);
+			}
+		}
+	}
+	
+	
+}

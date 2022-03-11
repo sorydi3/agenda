@@ -1,0 +1,99 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import java.awt.Color;
+//import java.awt.Graphics;
+//import java.awt.Graphics2D;
+//import java.awt.Rectangle;
+//import java.util.Vector;
+//
+//import javax.swing.JPanel;
+//
+//
+//
+//
+//public class JPanelGraficPastis extends JPanel
+//	{	
+//	
+//	Vector llValors;
+//	
+//	public JPanelGraficPastis()
+//		{
+//		
+//		}
+//	
+//	/*protected void paintComponent(Graphics g) 
+//		{ 
+//		super.paintComponent(g);	
+//		Rectangle area = getBounds();
+//		double total = 0.0D;
+//	    for (int i = 0; i < llValors.size(); i++) 
+//	    	{
+//	    	PorcioGraficPastis porcio=(PorcioGraficPastis)llValors.get(i);
+//	    	total += porcio.valor;
+//	    	}
+//
+//	    double curValue = 0.0D;
+//	    int startAngle = 0;
+//	    for (int i = 0; i < llValors.size(); i++) 
+//	    	{
+//	    	PorcioGraficPastis porcio=(PorcioGraficPastis)llValors.get(i);
+//	    	startAngle = (int) (curValue * 360 / total);
+//	    	int arcAngle = (int) (porcio.valor * 360 / total);
+//	    	System.out.println("Valor "+i+": start: "+startAngle+" arc: "+arcAngle);
+//	    	g.setColor(porcio.color);
+//	    	g.fillArc(area.x, area.y, area.width, area.height, startAngle, arcAngle);
+//	    	curValue += porcio.valor;
+//	    	}		
+//
+//		}*/
+//	
+//	
+//	public void paint(Graphics g) 
+//		{
+//		Graphics2D g2d = (Graphics2D)g; 	  	  
+//		super.paint(g);
+//		
+//		g.setColor(Color.red);
+//		/*int tamanyXPanell=this.getWidth();
+//		int tamanyYPanell=this.getHeight();
+//		g.fillRect(0, 0, tamanyXPanell,30);*/
+//		
+//		Rectangle area = getBounds();
+//		double total = 0.0D;
+//	    for (int i = 0; i < llValors.size(); i++) 
+//	    	{
+//	    	PorcioGraficPastis porcio=(PorcioGraficPastis)llValors.get(i);
+//	    	total += porcio.valor;
+//	    	}
+//
+//	    double curValue = 0.0D;
+//	    int startAngle = 0;
+//	    for (int i = 0; i < llValors.size(); i++) 
+//	    	{
+//	    	PorcioGraficPastis porcio=(PorcioGraficPastis)llValors.get(i);
+//	    	startAngle = (int) (curValue * 360 / total);
+//	    	int arcAngle = (int) (porcio.valor * 360 / total);
+//	    	//System.out.println("Valor "+i+": start: "+startAngle+" arc: "+arcAngle);
+//	    	//System.out.println("x: "+area.x+" y: "+area.y+" w: "+area.width+" h: "+area.height);
+//	    	g.setColor(porcio.color);
+//	    	//g.fillArc(area.x, area.y, area.width, area.height, startAngle, arcAngle);
+//	    	g.fillArc(0, 0, area.width, area.height, startAngle, arcAngle);
+//	    	
+//	    	curValue += porcio.valor;
+//	    	}		
+//		
+//		}
+//	
+//	public void Actualitzar(Vector _llValors)
+//		{
+//		llValors=_llValors;
+//		for (int i=0;i<llValors.size();i++)
+//			{
+//			PorcioGraficPastis porcio=(PorcioGraficPastis)llValors.get(i);
+//			System.out.println("Valor "+i+": "+porcio.valor);			
+//			}
+//		repaint();
+//		}
+//	
+//	}

@@ -1,0 +1,175 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.text.JTextComponent;
+import agendaproduccio.views.renderers.jtables.MyJTable;
+
+public class MyJTextField extends JTextField implements FocusListener {
+	private MyJTable m_jtable;
+	private IconTextComponentHelper m_Helper = new IconTextComponentHelper(this);
+	private final String m_hint;
+
+	public MyJTextField(String icon, String hint) {
+		super();
+		this.m_hint = hint;
+		this.addKeyListener(new MyAdapter());
+		this.setIcon(new ImageIcon("./img/" + icon));
+		this.addFocusListener(this);
+	}
+
+	public void addJtable(JTable jtable) {
+		this.m_jtable = (MyJTable) jtable;
+	}
+
+	private IconTextComponentHelper getHelper() {
+		if (m_Helper == null)
+			m_Helper = new IconTextComponentHelper(this);
+
+		return m_Helper;
+	}
+
+	public void setIcon(ImageIcon icon) {
+		getHelper().onSetIcon(icon);
+	}
+
+	@Override
+	protected void paintComponent(Graphics graphics) {
+		super.paintComponent(graphics);
+		getHelper().onPaintComponent(graphics);
+	}
+
+	@Override
+	public void setBorder(Border border) {
+		getHelper().onSetBorder(border);
+		super.setBorder(getHelper().getBorder());
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		this.repaint();
+
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		// TODO Auto-generated method stub
+		this.repaint();
+	}
+
+	class IconTextComponentHelper {
+		private static final int ICON_SPACING = 4;
+
+		private Border mBorder;
+		private ImageIcon mIcon;
+		private Border mOrigBorder;
+		private JTextComponent mTextComponent;
+
+		IconTextComponentHelper(JTextComponent component) {
+			mTextComponent = component;
+			mOrigBorder = component.getBorder();
+			mBorder = mOrigBorder;
+		}
+
+		Border getBorder() {
+			return mBorder;
+		}
+
+		void onPaintComponent(Graphics g) {
+			if (mIcon != null) {
+				Insets iconInsets = mOrigBorder.getBorderInsets(mTextComponent);
+				mIcon.paintIcon(mTextComponent, g, iconInsets.left, iconInsets.top);
+			}
+
+			if (getText().toString().isEmpty()) {
+				int height = getHeight();
+				Font prev = g.getFont();
+				Font italic = prev.deriveFont(Font.ITALIC);
+				Color prevColor = g.getColor();
+				g.setFont(italic);
+				g.setColor(UIManager.getColor("textInactiveText"));
+				int h = g.getFontMetrics().getHeight();
+				int textBottom = (height - h) / 2 + h - 4;
+				int x = getInsets().left;
+				Graphics2D g2d = (Graphics2D) g;
+				RenderingHints hints = g2d.getRenderingHints();
+				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				g2d.drawString(m_hint, x, textBottom);
+				g2d.setRenderingHints(hints);
+				g.setFont(prev);
+				g.setColor(prevColor);
+			}
+		}
+
+		void onSetBorder(Border border) {
+			mOrigBorder = border;
+
+			if (mIcon == null) {
+				mBorder = border;
+			} else {
+				Border margin = BorderFactory.createEmptyBorder(0, mIcon.getIconWidth() + ICON_SPACING, 0, 0);
+				mBorder = BorderFactory.createCompoundBorder(border, margin);
+			}
+		}
+
+		void onSetIcon(ImageIcon icon) {
+			mIcon = icon;
+			resetBorder();
+		}
+
+		private void resetBorder() {
+			mTextComponent.setBorder(mOrigBorder);
+		}
+	}
+
+	class MyAdapter extends KeyAdapter {
+		public MyAdapter() {
+			super();
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			TableRowSorter<DefaultTableModel> l_sorter = m_jtable.getSorter();
+			m_jtable.setRowSorter(l_sorter);
+			String l_text = getText().toString();
+			if (l_text.isEmpty()) {
+
+				l_sorter.setRowFilter(null);
+				System.out.println("string null");
+
+			} else {
+				try {
+					l_sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(l_text)));
+
+				} catch (PatternSyntaxException pse) {
+					System.out.println("Bad regex pattern");
+				}
+			}
+
+			((AbstractTableModel) m_jtable.getModel()).fireTableDataChanged();
+		}
+	}
+
+}

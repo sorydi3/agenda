@@ -1,0 +1,248 @@
+package agendaproduccio.utils;
+//package utils;
+//
+//import java.io.File;
+//import java.util.Collections;
+//import java.util.Date;
+//import java.util.HashMap;
+//import java.util.Properties;
+//import java.util.Set;
+//import java.util.Vector;
+//
+//import javax.mail.BodyPart;
+//import javax.mail.Message;
+//import javax.mail.MessagingException;
+//import javax.mail.Session;
+//import javax.mail.Transport;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeBodyPart;
+//import javax.mail.internet.MimeMessage;
+//import javax.mail.internet.MimeMultipart;
+//
+//import com.jscape.filetransfer.FileTransferException;
+//
+//import main.MainGUI;
+//import office365.connexio.Usuari365;
+//import office365.correu.CorreuServidor365;
+//import antic.entitatbdd.crm.dao.UsuariDAO;
+//import antic.entitatbdd.crm.model.Usuari;
+//
+//public class GestorMailEnviar 
+//{
+//	// ATRIBUTS
+//		static private GestorMailEnviar m_singleton = null;	
+//		
+//		static final public int SERVEI_ZIMBRA = 0;
+//		static final public int SERVEI_OFFICE365 = 1;
+//
+//		private CorreuServidor365 m_servidorCorreu365;
+//		private UsuariDAO m_daoUsuaris;
+//		
+//		public static Usuari USUARI_ZIMBRA_A;
+//		private HashMap<String,Usuari365> m_hmUsuaris365Creats;
+//	
+//	// M�TODES P�BLICS
+//		static public GestorMailEnviar GetInstance()
+//		{
+//			if ( m_singleton==null )
+//			{
+//				m_singleton = new GestorMailEnviar();				
+//			}
+//			return m_singleton;			
+//		}
+//		
+//		public boolean EnviarMail( int p_serveiMail, Usuari p_remitent, String p_destinatari, String p_assumpte, String p_contingut )
+//		{
+//			Vector<String> l_vDestinataris = new Vector<>();
+//			l_vDestinataris.add(p_destinatari);
+//			
+//			return EnviarMail(p_serveiMail, p_remitent, l_vDestinataris, p_assumpte, p_contingut, new Vector<>());
+//		}
+//		
+//		public boolean EnviarMail( int p_serveiMail, Usuari p_remitent, Vector<String> p_vDestinataris, String p_assumpte, String p_contingut )
+//		{
+//			return EnviarMail(p_serveiMail, p_remitent, p_vDestinataris, p_assumpte, p_contingut, new Vector<>());			
+//		}
+//		
+//		public boolean EnviarMail( int p_serveiMail, Usuari p_remitent, String p_destinatari, String p_assumpte, String p_contingut, Vector<String> p_vArxiusAdjunts )
+//		{
+//			Vector<String> l_vDestinataris = new Vector<>();
+//			l_vDestinataris.add(p_destinatari);
+//
+//			return EnviarMail(p_serveiMail, p_remitent, l_vDestinataris, p_assumpte, p_contingut, p_vArxiusAdjunts);			
+//		}
+//		
+//		public boolean EnviarMail( int p_serveiMail, Usuari p_remitent, Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, Vector<String> p_vArxiusAdjunts )
+//		{
+//			if ( p_serveiMail==SERVEI_OFFICE365 )
+//			{
+//				return EnviarMailPerOffice365( p_remitent, p_vDestinataris, p_assumpte, p_contingut, p_vArxiusAdjunts );
+//			}
+//			else if ( p_serveiMail==SERVEI_ZIMBRA )
+//			{
+//				return EnviarMailPerZimbra8( p_remitent, p_vDestinataris, p_assumpte, p_contingut, p_vArxiusAdjunts );
+//			}
+//			else
+//			{
+//				return false;
+//			}
+//		}
+//		
+//	// M�TODES PRIVATS PRINCIPALS
+//		private GestorMailEnviar()
+//		{
+//			m_servidorCorreu365 = CorreuServidor365.GetInstance();
+//			m_daoUsuaris = UsuariDAO.GetInstance();
+//			m_hmUsuaris365Creats = new HashMap<>();
+//			
+//			USUARI_ZIMBRA_A = new Usuari();
+//			USUARI_ZIMBRA_A.m_correu = "a@rotimpres.com";
+//			USUARI_ZIMBRA_A.m_usuariCorreu = "a";
+//			USUARI_ZIMBRA_A.m_passwordCorreu = "4a4a4a4";
+//		}
+//		
+//		private boolean EnviarMailPerZimbra8( Usuari p_remitent, Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, Vector<String> p_vArxiusAdjunts )
+//		{
+//			try
+//			{
+//				// Propietats generals
+//				Properties props = System.getProperties( );
+//				props.put( "mail.smtp.auth", "true" );
+//				Session mailSession = Session.getDefaultInstance( props, null );
+//
+//				// Omplim el contingut
+//				BodyPart l_text = new MimeBodyPart( );
+//				l_text.setContent( p_contingut, "text/html" );
+//
+//				MimeMultipart multiParte = new MimeMultipart( );
+//				multiParte.addBodyPart( l_text );
+//
+//				// Afegim els adjunts				
+//				for ( String l_adjunt : p_vArxiusAdjunts )
+//				{
+//					if ( !l_adjunt.isEmpty() )
+//					{
+//						MimeBodyPart l_attachedFilePart = new MimeBodyPart( );
+//						l_attachedFilePart.attachFile( l_adjunt );
+//						
+//						multiParte.addBodyPart( l_attachedFilePart );
+//					}
+//				}				
+//
+//				// Establim Remitents i Destinataris del missatge
+//				Message msg = new MimeMessage( mailSession );
+//				msg.setFrom( new InternetAddress( p_remitent.m_correu ) );
+//				
+//				for ( String l_destinatari : p_vDestinataris )
+//				{
+//					// Si �s un correu intern enviat des de zimbra, ha d'anar cap a rotimpres.cat
+//					String l_destinatariParsed = l_destinatari.replace("@rotimpres.com", "@rotimpres.cat").replace("@rotimpres.es", "@rotimpres.cat");
+//					msg.addRecipient( Message.RecipientType.TO, new InternetAddress( l_destinatariParsed ) );
+//				}
+//				
+//				// Establim el subjecte
+//				msg.setSubject( p_assumpte );
+//
+//				// Omplim data i �ltims detalls
+//				msg.setContent( multiParte );
+//				msg.setSentDate( new Date( ) );
+//				msg.setHeader( "X-Mailer", "JavaMail API" );
+//
+//				// Enviem el mail
+//				Transport tr = mailSession.getTransport( "smtp" );
+//				tr.connect( MainGUI.m_suite.m_servidorCorreu, p_remitent.m_usuariCorreu, p_remitent.m_passwordCorreu );
+//				msg.saveChanges( );
+//				tr.sendMessage( msg, msg.getAllRecipients( ) );
+//				tr.close( );
+//			}
+//			catch (MessagingException e)
+//			{
+//				System.out.println( e.fillInStackTrace( ) );
+//				return false;
+//			}
+//			catch (Exception e)
+//			{
+//				System.out.println( e.fillInStackTrace( ) );
+//				return false;
+//			}
+//
+//			return true;
+//		}		
+//		
+//		private boolean EnviarMailPerOffice365( Usuari p_remitent, Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, Vector<String> p_vArxiusAdjunts )
+//		{
+//			try
+//			{
+//				Usuari365 l_usuariOfficeUsuari = null;
+//				if ( m_hmUsuaris365Creats.containsKey( p_remitent.m_correu ) )
+//				{
+//					l_usuariOfficeUsuari = m_hmUsuaris365Creats.get( p_remitent.m_correu );
+//				}
+//				else
+//				{
+//					String l_authority = "https://login.microsoftonline.com/organizations/";
+//					Set<String> l_scope = Collections.singleton("user.read mail.send Mail.ReadWrite Mail.ReadBasic Mail.Read");
+//				    String l_clientId = "22b0ed26-ab82-4fd0-bcb9-e544bbed0628";
+//				    String l_username = p_remitent.m_correu;
+//				    String l_password = ObtenirPasswordOffice365Desencriptat( p_remitent );
+//					l_usuariOfficeUsuari = new Usuari365(l_authority, l_scope, l_clientId, l_username, l_password);
+//					m_hmUsuaris365Creats.put( p_remitent.m_correu, l_usuariOfficeUsuari );
+//				}
+//					
+//				Vector<File> l_vFitxersAdjunts = new Vector<>();
+//				double l_mida = 0.00;
+//				for ( String l_adjunt : p_vArxiusAdjunts )
+//				{
+//					if ( !l_adjunt.isEmpty() )
+//					{
+//						File l_fitxerAdjunt = new File( l_adjunt );
+//						if ( l_fitxerAdjunt.exists() )
+//						{
+//							l_mida += (l_fitxerAdjunt.length() / (1024.00 * 1024.00) );
+//							if ( l_mida > 4.00 )
+//							{
+//								throw new FileTransferException("Fitxer massa gran");
+//							}
+//							else
+//							{
+//								l_vFitxersAdjunts.add( l_fitxerAdjunt );
+//							}
+//						}
+//					}
+//				}
+//				
+//				m_servidorCorreu365.EnviarCorreu(l_usuariOfficeUsuari, p_vDestinataris, p_assumpte, p_contingut, l_vFitxersAdjunts );
+//				return true;
+//			}
+//			catch ( FileTransferException e )
+//			{
+//				System.out.println( "HI HA ADJUNTS MASSA PESANTS (M�X 4MB): OBRINT ENVIAMENT MANUAL" );
+//				GestorMailObrir.GetInstance().ObrirOmplirMail(p_vDestinataris, p_assumpte, p_contingut, p_vArxiusAdjunts);
+//				return true;
+//			}
+//			catch( Exception e )
+//			{
+//				e.printStackTrace();
+//				System.out.println(e.fillInStackTrace());
+//				System.out.println("ERROR: No s'ha pogut enviar l'email: "+e);
+//				return false;
+//			}
+//		}
+//		
+//	// M�TODES PRIVATS AUXILIARS
+//		private String ObtenirPasswordOffice365Desencriptat( Usuari p_remitent )
+//		{
+//			String l_pwd = "";
+//			
+//			if ( p_remitent.m_id==0 )
+//			{
+//				l_pwd = p_remitent.m_passwordCorreu;
+//			}
+//			else
+//			{
+//				l_pwd = m_daoUsuaris.ObtenirPasswordCorreu365Desencriptat( p_remitent );
+//			}
+//			
+//			return l_pwd;
+//		}
+//}

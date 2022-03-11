@@ -1,0 +1,148 @@
+package agendaproduccio.views.renderers.jtables;
+
+import java.awt.Color;
+
+import javax.swing.JCheckBox;
+import javax.swing.table.DefaultTableModel;
+
+import agendaproduccio.utils.JTableGUI;
+import agendaproduccio.utils.MyJTextField;
+import agendaproduccio.views.renderers.HighlightRenderer;
+import agendaproduccio.views.renderers.IntegerRenderer;
+
+
+
+public class MyJTable extends JTableGUI {
+	// ATR
+	private final int m_pla = 0;
+	private final int m_com = 1;
+	private final int m_part = 2;
+	private final int m_capcelera = 3;
+	private final int m_tir = 4;
+	private final int m_maq = 5;
+	private final int m_dh = 6;
+	private final int m_tirada = 7;
+	private final int m_pag = 8;
+	private final int m_fp = 9; 
+	private final int m_paper = 10; 
+	private final int m_ctp = 11; 
+	private final int m_imp = 12; 
+
+	private final int m_enc = 13; 
+	private final int m_alc = 14; 
+	private final int m_gll = 15; 
+	private final int m_dse = 16; 
+	private final int m_mae = 17; 
+	private final MyJTextField m_jtext;
+	private boolean m_color;
+
+	// --------------------- Constructors -------------------------------------
+	public MyJTable() {
+		super();
+		this.m_jtext = null;
+		this.configuraRenderers();
+		ConfigurarColumnes();
+	}
+
+	public MyJTable(MyJTextField jtext) {
+		super();
+		m_jtext = jtext;
+		this.configuraRenderers();
+		ConfigurarColumnes();
+	}
+
+	// ------------------------ Modificadors ----------------------------------
+
+	public void AfegirFila(Object p_capcelera) {
+		BuidarFila();
+
+		m_model.addRow(m_fila);
+	}
+	public void activateColorBackground() {
+		this.m_color = true;
+	}
+
+	// MTD PRV
+	@Override
+	protected void ConfigurarTotalColumnes() {
+		TOTAL_COLUMNES = 18;
+	}
+
+	@Override
+	protected DefaultTableModel CrearModel() {
+		m_fila[m_pla] = "Pla.";
+		m_fila[m_com] = "Com.";
+		m_fila[m_part] = "Part.";
+		m_fila[m_capcelera] = "Cap�elera";
+		m_fila[m_tir] = "Tir.";
+		m_fila[m_maq] = "M�q.";
+		m_fila[m_dh] = "D\\H";
+		m_fila[m_tirada] ="Tirada";
+		m_fila[m_pag] = "P�g.";
+
+		m_fila[m_fp] = "F\\P";
+		m_fila[m_paper] = "Paper";
+
+		m_fila[m_ctp] = "CTP";
+		m_fila[m_imp] = "IMP";
+		
+		m_fila[m_enc] = "ENC";
+		m_fila[m_alc] = "AL�.";
+
+		m_fila[m_gll] = "GLL";
+		m_fila[m_dse] = "DSE";
+
+		m_fila[m_mae] =  "MAE";
+		DefaultTableModel l_model = new DefaultTableModel(m_fila, 0) {
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				switch (columnIndex) {
+				case 0: 
+					return JCheckBox.class;
+				case 4:
+					return Integer.class;
+				default:
+					return String.class;
+				}
+
+			};
+
+			public boolean isCellEditable(int p_row, int p_col) {
+				return false;
+			}
+
+			public void setValueAt(Object p_obj, int p_row, int p_col) {
+				super.setValueAt(p_obj, p_row, p_col);
+			}
+
+			public Object getValueAt(int p_row, int p_col) {
+				return (super.getValueAt(p_row, p_col));
+			}
+
+			@Override
+			public int getColumnCount() {
+				//TODO Auto-generated method stub
+				return super.getColumnCount();
+			}
+
+		};
+
+		return l_model;
+	}
+
+	@Override
+	protected void ConfigurarColumnes() {
+		this.setBackground(Color.white);
+		getColumnModel().getColumn(m_capcelera).setPreferredWidth(150);
+		getColumnModel().getColumn(m_capcelera).setMinWidth(20);
+		getColumnModel().getColumn(m_capcelera).setMaxWidth(150);
+
+	}
+
+
+	@Override
+	protected void configuraRenderers() {
+		setDefaultRenderer(String.class, new HighlightRenderer(m_jtext));
+		setDefaultRenderer(Integer.class, new IntegerRenderer());
+	}
+}

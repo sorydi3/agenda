@@ -1,0 +1,82 @@
+package agendaproduccio.views.renderers;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+
+public class IntegerRenderer extends DefaultTableCellRenderer {
+	private final int COLUMNA9 = 9;
+	private final int COLUMNA11 = 11;
+	private final int COLUMNA10 = 10;
+	private final int COLUMNA12 = 12;
+
+	/**
+	* 
+	*/
+	private static final long serialVersionUID = 1L;
+
+	public IntegerRenderer() {
+
+		setHorizontalTextPosition(LEFT);
+	}
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		Component l_component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		JLabel etiqueta = (JLabel) l_component;
+		setOpaque(isSelected);
+		renderInteger(etiqueta, value, row, column, table, isSelected);
+		return this;
+	}
+
+	private void renderInteger(JLabel etiqueta, Object value, int row, int column, JTable jtable, boolean isSelected) {
+		if (value instanceof Integer) {
+
+			etiqueta.setText(String.valueOf((Integer) value));
+			Object l_value = null;
+			Object l_valueBd = null;
+			if (jtable.getColumnName(column).equals("Rend 0")) {
+				l_value = jtable.getValueAt(row, COLUMNA9);
+				l_valueBd = jtable.getValueAt(row, COLUMNA11);
+			} else {
+				l_value = jtable.getValueAt(row, COLUMNA10);
+				l_valueBd = jtable.getValueAt(row, COLUMNA12);
+			}
+
+			if ((Integer) l_value == 1 || (Integer) l_valueBd == 1) {
+
+				if (!isSelected) {
+
+					if ((Integer) l_valueBd == 1) {
+						etiqueta.setBackground(Color.blue);
+						etiqueta.setForeground(Color.white);
+					} else {
+						etiqueta.setBackground(Color.red);
+						etiqueta.setForeground(Color.white);
+					}
+					setOpaque(true);
+				}
+			} else {
+				etiqueta.setForeground(Color.black);
+			}
+
+		}
+
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(Color.LIGHT_GRAY);
+		g2d.fillRect(0, this.getHeight() - 2, this.getWidth(), 1);
+	}
+
+}

@@ -1,0 +1,69 @@
+package agendaproduccio.utils;
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.CellEditor;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+
+public class PasteCellTable implements ActionListener
+{  
+	private JTable m_jtaula;
+	private String m_value;
+	private CellEditor m_editor;
+	private Clipboard m_clipboard;
+	private Transferable m_content;
+	
+	public PasteCellTable( JTable p_jtable )
+	{	
+		m_jtaula = p_jtable;
+	}
+	
+	public void actionPerformed(ActionEvent e) 
+	{
+		int l_selectedRow, l_selectedColumn;
+		
+		 m_clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		 m_content = m_clipboard.getContents( this );
+	
+		 if ( m_content != null )
+		 {
+		   try 
+		   {
+			   m_value = m_content.getTransferData(DataFlavor.stringFlavor).toString();     
+			   l_selectedColumn = m_jtaula.getSelectedColumn();
+	           l_selectedRow = m_jtaula.getSelectedRow();
+	            
+		       if ( m_jtaula.isCellEditable( l_selectedRow, l_selectedColumn ) ) 
+		       {
+		    	   m_jtaula.setValueAt( m_value, l_selectedRow, l_selectedColumn );
+		           if ( m_jtaula.getEditingRow() == l_selectedRow && m_jtaula.getEditingColumn() == l_selectedColumn) 
+		           {
+		        	   m_editor = m_jtaula.getCellEditor();
+		        	   m_editor.cancelCellEditing();
+	                   m_jtaula.editCellAt( l_selectedRow, l_selectedColumn );
+		           }
+		        }
+		        
+		       	m_jtaula.repaint();
+		   }
+		   catch (UnsupportedFlavorException e1) 
+		   {
+		     JOptionPane.showMessageDialog( m_jtaula , "No es pot enganxar", "Error", JOptionPane.ERROR_MESSAGE);
+		     System.err.println("UNSUPPORTED FLAVOR EXCEPTION " + e1.getLocalizedMessage());
+		   } 
+		   catch (IOException e2) 
+		   {
+			   JOptionPane.showMessageDialog( m_jtaula , "No es pot enganxar", "Error", JOptionPane.ERROR_MESSAGE);
+		      System.err.println("DATA CONSUMED EXCEPTION " + e2.getLocalizedMessage());
+		   }
+		 }
+	}
+}

@@ -1,0 +1,33 @@
+package agendaproduccio.utils;
+
+import javax.swing.JComponent;
+import javax.swing.JLayer;
+import javax.swing.JPanel;
+
+public class DisablePanelAuxiliar
+{
+private BlurLayerUI m_blurLayerUI;
+public JLayer <JComponent> m_jlayer;
+
+public DisablePanelAuxiliar()
+{
+	m_blurLayerUI = new BlurLayerUI( );
+}
+
+public void SetPanel( JPanel p_jpanel )
+{	
+	m_jlayer = new JLayer <JComponent>( p_jpanel, m_blurLayerUI );
+}
+
+public void SetEnablePanel( boolean p_enabled )
+{
+	m_blurLayerUI.m_difuminar = !p_enabled;
+	m_jlayer.repaint( );
+	m_jlayer.updateUI( );
+}
+
+public boolean IsEnabled()
+{
+	return m_blurLayerUI.m_difuminar;
+}
+}

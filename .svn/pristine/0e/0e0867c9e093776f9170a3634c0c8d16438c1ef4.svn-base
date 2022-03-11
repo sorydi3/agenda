@@ -1,0 +1,138 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
+
+//import utils.MiLayout;
+
+public class JPanellCalendariAmbCheckBox extends JPanel
+{
+	private static final long serialVersionUID = 1L;
+	private int m_midaX,m_midaY;
+	public JCheckBox m_jxbTitol;
+	
+	private JPanellCalendari m_calendari;
+	
+	public JPanellCalendariAmbCheckBox(String p_nomCalendari)
+	{
+		//OPCIONS GENERALS
+		setBackground(new Color(235,235,235));
+		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		setLayout(null);
+		m_midaX = 145;
+		m_midaY = 190;
+		setSize(m_midaX, m_midaY);		
+				
+		//Checkbox Titol		
+		m_jxbTitol = new JCheckBox(p_nomCalendari);
+		m_jxbTitol.setBounds(5,0,140,30);
+		m_jxbTitol.addItemListener(new ItemListener() 
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e) 
+			{
+				if (m_jxbTitol.isSelected())
+				{
+					m_calendari.SetEnabled(true);
+				}
+				else
+				{
+					m_calendari.SetEnabled(false);
+				}
+			}
+		});
+		m_jxbTitol.setSelected(false);
+		add(m_jxbTitol);
+		
+		//Calendari
+		m_calendari = new JPanellCalendari();
+		m_calendari.SetData(new GregorianCalendar());
+		m_calendari.setLocation(0,25);
+		m_calendari.SetEnabled(false);
+		add(m_calendari);
+	}
+	
+	public void SetData( String p_data )
+	{
+		m_calendari.SetData(p_data);
+	}
+	
+	public void SetPermetDeseleccionarDia( boolean p_permetDeseleccionarDia )
+	{
+		m_calendari.SetPermetDeseleccionarDia(p_permetDeseleccionarDia);
+	}
+	
+	public void SltMesSeguent()
+	{
+		m_calendari.SltMesSeguent();
+	}
+	
+	public void SltMesAnterior()
+	{
+		m_calendari.SltMesAnterior();
+	}
+	
+	public void SetDataDDMMAAAA( String p_data )
+	{
+		m_calendari.SetDataDDMMAAAA(p_data);
+	}
+	
+	public void SetData( Calendar p_data )
+	{
+		m_calendari.SetData(p_data);
+	}
+	
+	public void SetData()
+	{
+		m_calendari.SetData();
+	}
+	
+	public Calendar GetDataCalendarFormat()
+	{
+		return m_calendari.GetDataCalendarFormat();
+	}
+	
+	public String GetDataJavaFormat()
+	{
+		return m_calendari.GetDataJavaFormat();
+	}
+
+	public void setDefault() 
+	{
+		m_calendari.SetData(new GregorianCalendar());
+		m_jxbTitol.setSelected(false);
+		m_calendari.setEnabled(false);
+	}
+
+	public void SetSelected(boolean p_selected) 
+	{
+		m_jxbTitol.setSelected(p_selected);
+	}
+
+	public boolean IsSelected() 
+	{
+		return m_jxbTitol.isSelected();
+	}
+
+	public void SetBackgroundVisibility(boolean b) 
+	{
+		if (!b)
+		{
+			setBackground(null);
+			setBorder(null);
+		}
+		else
+		{
+			setBackground(new Color(235,235,235));
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		}
+		setOpaque(b);
+	}
+}

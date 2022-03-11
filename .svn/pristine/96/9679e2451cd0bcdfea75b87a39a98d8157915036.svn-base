@@ -1,0 +1,107 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+
+
+
+public class JPopupHora extends JPopupMenu
+	{
+	JButton butGuardar;	
+	Color m_colorFons = new Color(71,79,97);	
+	JTextField jtfHora;
+	JTextField jtfHoraFi;
+	
+	public JPopupHora()
+		{
+		setSize(new Dimension(110,225));
+		setPreferredSize(new Dimension(110,225));
+		setLayout(null);
+		setBackground(Color.white);
+		
+		ActionListener menuListener = new ActionListener() {
+		      public void actionPerformed(ActionEvent event) {
+		        /*System.out.println("Popup menu item ["
+		            + event.getActionCommand() + "] was pressed.");*/
+		    	  
+		    jtfHora.setText(event.getActionCommand());
+		    if (jtfHoraFi!=null)
+		    	{
+		    	  String hora=(String)event.getActionCommand();
+				  String val[]=null;
+				  val=hora.split(":");
+				  String strHores="";
+				  String strMinuts="";
+				  int hores=0;
+				  try
+					{
+					hores=Integer.parseInt(val[0]);
+					}
+					catch (Exception e)
+					{
+					hores=0;	
+					}
+				  int minuts=0;
+				  try
+					{
+					minuts=Integer.parseInt(val[1]);
+					}
+					catch (Exception e)
+					{
+					minuts=0;	
+					}
+				  if (minuts==30)
+				  	{
+					minuts=0;
+					hores++;
+				  	}
+				  	else
+				  	{
+					minuts=30;  
+				  	}
+				  if (hores>9) strHores=""+hores;
+				  	else strHores="0"+hores; 
+				  if (minuts>9) strMinuts=""+minuts;
+				  	else strMinuts="0"+minuts; 
+		    	jtfHoraFi.setText(strHores+":"+strMinuts);	
+		    	}
+		      }
+		    };
+		int hores=24;
+		setLayout(new GridLayout(hores, 2));
+		JMenuItem item;		
+		for (int i=0;i<hores;i++)
+			{	
+			String h=""+i;
+			if (h.length()==1) h="0"+h;
+			add(item = new JMenuItem(h+":00"));	    
+			item.addActionListener(menuListener);
+			add(item = new JMenuItem(h+":30"));	    
+			item.addActionListener(menuListener);
+			}
+		setSize(new Dimension(110,hores*25));
+		setPreferredSize(new Dimension(110,hores*25));
+		}
+
+	
+	public void Actualitzar(JTextField _jtfHora)
+		{
+		jtfHora=_jtfHora;		
+		jtfHoraFi=null;
+		}
+
+	public void Actualitzar(JTextField _jtfHora,JTextField _jtfHoraFi)
+		{
+		jtfHora=_jtfHora;		
+		jtfHoraFi=_jtfHoraFi;
+		}
+
+	}

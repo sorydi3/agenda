@@ -1,0 +1,124 @@
+package agendaproduccio.utils;
+
+import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+
+
+public class AutoComboBox extends JComboBox<Object> {
+
+String keyWord[] = {""};
+Vector myVector = new Vector();
+AutoComboBox joMateix;
+ComboListener comboListener;
+JTextField text =null;
+
+public AutoComboBox(FocusListener focusListener) {
+	joMateix =this;
+	//componentSeguent=_componentSeguent;
+    setModel(new DefaultComboBoxModel(myVector));
+    //addItem("");
+    //setSelectedIndex(0);
+    setSelectedIndex(-1);
+    setEditable(true);
+    text = (JTextField) this.getEditor().getEditorComponent();
+    text.setFocusable(true);
+    text.setText("");
+    text.addKeyListener(comboListener=new ComboListener(this, myVector));
+    text.addFocusListener(focusListener);
+    text.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e)
+    	{
+    	System.out.println("Fem click");
+    	ActualitzarFiltreSenseSeleccionar();
+    	if (isEnabled()) comboListener.cbListener.showPopup();
+    	System.out.println("Apliquem filtre");
+    	//ActualitzarFiltre();
+    	}});
+    setMyVector();
+    
+}
+
+public AutoComboBox(FocusListener focusListener,ActionListener actionListener) {
+	joMateix =this;
+	//componentSeguent=_componentSeguent;
+    setModel(new DefaultComboBoxModel(myVector));
+    //addItem("");
+    //setSelectedIndex(0);
+    setSelectedIndex(-1);
+    setEditable(true);
+    text = (JTextField) this.getEditor().getEditorComponent();
+    text.setFocusable(true);
+    text.setText("");
+    text.addKeyListener(comboListener=new ComboListener(this, myVector));
+    addActionListener(actionListener);
+    text.addFocusListener(focusListener);
+    text.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e)
+    	{
+    	//System.out.println("Es editable: "+isEditable());
+    	if (isEnabled()) comboListener.cbListener.showPopup();
+    	//ActualitzarFiltre();
+    	}});
+    setMyVector();
+
+}
+
+
+/**
+ * set the item list of the AutoComboBox
+ * @param keyWord an String array
+ */
+public void setKeyWord(String[] keyWord) {
+    this.keyWord = keyWord;
+    setMyVectorInitial();
+    //setSelectedItem("");
+}
+
+public void clearKeyWord()
+{
+	this.keyWord = null;
+	myVector.clear();
+}
+
+private void setMyVector() {
+    int a;
+    for (a = 0; a < keyWord.length; a++) {
+        myVector.add(keyWord[a]);
+    }
+}
+
+private void setMyVectorInitial() 
+	{
+    myVector.clear();
+    int a;
+    if (keyWord!=null)
+    	{
+    	for (a = 0; a < keyWord.length; a++) 
+    		{
+    		myVector.add(keyWord[a]);
+    		}
+    	}    
+	}
+
+
+public void ActualitzarFiltre()
+	{
+	System.out.println("Filtre: "+getSelectedItem());
+	if (getSelectedItem()==null) comboListener.ActualitzarFiltre("");
+		else comboListener.ActualitzarFiltre(""+getSelectedItem());
+	}
+
+public void ActualitzarFiltreSenseSeleccionar()
+	{
+	//String valor=getSelectedItem()==null?"":(String)getSelectedItem();
+	String valor = text.getText();
+	//System.out.println("Posem valor a actualitzar sense filtrar: "+valor);
+	comboListener.ActualitzarFiltreSenseSeleccionar(valor);
+	}
+
+}

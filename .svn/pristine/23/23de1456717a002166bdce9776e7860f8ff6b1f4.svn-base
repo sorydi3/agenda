@@ -1,0 +1,323 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+
+
+public class JPopupData extends JPopupMenu
+	{
+	Vector dies;
+	JLabel textMes;
+	Calendar dataActual;
+	JButton butGuardar;	
+	Color m_colorFons = new Color(71,79,97);
+	JPanel panell;
+	Calendar calPosada;
+	JTextField jtfData;
+	JTextField jtfDataCopia;
+	JTable tabDades;
+	int filaTaula;
+	int columnaTaula;
+	
+	public JPopupData()
+		{
+		setSize(new Dimension(200,200));
+		setPreferredSize(new Dimension(200,200));
+		setLayout(null);
+		setBackground(Color.white);
+		
+		panell = new JPanel();
+		panell.setSize(new Dimension(200,200));
+		panell.setPreferredSize(new Dimension(200,200));
+		add(panell);
+		panell.setLocation(0, 0);
+		panell.setLayout(null);
+		panell.setBackground(Color.white);
+		
+		dataActual=DataHora.getInstance().RetornaDataActual();
+		
+		JButton butMesAnterior=new JButton(new ImageIcon("./img/fletxaAEsquerra.gif"));
+		butMesAnterior.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e){butMesAnterior_mouseReleased();}});
+		butMesAnterior.setSize(new Dimension(25,25));
+		butMesAnterior.setPreferredSize(new Dimension(25,25));
+		butMesAnterior.setLocation(3,4);
+		butMesAnterior.setBorder(BorderFactory.createEmptyBorder());
+		butMesAnterior.setBorderPainted(true);
+		butMesAnterior.setFocusPainted(false);
+		butMesAnterior.setContentAreaFilled(false);
+		butMesAnterior.setOpaque(false);	
+		panell.add(butMesAnterior);
+
+		JButton butMesSeguent=new JButton(new ImageIcon("./img/fletxaADreta.gif"));
+		butMesSeguent.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e){butMesSeguent_mouseReleased();}});
+		butMesSeguent.setSize(new Dimension(25,25));
+		butMesSeguent.setPreferredSize(new Dimension(25,25));
+		butMesSeguent.setBorder(BorderFactory.createEmptyBorder());
+		butMesSeguent.setLocation(155,4);
+		butMesSeguent.setBorderPainted(true);
+		butMesSeguent.setFocusPainted(false);
+		butMesSeguent.setContentAreaFilled(false);
+		butMesSeguent.setOpaque(false);
+		panell.add(butMesSeguent);
+
+		
+		JButton butEsborrar=new JButton("Esborrar");
+		butEsborrar.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e){butEsborrar();}});
+		butEsborrar.setSize(new Dimension(80,25));
+		butEsborrar.setPreferredSize(new Dimension(80,25));
+		butEsborrar.setLocation(110,160);
+		//butEsborrar.setBorder(BorderFactory.createEmptyBorder());
+		//butEsborrar.setBorderPainted(true);
+		//butEsborrar.setFocusPainted(false);
+		//butEsborrar.setContentAreaFilled(false);
+		butEsborrar.setOpaque(false);	
+		panell.add(butEsborrar);
+		
+		textMes=new JLabel("");		
+		textMes.setLocation(35+10,2+7);
+		//textMes.setEnabled(false);
+		textMes.setSize(new Dimension(100,20));
+		textMes.setPreferredSize(new Dimension(100,20));
+		textMes.setBackground(Color.black);
+		panell.add(textMes);
+
+		JLabel textdl=new JLabel("<html><b>dl</b></html>");
+		textdl.setForeground(Color.black);
+		textdl.setLocation(6+20,18+7);
+		textdl.setSize(new Dimension(40,20));
+		textdl.setPreferredSize(new Dimension(40,20));				
+		panell.add(textdl);
+
+		JLabel textdm=new JLabel("<html><b>dm</b></html>");
+		textdm.setForeground(Color.black);
+		textdm.setLocation(24+20,18+7);
+		textdm.setSize(new Dimension(40,20));
+		textdm.setPreferredSize(new Dimension(40,20));		
+		panell.add(textdm);
+
+		JLabel textdme=new JLabel("<html><b>dc</b></html>");
+		textdme.setForeground(Color.black);
+		textdme.setLocation(46+20,18+7);
+		textdme.setSize(new Dimension(40,20));
+		textdme.setPreferredSize(new Dimension(40,20));		
+		panell.add(textdme);
+
+		JLabel textdj=new JLabel("<html><b>dj</b></html>");
+		textdj.setForeground(Color.black);
+		textdj.setLocation(66+20,18+7);
+		textdj.setSize(new Dimension(40,20));
+		textdj.setPreferredSize(new Dimension(40,20));		
+		panell.add(textdj);
+
+		JLabel textdv=new JLabel("<html><b>dv</b></html>");
+		textdv.setForeground(Color.black);
+		textdv.setLocation(85+20,18+7);
+		textdv.setSize(new Dimension(40,20));
+		textdv.setPreferredSize(new Dimension(40,20));				
+		panell.add(textdv);
+
+		JLabel textds=new JLabel("<html><b>ds</b></html>");
+		textds.setForeground(Color.black);
+		textds.setLocation(105+20,18+7);
+		textds.setSize(new Dimension(40,20));
+		textds.setPreferredSize(new Dimension(40,20));		
+		panell.add(textds);
+
+		JLabel textdg=new JLabel("<html><b>dg</b></html>");
+		textdg.setForeground(Color.black);
+		textdg.setLocation(125+20,18+7);
+		textdg.setSize(new Dimension(40,20));
+		textdg.setPreferredSize(new Dimension(40,20));		
+			
+		panell.add(textdg);
+		
+		dies = new Vector(1,1);
+		
+		int dia=1;
+		for (int y=0;y<6;y++)
+			{
+			for (int x=0;x<7;x++)
+				{
+				if (dia<=31)
+					{
+					JButton but=new JButton("<html><font face='Arial' size=2>"+dia+"</font></html>");
+					but.setName(""+dia);
+					but.setHorizontalAlignment(SwingConstants.RIGHT);
+					but.setIconTextGap(9);
+			        if (dia>=10) but.setMargin(new Insets(0,-10,0,0));
+			        	else but.setMargin(new Insets(0,-5,0,0));
+					//but.setBackground(Color.WHITE);
+					but.setBackground(m_colorFons);
+					but.setForeground(Color.white);
+					but.setLocation((3+x*20)+20,(33+y*20)+9);
+					but.setSize(new Dimension(21,20));
+					but.setPreferredSize(new Dimension(21,20));
+					but.addMouseListener(new MouseAdapter() {public void mouseReleased(MouseEvent e){but_mouseReleased(e);}});
+					but.setVisible(false);
+					dies.add(dia-1,but);
+					panell.add(but);
+					}
+				dia++;					
+				}			
+			}	
+		calPosada=(Calendar)dataActual.clone();
+		calPosada.set(calPosada.get(Calendar.YEAR),calPosada.get(Calendar.MONTH),1,calPosada.get(Calendar.HOUR_OF_DAY),0);
+		posarAData(calPosada);
+		
+		}
+
+
+	public void butEsborrar()
+		{
+		if (jtfData!=null) 
+			{
+			//jtfData.setText(" ");
+			jtfData.setText("");
+			}
+		if (jtfDataCopia!=null) 
+			{
+			//jtfDataCopia.setText(" ");
+			jtfDataCopia.setText("");
+			}
+		if (tabDades!=null) tabDades.setValueAt(" ",filaTaula,columnaTaula);
+		setVisible(false);				
+		}
+	
+	public void but_mouseReleased(MouseEvent e)
+		{
+		JButton but=(JButton)e.getComponent();
+		int dia=Integer.parseInt(but.getName());
+		String sdia=new String("");
+		if (dia<10) sdia="0"+dia;
+			else sdia=""+dia;
+		int mes=calPosada.get(Calendar.MONTH)+1;
+		String smes=new String("");
+		if (mes<10) smes="0"+mes;
+			else smes=""+mes;
+		String sany=new String(""+calPosada.get(Calendar.YEAR));
+		String valor=sdia+"/"+smes+"/"+sany;
+		if (jtfData!=null) jtfData.setText(valor);
+		if (jtfDataCopia!=null) jtfDataCopia.setText(valor);
+		if (tabDades!=null) tabDades.setValueAt(valor,filaTaula,columnaTaula);
+		setVisible(false);		
+		}
+	
+	public void butMesAnterior_mouseReleased()
+		{
+		int mes=calPosada.get(Calendar.MONTH);
+		int any=calPosada.get(Calendar.YEAR);
+		if (mes==0) 
+			{
+			mes=11;
+			any=any-1;
+			}
+			else mes--;
+		calPosada.set(any,mes,1,calPosada.get(Calendar.HOUR_OF_DAY),0);
+		posarAData(calPosada);				
+		}
+	
+	public void butMesSeguent_mouseReleased()
+		{
+		int mes=calPosada.get(Calendar.MONTH);
+		int any=calPosada.get(Calendar.YEAR);
+		if (mes==11) 
+			{
+			mes=0;
+			any=any+1;
+			}
+			else mes++;
+		calPosada.set(any,mes,1,calPosada.get(Calendar.HOUR_OF_DAY),0);
+		posarAData(calPosada);	
+		}
+	
+	
+	public void posarAData(Calendar cal)
+		{
+		cal.set(Calendar.DAY_OF_MONTH,1);
+		calPosada=(Calendar)cal.clone();
+		System.out.println("Posem a data: "+DataHora.getInstance().CalendarToStringEuropeu(calPosada));
+		int numDies = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int x=0;
+		int numdia=cal.get(Calendar.DAY_OF_WEEK);
+		if (numdia==1) numdia=7;
+			else numdia--;
+		boolean saltlinia=false;
+		int y=0;
+		while (x<numDies)
+			{
+			//System.out.println("dia:"+(x+1)+" lin:"+y+" posicio: "+((3+(numdia-1)*20)+20));
+			((JButton)dies.get(x)).setLocation((3+(numdia-1)*20)+20,(33+y*20)+9);
+			if ((cal.get(Calendar.MONTH)==dataActual.get(Calendar.MONTH))&&(x+1==dataActual.get(Calendar.DAY_OF_MONTH))&&(cal.get(Calendar.YEAR)==dataActual.get(Calendar.YEAR))) ((JButton)dies.get(x)).setBackground(Color.RED);			
+				else ((JButton)dies.get(x)).setBackground(m_colorFons);			
+			((JButton)dies.get(x)).setVisible(true);
+			numdia++;
+			if (numdia==8) 
+				{
+				numdia=1;
+				y++;
+				}
+			x++;
+			}
+		for (int z=x;z<31;z++) ((JButton)dies.get(z)).setVisible(false);
+		String mes=new String("");
+		int m=cal.get(Calendar.MONTH);
+		if (m==0) mes="Gener";
+		if (m==1) mes="Febrer";
+		if (m==2) mes="Mar�";
+		if (m==3) mes="Abril";
+		if (m==4) mes="Maig";
+		if (m==5) mes="Juny";
+		if (m==6) mes="Juliol";
+		if (m==7) mes="Agost";
+		if (m==8) mes="Setembre";
+		if (m==9) mes="Octubre";
+		if (m==10) mes="Novembre";
+		if (m==11) mes="Decembre";
+		textMes.setText("<html><b>"+mes+", "+cal.get(Calendar.YEAR)+"</b></html>");
+		updateUI();
+		//System.exit(-1);
+		}
+	
+	public void Actualitzar(JTextField _jtfData,Calendar cal)
+		{
+		jtfData=_jtfData;
+		jtfDataCopia=null;
+		tabDades=null;
+		posarAData(cal);
+		}
+
+	public void Actualitzar(JTextField _jtfData,JTextField _jtfData1,Calendar cal)
+		{
+		jtfData=_jtfData;
+		jtfDataCopia=_jtfData1;
+		tabDades=null;
+		posarAData(cal);
+		}	
+
+	public void Actualitzar(JTable _taula,int fila,int columna,Calendar cal)
+		{
+		tabDades=_taula;
+		filaTaula=fila;
+		columnaTaula=columna;
+		jtfDataCopia=null;
+		jtfData=null;
+		posarAData(cal);
+		}
+
+	}

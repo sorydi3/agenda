@@ -1,0 +1,410 @@
+package agendaproduccio.utils;
+//package utils;
+//
+//import java.awt.Desktop;
+//import java.io.BufferedWriter;
+//import java.io.File;
+//import java.io.FileWriter;
+//import java.io.IOException;
+//import java.io.RandomAccessFile;
+//import java.net.URI;
+//
+//import org.apache.commons.io.FileUtils;
+//
+//public class FileManagement
+//{
+//	private static FileManagement m_singleton;
+//
+//	public String m_path;
+//	public String m_pathArxiusTemporals;
+//	public String m_MailsVerificacioPressupostos;
+//	public String m_pathComandesTemporals;
+//	public String m_pathComandesPartes;
+//	public String m_pathServidorWebPartes;
+//	public String m_pathPressupostosAntics;
+//	public String m_dataPerDefecteFiValidesaConversioPress;
+//	public String m_preusCorrectesIntervalsPercentatgeMajorOIgualConversioPress;
+//	public String m_preusCorrectesIntervalsPercentatgeMenorOIgualConversioPress;
+//	public String m_percentatgeLimitSimuladorPreusTransport;
+//
+//	public static FileManagement GetInstance()
+//	{
+//		if ( m_singleton == null )
+//		{
+//			m_singleton = new FileManagement( );
+//		}
+//
+//		return m_singleton;
+//	}
+//
+//	public FileManagement()
+//	{
+//		m_pathArxiusTemporals = "c:/temp/";
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/PathERP.txt", "r" );
+//			m_path = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_path = "";
+//		}
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/PathServidorWebPartes.txt", "r" );
+//			m_pathServidorWebPartes = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_pathServidorWebPartes = "";
+//		}
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/MailsValidacioPressupostos.txt", "r" );
+//			m_MailsVerificacioPressupostos = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_MailsVerificacioPressupostos = "";
+//		}
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/PathComandesTemporals.txt", "r" );
+//			m_pathComandesTemporals = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_pathComandesTemporals = "";
+//		}
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/PathComandesPartes.txt", "r" );
+//			m_pathComandesPartes = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_pathComandesPartes = "";
+//		}
+//
+//		// Llegim el fitxer que cont� la informaci� dels PATH's on van a parar els
+//		// pressupostos
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/PathPressupostosComercial.txt", "r" );
+//			m_pathPressupostosAntics = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_pathPressupostosAntics = "";
+//		}
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/DataPerDefecteFiValidesaConversioPress.txt", "r" );
+//			m_dataPerDefecteFiValidesaConversioPress = l_fd.readLine( );
+//			m_preusCorrectesIntervalsPercentatgeMajorOIgualConversioPress = l_fd.readLine( );
+//			m_preusCorrectesIntervalsPercentatgeMenorOIgualConversioPress = l_fd.readLine( );
+//
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_dataPerDefecteFiValidesaConversioPress = "";
+//		}
+//
+//		try
+//		{
+//			RandomAccessFile l_fd = new RandomAccessFile( "./config/IntervalSimuladorPreusTransports.txt", "r" );
+//			m_percentatgeLimitSimuladorPreusTransport = l_fd.readLine( );
+//			l_fd.close( );
+//			l_fd = null;
+//		}
+//		catch (Exception e)
+//		{
+//			m_percentatgeLimitSimuladorPreusTransport = "0";
+//		}
+//	}
+//
+//	public void GuardarDataPerDefecteFiValidesaConversioPressupostos( String p_data, String p_preusCorrectesIntervalsPercentatgeMajorOIgual, String p_preusCorrectesIntervalsPercentatgeMenorOIgual )
+//	{
+//		try
+//		{
+//			File m_file = new File( "./config/DataPerDefecteFiValidesaConversioPress.txt" );
+//			BufferedWriter output = new BufferedWriter( new FileWriter( m_file, false ) );
+//
+//			output.write( p_data );
+//			output.write( "\r\n" );
+//			output.write( p_preusCorrectesIntervalsPercentatgeMajorOIgual );
+//			output.write( "\r\n" );
+//			output.write( p_preusCorrectesIntervalsPercentatgeMenorOIgual );
+//
+//			output.close( );
+//
+//			output = null;
+//			m_file = null;
+//		}
+//		catch (Exception ex)
+//		{
+//			System.out.println( "Ha Fallat el log de Simultaneitat TA!!!" + ex );
+//		}
+//
+//	}
+//
+//	public void GuardarIntervalPerDefecteTransport( String p_preusCorrectesIntervalsPercentatgeMajorOIgual )
+//	{
+//		try
+//		{
+//			File m_file = new File( "./config/IntervalSimuladorPreusTransports.txt" );
+//			BufferedWriter output = new BufferedWriter( new FileWriter( m_file, false ) );
+//
+//			output.write( p_preusCorrectesIntervalsPercentatgeMajorOIgual );
+//			output.close( );
+//
+//			output = null;
+//			m_file = null;
+//		}
+//		catch (Exception ex)
+//		{
+//			System.out.println( "Ha Fallat el log de Simultaneitat TA!!!" + ex );
+//		}
+//
+//	}
+//
+//	public boolean Obrir( InterfaceArxiuAdjunt p_arxiuAdjunt )
+//	{
+//		try
+//		{
+//			Desktop.getDesktop( ).open( new File( p_arxiuAdjunt.GetFilePath( ) ) );
+//		}
+//		catch (Exception ex)
+//		{
+//			System.out.println( ex.fillInStackTrace( ) );
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	public boolean Obrir( String p_path )
+//	{
+//		try
+//		{
+//			if ( p_path.toLowerCase( ).indexOf( "http" ) == 0 )
+//			{
+//				Desktop.getDesktop( ).browse( (new URI( p_path )) );
+//			}
+//			else
+//			{
+//				File l_file = new File( p_path );
+//				Desktop.getDesktop( ).browse( new URI( l_file.toURI( ).toString( ).replace( "file:////", "file://" ) ) );
+//			}
+//		}
+//		catch (Exception ex)
+//		{
+//			System.out.println( ex.fillInStackTrace( ) );
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	public boolean CopiarFitxersCarpeta( String p_pathOrigen, String p_pathDesti )
+//	{
+//		File[] l_llistaFitxersOriginal;
+//
+//		try
+//		{
+//			l_llistaFitxersOriginal = (new File( p_pathOrigen )).listFiles( );
+//
+//			if ( l_llistaFitxersOriginal != null )
+//			{
+//				for ( int i = 0; i < l_llistaFitxersOriginal.length; i++ )
+//				{
+//					File l_fileDesti = new File( p_pathDesti + "/" + l_llistaFitxersOriginal[i].getName( ) );
+//
+//					if ( l_llistaFitxersOriginal[i].isDirectory( ) )
+//					{
+//						this.CopiarFitxersCarpeta( l_llistaFitxersOriginal[i].getPath( ), p_pathDesti + "/" + l_llistaFitxersOriginal[i].getName( ) );
+//					}
+//					else
+//					{
+//						FileUtils.copyFile( l_llistaFitxersOriginal[i], l_fileDesti );
+//					}
+//				}
+//			}
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace( );
+//
+//			System.out.println( e.fillInStackTrace( ) );
+//			return false;
+//		}
+//
+//		return true;
+//	}
+//
+//	public boolean CopiarFitxer( String p_pathOrigen, String p_pathDesti )
+//	{
+//		try
+//		{
+//			File l_fileOrigen = new File( p_pathOrigen );
+//			File l_fileDesti = new File( p_pathDesti );
+//
+//			FileUtils.copyFile( l_fileOrigen, l_fileDesti );
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace( );
+//
+//			System.out.println( e.fillInStackTrace( ) );
+//			return false;
+//		}
+//
+//		return true;
+//	}
+//
+//	public boolean CopiarFitxer( File l_fileOrigen, String p_pathDesti )
+//	{
+//		try
+//		{
+//			File l_fileDesti = new File( p_pathDesti );
+//
+//			FileUtils.copyFile( l_fileOrigen, l_fileDesti );
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace( );
+//
+//			System.out.println( e.fillInStackTrace( ) );
+//			return false;
+//		}
+//
+//		return true;
+//	}
+//
+//	public void CrearDirectori( String p_path )
+//	{
+//		try
+//		{
+//			File l_file = new File( p_path );
+//			if ( !l_file.exists( ) )
+//				l_file.mkdirs( );
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace( );
+//			System.out.println( e.fillInStackTrace( ) );
+//		}
+//	}
+//
+//	public void EsborrarFitxer( String p_path )
+//	{
+//		try
+//		{
+//			File l_file = new File( p_path );
+//			l_file.delete( );
+//		}
+//		catch (Exception e)
+//		{
+//			e.printStackTrace( );
+//			System.out.println( e.fillInStackTrace( ) );
+//		}
+//	}
+//
+//	public boolean MouFitxer( String p_pathOrigen, String p_pathDesti )
+//	{
+//		try
+//		{
+//			File l_fileOrigen = new File( p_pathOrigen );
+//			File l_fileDesti = new File( p_pathDesti );
+//
+//			FileUtils.moveFile( l_fileOrigen, l_fileDesti );
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace( );
+//
+//			System.out.println( e.fillInStackTrace( ) );
+//			return false;
+//		}
+//
+//		return true;
+//	}
+//
+//	public boolean CreaFitxer( String nomfitxer, String aescriure )
+//	{
+//		FileWriter fd;
+//		try
+//		{
+//			fd = new FileWriter( nomfitxer );
+//			fd.write( aescriure );
+//			fd.close( );
+//		}
+//		catch (Exception e)
+//		{
+//			System.out.println( e.fillInStackTrace( ) );
+//			return false;
+//		}
+//		return true;
+//	}
+//
+//	public void GuardarLogGeneracioPlanificacions( boolean l_generat, int p_idPlanificacioReferencia, int p_idPlanificacio, String p_nomFeina, int p_totalPlanificacions, String p_periodicitat, int p_numeroPlanificacionsOriginals )
+//	{
+//		if ( l_generat )
+//		{
+//			try
+//			{
+//				File m_file = new File( "c:/ActualitzacioPlanificacions/LogPlanificacionsGenerades.txt" );
+//				BufferedWriter output = new BufferedWriter( new FileWriter( m_file, true ) );
+//
+//				output.write( "Planificacio Ref.: " + p_idPlanificacioReferencia + " Planificacio: " + p_idPlanificacio + " NomFeina: " + p_nomFeina + " Planificacions Originals: " + p_numeroPlanificacionsOriginals + " Planificacions creades: " + p_totalPlanificacions + " Periodicitat: " + p_periodicitat );
+//				output.write( "\r\n" );
+//				output.close( );
+//
+//				output = null;
+//				m_file = null;
+//			}
+//			catch (Exception ex)
+//			{
+//				System.out.println( "Petada" );
+//			}
+//		}
+//		else
+//		{
+//			try
+//			{
+//				File m_file = new File( "c:/ActualitzacioPlanificacions/LogPlanificacionsNOGenerades.txt" );
+//				BufferedWriter output = new BufferedWriter( new FileWriter( m_file, true ) );
+//
+//				output.write( "Planificacio Ref.: " + p_idPlanificacioReferencia + " Planificacio: " + p_idPlanificacio + " NomFeina: " + p_nomFeina + " Planificacions Originals: " + p_numeroPlanificacionsOriginals + " Periodicitat: " + p_periodicitat );
+//				output.write( "\r\n" );
+//				output.close( );
+//
+//				output = null;
+//				m_file = null;
+//			}
+//			catch (Exception ex)
+//			{
+//				System.out.println( "Petada" );
+//			}
+//		}
+//	}
+//
+//}

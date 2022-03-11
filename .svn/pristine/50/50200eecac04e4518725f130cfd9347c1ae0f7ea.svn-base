@@ -1,0 +1,140 @@
+package agendaproduccio.utils;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.util.Vector;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JTextField;
+
+public class ComboListener extends KeyAdapter
+{
+@SuppressWarnings("rawtypes")
+JComboBox cbListener;
+@SuppressWarnings("rawtypes")
+Vector vector;
+
+@SuppressWarnings("rawtypes")
+public ComboListener(JComboBox cbListenerParam, Vector vectorParam)
+{
+    cbListener = cbListenerParam;
+    vector = vectorParam;
+}
+
+@SuppressWarnings({ "unchecked", "rawtypes" })
+public void keyReleased(KeyEvent key)
+{
+            // TODO Auto-generated method stub
+	if ((key.getKeyCode()!=KeyEvent.VK_DOWN)&&(key.getKeyCode()!=KeyEvent.VK_UP)&&(key.getKeyCode()!=KeyEvent.VK_LEFT)&&(key.getKeyCode()!=KeyEvent.VK_RIGHT)&&(key.getKeyCode()!=KeyEvent.VK_HOME)&&(key.getKeyCode()!=KeyEvent.VK_ESCAPE))
+		{
+		int pos=((JTextField)cbListener.getEditor().getEditorComponent()).getCaretPosition();
+		System.out.println("Posicio get: "+pos);
+        String text = ((JTextField)key.getSource()).getText();
+        if (!text.equals(""))
+        	{
+            cbListener.setModel(new DefaultComboBoxModel(getFilteredList(text)));
+            cbListener.setSelectedIndex(-1);            
+            ((JTextField)cbListener.getEditor().getEditorComponent()).setText(text);
+            System.out.println("Posicio fem el set: "+pos);
+            ((JTextField)cbListener.getEditor().getEditorComponent()).setCaretPosition(pos);
+            if (key.getKeyCode()!=KeyEvent.VK_ENTER) cbListener.showPopup();
+            }
+            else
+            {
+            cbListener.hidePopup();
+            }
+		}
+		else
+		{
+		if (key.getKeyCode()==KeyEvent.VK_ESCAPE) cbListener.hidePopup();
+		}
+}
+
+public void ActualitzarFiltre(String text)
+{
+          // TODO Auto-generated method stub
+		int pos=((JTextField)cbListener.getEditor().getEditorComponent()).getCaretPosition();
+		System.out.println("Posicio get: "+pos);        
+        if (!text.equals(""))
+        	{
+            cbListener.setModel(new DefaultComboBoxModel(getFilteredList(text)));
+            cbListener.setSelectedIndex(-1);            
+            ((JTextField)cbListener.getEditor().getEditorComponent()).setText(text);
+            System.out.println("Posicio fem el set: "+pos);
+            ((JTextField)cbListener.getEditor().getEditorComponent()).setCaretPosition(pos);
+            cbListener.showPopup();
+            }
+            else
+            {
+           /*    cbListener.setModel(new DefaultComboBoxModel(getFilteredList(text)));
+               cbListener.setSelectedIndex(-1);            
+               ((JTextField)cbListener.getEditor().getEditorComponent()).setText(text);
+               System.out.println("Posicio fem el set: "+pos);
+               //((JTextField)cbListener.getEditor().getEditorComponent()).setCaretPosition(pos);
+            */	
+            cbListener.hidePopup();
+            }
+}
+
+
+public void ActualitzarFiltreSenseSeleccionar(String p_text)
+{
+cbListener.setModel(new DefaultComboBoxModel(getFilteredList("")));
+((JTextField)cbListener.getEditor().getEditorComponent()).setText(p_text);
+}
+
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public Vector getFilteredList(String text)
+{
+    Vector v = new Vector();
+    int a=0;
+    int maximResultats=13;
+    boolean posarTresPunts=false;
+    text=removeDiacriticalMarks(text);
+    String textVector="";
+    while ((a<vector.size())&&((v.size()<maximResultats+1)||(posarTresPunts)))
+    {
+    	textVector=removeDiacriticalMarks(vector.get(a).toString().toLowerCase());
+    	if(textVector.indexOf(text.toLowerCase())!=-1)
+    		{
+    		if (v.size()<maximResultats) v.add(vector.get(a).toString());    
+    			else posarTresPunts=true;
+    		}    	
+    	a++;
+    	
+    	
+        /*if(vector.get(a).toString().startsWith(text))
+        {
+            v.add(vector.get(a).toString());
+        }
+                    else if(vector.get(a).toString().startsWith(text.toLowerCase()))
+        {
+            v.add(vector.get(a).toString());
+        }
+                     else if(vector.get(a).toString().startsWith(text.toUpperCase()))
+        {
+            v.add(vector.get(a).toString());
+        }
+                     else if(vector.get(a).toString().startsWith(WordUtils.capitalizeFully(text)))
+        {
+            v.add(vector.get(a).toString());
+        }
+                     else if(vector.get(a).toString().startsWith(WordUtils.uncapitalize(text)))
+        {
+            v.add(vector.get(a).toString());
+        }*/
+    }
+    if (posarTresPunts) v.add("...");
+    return v;
+}
+
+
+public static String removeDiacriticalMarks(String string) {
+    return Normalizer.normalize(string, Form.NFD)
+        .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+}	
+
+}

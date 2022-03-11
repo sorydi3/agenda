@@ -1,0 +1,217 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
+
+public abstract class JTaulaPlana extends JTable
+{
+	// [ATR] Definici� Columnes
+		protected int TOTAL_COLUMNES = 0;
+
+	// [ATR] Model i Sorter
+		protected DefaultTableModel m_model;
+		protected TableRowSorter<DefaultTableModel> m_sorter;
+		protected DefaultTableCellRenderer m_crHeader;
+		protected DefaultTableCellRenderer m_crText;
+		protected DefaultTableCellRenderer m_crIcona;
+
+	// [ATR] Gesti� i Acc�s Bdd
+		protected DataHora m_dh;
+		protected GUIDefinition m_gui;
+		protected Conversions l_cnv;
+		
+	// [ATR] Altres
+		protected Comparator <String> m_comparadorEnters;
+		
+	// [MTD] Creaci�
+		public JTaulaPlana( )
+		{
+			super();
+			m_dh = DataHora.getInstance( );
+			m_gui = GUIDefinition.GetInstance( );
+			l_cnv = Conversions.getInstance( );			
+		}
+		
+		public void ConfigurarTaula( int p_numColumnes )
+		{
+			TOTAL_COLUMNES = p_numColumnes;
+			
+			ConfigurarModel();
+			ConfigurarSorter();
+			ConfigurarRenderers();
+			ConfigurarVisualitzacio();
+		}
+
+	// [MTD] Configuraci�		
+		private void ConfigurarModel() 
+		{
+			m_model = CrearModel();
+			setModel(m_model);
+		}
+
+		private void ConfigurarSorter()
+		{
+			m_sorter = new TableRowSorter<DefaultTableModel>(m_model);
+			setRowSorter(m_sorter);		
+
+			m_comparadorEnters = new Comparator <String>( )
+			{				
+				@Override
+				public int compare( String o1, String o2 )
+				{
+					try
+					{
+						return (Integer.parseInt( o1.replaceAll("\\.","").replaceAll(",","") ))-(Integer.parseInt( o2.replaceAll("\\.","").replaceAll(",","") ));					
+					}
+					catch ( Exception e ){}
+					
+					return o1.compareTo( o2 );
+				}
+			};
+		}
+
+		private void ConfigurarRenderers()
+		{
+			m_crHeader = new DefaultTableCellRenderer( )
+			{
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+				{
+					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					c.setFont( m_gui.m_fontNegreta14 );
+					c.setBackground( Color.WHITE );
+					c.setForeground( Color.BLACK );
+					return c;
+				}
+				
+				@Override
+				public void paintComponent( Graphics g )
+				{
+					super.paintComponent( g );
+					
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.setColor( Color.BLACK );
+					g2d.fillRect( 0, this.getHeight( )-2, this.getWidth( ), 2 );					
+				}
+				
+			};
+			m_crHeader.setPreferredSize( new Dimension( m_crHeader.getPreferredSize( ).width, 30 ) );
+			m_crHeader.setFocusable( false );
+			
+			m_crText = new DefaultTableCellRenderer( )
+			{
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+				{
+					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					c.setBackground( Color.WHITE );
+					return c;
+				}
+				
+				@Override
+				public void paintComponent( Graphics g )
+				{
+					super.paintComponent( g );
+					
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.setColor( m_gui.m_colorGris228 );
+					g2d.fillRect( 0, this.getHeight( )-1, this.getWidth( ), 1 );					
+				}
+				
+			};
+			m_crText.setPreferredSize( new Dimension( m_crText.getPreferredSize( ).width, 30 ) );
+			
+			m_crIcona = new DefaultTableCellRenderer( )
+			{
+				@Override
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+				{
+					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					c.setBackground( Color.WHITE );
+					setHorizontalAlignment(JLabel.CENTER);
+					setText( "" );
+					setIcon( (ImageIcon) table.getValueAt( row, column ) );
+					return c;
+				}
+				
+				@Override
+				public void paintComponent( Graphics g )
+				{
+					super.paintComponent( g );
+					
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.setColor( m_gui.m_colorGris228 );
+					g2d.fillRect( 0, this.getHeight( )-1, this.getWidth( ), 1 );					
+				}
+			};
+		}
+
+		private void ConfigurarVisualitzacio() 
+		{
+			// Opcions Generals
+			getTableHeader().setReorderingAllowed(false);
+			setRowHeight(30);
+			setSelectionBackground( m_gui.m_colorBlauGrisos );
+			setSelectionForeground( Color.BLACK );
+			
+			// Amplada i Renderers de Columnes
+			ConfigurarColumnes();
+		}
+
+	// [MTD] Actualitzaci�
+		public void Buidar()
+		{
+			m_model.setRowCount(0);
+		}
+
+		public void FiltrarGeneric( String p_filtre )
+		{
+			// Llista de filtres
+			List<RowFilter<Object, Object>> l_filtersList = new ArrayList<RowFilter<Object, Object>>();			
+			for ( int i = 0 ; i < TOTAL_COLUMNES ; i++ )	// REGEX per cada columna
+			{
+				l_filtersList.add(RowFilter.regexFilter("(?i)"+p_filtre, i ));				
+			}
+			
+			// Posem el filtre
+			m_sorter.setRowFilter(RowFilter.orFilter( l_filtersList ));
+		}
+
+	// [MTD] Altres
+		public Component prepareRenderer(TableCellRenderer renderer, int rowIndex,int vColIndex) 
+		{
+			Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+			
+			if (c instanceof JComponent) 
+			{
+				try 
+				{
+					JComponent jc = (JComponent) c;
+					PrepararRendererCasella( renderer, rowIndex, vColIndex, jc );
+				} 
+				catch (Exception e) {}
+			}
+			return c;
+		}
+		
+	// [MTD] Abstractes
+		protected abstract DefaultTableModel CrearModel();
+		protected abstract void ConfigurarColumnes();
+		protected abstract void PrepararRendererCasella( TableCellRenderer p_renderer, int p_row, int p_col, JComponent p_casella );
+}

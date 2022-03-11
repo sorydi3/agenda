@@ -1,0 +1,67 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import main.MainGUI;
+//
+//import org.asteriskjava.manager.ManagerConnection;
+//import org.asteriskjava.manager.ManagerConnectionFactory;
+//import org.asteriskjava.manager.action.OriginateAction;
+//import org.asteriskjava.manager.response.ManagerResponse;
+//  
+//public final class VeuIP {
+//   
+//  private static VeuIP m_singleton;
+//  private boolean generarTrucades=true;
+//  
+//  public static VeuIP getInstance()
+//  {
+//      if( m_singleton == null )
+//      {
+//          m_singleton = new VeuIP( );
+//      }
+//      return m_singleton;
+//  }  
+//  
+//
+//  public String GenerarTrucada(String telefon,String Nom)
+//  	{
+//	  String resposta="";
+//	  //if ((MainGUI.m_suite.usuariActual.m_usuari.equals("argerich"))||(MainGUI.m_suite.usuariActual.m_usuari.equals("nievas")))
+//	  if ((MainGUI.m_suite.usuariActual.m_activarEnviarTrucades)&&(!MainGUI.m_suite.usuariActual.m_extensioTelefon.equals("")))
+//	  	{		 
+//		 try
+//		 	{
+//			 // OK Connexi� externa
+//			 ManagerConnectionFactory factory = new ManagerConnectionFactory("10.10.10.1","rotimpres2017@#", "rotimpres");
+//			 ManagerConnection c =  factory.createManagerConnection();
+//
+//			 OriginateAction originateAction;
+//			 ManagerResponse originateResponse;
+//			 originateAction = new OriginateAction();
+//			 originateAction.setChannel("SIP/"+MainGUI.m_suite.usuariActual.m_extensioTelefon); //from user
+//			 originateAction.setContext("from-internal");
+//			 //originateAction.setContext("outgoing");
+//			 originateAction.setExten(telefon);
+//			 originateAction.setCallerId(Nom);
+//			 originateAction.setPriority(new Integer(1));
+//			 // connect to Asterisk and log in
+//			 c.login();
+//			 // send the originate action and wait for a maximum of 30 seconds for Asterisk to send a reply
+//			 originateResponse = c.sendAction(originateAction, 30000);
+//			 // print out whether the originate succeeded or not
+//			 resposta=originateResponse.getResponse();
+//			 System.out.println(resposta);
+//			 // and finally log off and disconnect
+//			 c.logoff();    
+//		 	}
+//		 	catch (Exception e)
+//		 		{
+//		 		System.out.println("error: "+e);
+//		 		resposta="error";
+//		 		}		 
+//	  	}
+//	 return (resposta);
+//  	}
+//
+//
+//}

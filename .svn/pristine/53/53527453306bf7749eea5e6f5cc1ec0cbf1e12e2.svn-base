@@ -1,0 +1,227 @@
+package agendaproduccio.utils;
+//package antic.utils;
+//
+//import java.io.File;
+//import java.io.FileOutputStream;
+//import java.util.Date;
+//import java.util.Properties;
+//import java.util.Vector;
+//
+//import javax.mail.BodyPart;
+//import javax.mail.Message;
+//import javax.mail.Session;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeBodyPart;
+//import javax.mail.internet.MimeMessage;
+//import javax.mail.internet.MimeMultipart;
+//import javax.mail.internet.MimeUtility;
+//import javax.swing.JOptionPane;
+//
+//import main.MainGUI;
+//
+//public class GestorMailObrir
+//{
+//	// ATRIBUTS
+//		static private GestorMailObrir m_singleton = null;
+//		static final public String MAIL_THUNDERBIRD = "Thunderbird";
+//		static final public String MAIL_OUTLOOK = "Outlook";
+//		
+//	// METODES PUBLICS
+//		static public GestorMailObrir GetInstance()
+//		{
+//			if ( m_singleton == null )
+//			{
+//				m_singleton = new GestorMailObrir();
+//			}
+//			return m_singleton;
+//		}
+//		
+//		public void ObrirOmplirMail( String p_destinatari, String p_assumpte, String p_contingut )
+//		{
+//			Vector<String> l_vDestinataris = new Vector<>();
+//			l_vDestinataris.add(p_destinatari);
+//			
+//			ObrirOmplirMail( l_vDestinataris , p_assumpte, p_contingut, new Vector<>());
+//		}
+//		
+//		public void ObrirOmplirMail( String p_destinatari, String p_assumpte, String p_contingut, String l_adjunt )
+//		{
+//			Vector<String> l_vDestinataris = new Vector<>();
+//			l_vDestinataris.add(p_destinatari);
+//			
+//			Vector<String> l_vAdjunts = new Vector<>();
+//			l_vAdjunts.add( l_adjunt );
+//			
+//			ObrirOmplirMail( l_vDestinataris , p_assumpte, p_contingut, l_vAdjunts );		
+//		}
+//		
+//		public void ObrirOmplirMail( String p_destinatari, String p_assumpte, String p_contingut, Vector<String> p_vAdjunts )
+//		{
+//			Vector<String> l_vDestinataris = new Vector<>();
+//			l_vDestinataris.add(p_destinatari);
+//			
+//			ObrirOmplirMail( l_vDestinataris , p_assumpte, p_contingut, p_vAdjunts );		
+//		}
+//		
+//		public void ObrirOmplirMail( Vector<String> p_vDestinataris, String p_assumpte, String p_contingut )
+//		{
+//			ObrirOmplirMail( p_vDestinataris, p_assumpte, p_contingut, new Vector<>());		
+//		}
+//
+//		public void ObrirOmplirMail( Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, String p_adjunt )
+//		{
+//			Vector<String> l_vAdjunts = new Vector<>();
+//			l_vAdjunts.add( p_adjunt );
+//			
+//			ObrirOmplirMail( p_vDestinataris, p_assumpte, p_contingut, l_vAdjunts );		
+//		}
+//		
+//		public void ObrirOmplirMail( Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, Vector<String> p_vAdjunts )
+//		{
+//			if ( MainGUI.m_suite.usuariActual.m_appCorreu.equals( MAIL_OUTLOOK ) )
+//			{
+//				ObrirOmplirMailOutlook( p_vDestinataris, p_assumpte, p_contingut, p_vAdjunts );
+//			}
+//			else if ( MainGUI.m_suite.usuariActual.m_appCorreu.equals( MAIL_THUNDERBIRD ) )
+//			{
+//				ObrirOmplirMailThunderbird( p_vDestinataris, p_assumpte, p_contingut, p_vAdjunts );				
+//			}
+//			else
+//			{
+//				JOptionPane.showMessageDialog( null, "<html><p>El teu usuari no t� cap App de Correu per defecte assignada.<br>Truca a Inform�tica (22).</p></html>", "App de Correu no assignada", JOptionPane.ERROR_MESSAGE);
+//			}
+//		}
+//		
+//	// METODES PRIVAT PRINCIPALS
+//		private void ObrirOmplirMailThunderbird( Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, Vector<String> p_vAdjunts )
+//		{
+//			String l_strDestinataris = "";
+//			for ( String l_destinatari : p_vDestinataris )
+//			{
+//				if ( !l_strDestinataris.isEmpty() )
+//				{
+//					l_strDestinataris += ";";
+//				}
+//				l_strDestinataris += l_destinatari;				
+//			}
+//			
+//			String l_strAdjunts = "";
+//			for ( String l_adjunt : p_vAdjunts )
+//			{
+//				if ( !l_adjunt.isEmpty() )
+//				{
+//					if ( !l_strAdjunts.isEmpty() )
+//					{
+//						l_strAdjunts += ",";
+//					}
+//					l_strAdjunts += l_adjunt;
+//				}
+//			}			
+//			
+//			try 
+//			{
+//				Runtime.getRuntime( ).exec( "thunderbird -compose \"to='" + l_strDestinataris + "',subject='" + p_assumpte + "',body='" + p_contingut + "',attachment='" + l_strAdjunts + "'\"" );
+//			} 
+//			catch (Exception e) 
+//			{
+//				try
+//				{
+//					Runtime.getRuntime( ).exec( "C:/Program Files (x86)/Mozilla Thunderbird/thunderbird.exe -compose \"to='" + l_strDestinataris + "',subject='" + p_assumpte + "',body='" + p_contingut + "',attachment='" + l_strAdjunts + "'\"" );
+//				}
+//				catch (Exception e2)
+//				{
+//					JOptionPane.showMessageDialog( null, "Hi ha hagut un error inesperat a l'hora de generar el mail", "Error en Generar Mail", JOptionPane.ERROR_MESSAGE);
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		
+//		private void ObrirOmplirMailOutlook( Vector<String> p_vDestinataris, String p_assumpte, String p_contingut, Vector<String> p_vArxiusAdjunts )
+//		{
+//			try
+//			{
+//				// Propietats generals
+//				Properties props = System.getProperties( );
+//				props.put( "mail.smtp.auth", "true" );
+//				Session mailSession = Session.getDefaultInstance( props, null );
+//
+//				// Omplim el contingut
+//				BodyPart l_text = new MimeBodyPart( );
+//				l_text.setContent( p_contingut, "text/html; charset=UTF-8" );
+//
+//				MimeMultipart multiParte = new MimeMultipart( );
+//				multiParte.addBodyPart( l_text );
+//
+//				// Afegim els adjunts				
+//				for ( String l_adjunt : p_vArxiusAdjunts )
+//				{
+//					if ( !l_adjunt.isEmpty() )
+//					{
+//						MimeBodyPart l_attachedFilePart = new MimeBodyPart( );
+//						l_attachedFilePart.attachFile( l_adjunt );
+//						
+//						multiParte.addBodyPart( l_attachedFilePart );
+//					}
+//				}				
+//
+//				// Establim Remitents i Destinataris del missatge
+//				Message msg = new MimeMessage( mailSession );
+//				msg.setFrom( new InternetAddress( MainGUI.m_suite.usuariActual.m_correu ) );
+//				
+//				for ( String l_destinatari : p_vDestinataris )
+//				{
+//					if ( l_destinatari.contains("@") )
+//					{
+//						msg.addRecipient( Message.RecipientType.TO, new InternetAddress( l_destinatari ) );
+//					}
+//				}
+//				
+//				// Establim el subjecte
+//				msg.setSubject( MimeUtility.encodeText(p_assumpte,"UTF-8","B") );
+//				msg.setHeader("X-Unsent", "1");
+//
+//				// Omplim data i �ltims detalls
+//				msg.setContent( multiParte );
+//				msg.setSentDate( new Date( ) );
+//				msg.setHeader( "X-Mailer", "JavaMail API" );
+//				msg.saveChanges( );
+//				
+//				File resultEmail = File.createTempFile("test", ".eml");
+//			    try (FileOutputStream fs = new FileOutputStream(resultEmail)) 
+//			    {
+//			        msg.writeTo(fs);
+//			        fs.flush();
+//			        fs.getFD().sync();
+//			    } 
+//			    catch ( Exception exc3 )
+//			    {
+//			    	exc3.printStackTrace();
+//			    }
+//			    
+//			    ProcessBuilder l_pbObrirMail = new ProcessBuilder();
+//			    l_pbObrirMail.command( "cmd.exe", "/C", "start", "outlook.exe" , "/eml", resultEmail.getCanonicalPath() );
+//			    
+//			    Process l_proces = l_pbObrirMail.start();
+//			    try
+//			    {
+//			    	l_proces.waitFor();
+//			    }
+//			    catch( Exception exc1 )
+//			    {
+//			    	System.err.println( "ERROR EN OBRIR MAIL:" );
+//			    	exc1.printStackTrace();
+//			    }
+//			    finally 
+//			    {
+//			    	l_proces.getErrorStream().close();
+//			    	l_proces.getInputStream().close();
+//			    	l_proces.getErrorStream().close();
+//			    	l_proces.destroy();
+//			    }
+//			}
+//			catch ( Exception exc2 )
+//			{
+//				exc2.printStackTrace();
+//			}
+//		}
+//}

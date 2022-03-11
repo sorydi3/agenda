@@ -1,0 +1,22 @@
+package agendaproduccio.utils;
+
+public class DefinicioCamp
+{
+	public String m_nomCamp;
+	public int m_mida;
+	public boolean m_visible;
+	public boolean m_trobat;
+	public boolean m_modificable;
+	public int m_numeroColumna;
+	
+	public DefinicioCamp()
+		{
+		m_nomCamp = "";
+		m_mida = 0;
+		m_visible = false;
+		m_trobat = false;
+		m_modificable = false;
+		m_numeroColumna = 0;
+		}
+
+}

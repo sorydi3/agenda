@@ -1,0 +1,80 @@
+package agendaproduccio.utils;
+
+public class HoresMinuts implements Comparable<HoresMinuts>
+{
+	private int m_hores;
+	private int m_minuts;
+	
+	public HoresMinuts()
+	{
+		EstablirHoresMinuts(0,0);
+	}
+	
+	public HoresMinuts( int p_hora, int p_minuts )
+	{
+		EstablirHoresMinuts( p_hora, p_minuts );		
+	}
+	
+	public HoresMinuts( String p_strHoresMinuts )
+	{
+		String l_arrHoresMinuts[] = p_strHoresMinuts.replaceAll( " ", "" ).split( ":" );
+		if ( l_arrHoresMinuts.length>=2 )
+		{
+			try
+			{
+				EstablirHoresMinuts( Integer.parseInt( l_arrHoresMinuts[0] ), Integer.parseInt( l_arrHoresMinuts[1] ) );
+			}
+			catch ( Exception e ) {}		
+		}
+	}
+	
+	public void EstablirHoresMinuts( int p_hora, int p_minuts )
+	{
+		EstablirHores( p_hora );
+		EstablirMinuts( p_minuts );
+	}
+
+	public void EstablirHores( int p_hora )
+	{
+		m_hores = Math.min( 23, Math.max( 0, p_hora ) );
+	}
+
+	public void EstablirMinuts( int p_minuts )
+	{
+		m_minuts = Math.min( 59, Math.max( 0, p_minuts ) );
+	}
+
+	@Override
+	public String toString()
+	{
+		String l_res = "";
+		
+		if ( m_hores < 10 )
+		{
+			l_res += "0";
+		}
+		l_res += m_hores;
+		
+		l_res += ":";
+		if ( m_minuts < 10 )
+		{
+			l_res += "0";
+		}
+		l_res += m_minuts;
+		
+		return l_res;
+	}
+
+	@Override
+	public int compareTo( HoresMinuts p_horesMinuts )
+	{
+		if ( m_hores == p_horesMinuts.m_hores )
+		{
+			return m_minuts - p_horesMinuts.m_minuts;			
+		}
+		else
+		{
+			return m_hores - p_horesMinuts.m_hores;
+		}
+	}
+}

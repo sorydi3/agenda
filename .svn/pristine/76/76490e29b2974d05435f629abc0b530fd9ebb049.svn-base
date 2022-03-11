@@ -1,0 +1,20 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+
+
+
+
+public class PorcioGraficPastis
+	{	
+	public Color color;
+	public double valor;
+	public  String Descripcio;
+	
+	public PorcioGraficPastis(Color _color,double _valor,String _Descripcio)
+		{
+		color=_color;
+		valor=_valor;
+		Descripcio=_Descripcio;
+		}
+	}

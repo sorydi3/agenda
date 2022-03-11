@@ -1,0 +1,58 @@
+package agendaproduccio.utils;
+
+import java.util.Objects;
+
+public class PairOfElements <F, S> 
+{
+    public final F m_first;
+    public final S m_second;
+    /**
+     * Constructor for a Pair.
+     *
+     * @param first the first object in the Pair
+     * @param second the second object in the pair
+     */
+    public PairOfElements(F first, S second) 
+    {
+        this.m_first = first;
+        this.m_second = second;
+    }
+    /**
+     * Checks the two objects for equality by delegating to their respective
+     * {@link Object#equals(Object)} methods.
+     *
+     * @param o the {@link Pair} to which this one is to be checked for equality
+     * @return true if the underlying objects of the Pair are both considered
+     *         equal
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PairOfElements)) {
+            return false;
+        }
+        PairOfElements<?, ?> p = (PairOfElements<?, ?>) o;
+        return Objects.equals(p.m_first, m_first) && Objects.equals(p.m_second, m_second);
+    }
+    /**
+     * Compute a hash code using the hash codes of the underlying objects
+     *
+     * @return a hashcode of the Pair
+     */
+    @Override
+    public int hashCode() {
+        return (m_first == null ? 0 : m_first.hashCode()) ^ (m_second == null ? 0 : m_second.hashCode());
+    }
+    @Override
+    public String toString() {
+        return "PairOfElements{" + String.valueOf(m_first) + " " + String.valueOf(m_second) + "}";
+    }
+    /**
+     * Convenience method for creating an appropriately typed pair.
+     * @param a the first object in the Pair
+     * @param b the second object in the pair
+     * @return a Pair that is templatized with the types of a and b
+     */
+    public static <A, B> PairOfElements <A, B> create(A a, B b) {
+        return new PairOfElements<A, B>(a, b);
+    }
+}

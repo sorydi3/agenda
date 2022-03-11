@@ -1,0 +1,57 @@
+package agendaproduccio.utils;
+
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.JCheckBox;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+
+@SuppressWarnings("serial")
+public class CellRendererCheckBox extends DefaultTableCellRenderer
+{
+	private Color m_colorFilaParell;
+	private Color m_colorSeleccionat;
+	private JCheckBox m_jchkbox;
+
+	public CellRendererCheckBox() 
+	{
+		JCheckBox l_jxb = new JCheckBox();
+		l_jxb.setOpaque(true);
+		l_jxb.setHorizontalAlignment(JCheckBox.CENTER);
+		
+		EstablirCheckBox(l_jxb);
+	}
+	
+	public CellRendererCheckBox( JCheckBox p_jxb )
+	{	
+		EstablirCheckBox(p_jxb);
+	}
+	
+	private void EstablirCheckBox(JCheckBox p_jxb)
+	{
+		m_jchkbox = p_jxb;
+		m_colorFilaParell = new Color(242,242,242);
+		m_colorSeleccionat = new Color(57,105,138);
+	}
+	
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,  int row, int column)
+	{ 	
+		m_jchkbox.setSelected(value.equals(true));
+		if (row%2==0)
+		{
+			m_jchkbox.setBackground (Color.white);
+		}
+		else
+		{
+			m_jchkbox.setBackground( m_colorFilaParell );
+		}
+		
+		if( isSelected )
+		{	
+			m_jchkbox.setBackground( m_colorSeleccionat );
+		}
+		
+		return m_jchkbox;
+	}
+}

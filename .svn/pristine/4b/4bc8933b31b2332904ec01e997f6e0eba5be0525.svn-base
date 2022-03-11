@@ -1,0 +1,138 @@
+package agendaproduccio.utils;
+//package utils;
+//
+//import java.io.IOException;
+//
+//import com.jcraft.jsch.ChannelSftp;
+//import com.jcraft.jsch.JSch;
+//import com.jcraft.jsch.JSchException;
+//import com.jcraft.jsch.Session;
+//import com.jcraft.jsch.SftpException;
+// 
+///**
+// * Clase encargada de establecer conexion y ejecutar comandos SFTP.
+// */
+//public class SFTPConnector {
+// 
+//    /**
+//     * Sesion SFTP establecida.
+//     */
+//    private Session session;
+// 
+//    /**
+//     * Establece una conexion SFTP.
+//     *
+//     * @param username Nombre de usuario.
+//     * @param password Contrasena.
+//     * @param host     Host a conectar.
+//     * @param port     Puerto del Host.
+//     *
+//     * @throws JSchException          Cualquier error al establecer
+//     *                                conexi�n SFTP.
+//     * @throws IllegalAccessException Indica que ya existe una conexion
+//     *                                SFTP establecida.
+//     */
+//    public void connect(String username, String password, String host, int port)
+//        throws JSchException, IllegalAccessException {
+//        if (this.session == null || !this.session.isConnected()) {
+//            JSch jsch = new JSch();
+// 
+//            this.session = jsch.getSession(username, host, port);
+//            this.session.setPassword(password);
+// 
+//            // Parametro para no validar key de conexion.
+//            this.session.setConfig("StrictHostKeyChecking", "no");
+// 
+//            this.session.connect();
+//        } else {
+//            throw new IllegalAccessException("Sesion SFTP ya iniciada.");
+//        }
+//    }
+// 
+//    
+//    public final void getFile(String p_directoriFTP, String p_directoriLocal, String p_nomArxiuFTP,String p_nomArxiuLocal) throws IllegalAccessException, IOException,SftpException, JSchException 
+//    	{
+//    	System.out.println("Entrem al getfile, sessi� connectada? "+session.isConnected( ));
+//        if (this.session != null && this.session.isConnected()) 
+//        	{
+//            // Abrimos un canal SFTP. Es como abrir una consola.
+//          	System.out.println("Obrim canal");
+//            ChannelSftp channelSftp = (ChannelSftp) this.session.openChannel("sftp");
+//            System.out.println("Fem el connect");
+//            channelSftp.connect();
+//            System.out.println("Anem al path: "+p_directoriFTP);
+//            // Nos ubicamos en el directorio del FTP.                
+//            //
+//            channelSftp.cd(p_directoriFTP);
+//
+//            /*System.out.println("Fem el llistat d'arxius");
+//            Vector<ChannelSftp.LsEntry> list = channelSftp.ls("*");
+//            System.out.println("Total arxius: "+list.size( ));
+//            for(ChannelSftp.LsEntry entry : list) 
+//             	{
+//                System.out.println(entry.getFilename()); 
+//             	}*/                
+//                
+//            channelSftp.get( p_nomArxiuFTP,p_directoriLocal+"/"+p_nomArxiuLocal);
+//            System.out.println("Archivo descargado exitosamente");     
+//            channelSftp.exit();
+//            channelSftp.disconnect();
+//            }
+//        	else 
+//        	{
+//            System.out.println("Sessi� no iniciada");
+//            throw new IllegalAccessException("No existe sesion SFTP iniciada.");
+//            }
+//        }
+//    
+//    /**
+//     * A�ade un archivo al directorio FTP usando el protocolo SFTP.
+//     *
+//     * @param ftpPath  Path del FTP donde se agregar� el archivo.
+//     * @param filePath Directorio donde se encuentra el archivo a subir en
+//     *                 disco.
+//     * @param fileName Nombre que tendra el archivo en el destino.
+//     *
+//     * @throws IllegalAccessException Excepci�n lanzada cuando no hay
+//     *                                conexi�n establecida.
+//     * @throws JSchException          Excepci�n lanzada por alg�n
+//     *                                error en la ejecuci�n del comando
+//     *                                SFTP.
+//     * @throws SftpException          Error al utilizar comandos SFTP.
+//     * @throws IOException            Excepci�n al leer el texto arrojado
+//     *                                luego de la ejecuci�n del comando
+//     *                                SFTP.
+//     */
+//    public final void addFile(String ftpPath, String filePath,
+//        String fileName) throws IllegalAccessException, IOException,
+//        SftpException, JSchException {
+//        if (this.session != null && this.session.isConnected()) {
+// 
+//            // Abrimos un canal SFTP. Es como abrir una consola.
+//            ChannelSftp channelSftp = (ChannelSftp) this.session.
+//                openChannel("sftp");
+// 
+//            // Nos ubicamos en el directorio del FTP.
+//            channelSftp.cd(ftpPath);
+//            channelSftp.connect();
+// 
+//            System.out.println(String.format("Creando archivo %s en el " +
+//                "directorio %s", fileName, ftpPath));
+//            channelSftp.put(filePath, fileName);
+// 
+//            System.out.println("Archivo subido exitosamente");
+// 
+//            channelSftp.exit();
+//            channelSftp.disconnect();
+//        } else {
+//            throw new IllegalAccessException("No existe sesion SFTP iniciada.");
+//        }
+//    }
+// 
+//    /**
+//     * Cierra la sesion SFTP.
+//     */
+//    public final void disconnect() {
+//        this.session.disconnect();
+//    }
+//}
