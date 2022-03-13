@@ -26,13 +26,13 @@ private ConnexionsBdd()
 {
 	
 
-	m_bddMySqlControlPlanta = new DataAccessLayer( "MYSQL", "./config/Connexiocontrolplanta.txt", "root", "lpc1232001" );
+	m_bddMySqlControlPlanta = new DataAccessLayer( "MYSQL", "./config/Connexiocontrolplanta.txt", "root", "Ibrahima_22" );
 	m_bddMySqlControlPlanta.ShowInformacio( );
 	
 	m_bddMySqlERP4 = null;
 	if ( System.getProperty("user.name").equals("oliveras") || System.getProperty("user.name").equals("nievas") || System.getProperty("user.name").equals("serra"))
 	{
-		m_bddMySqlERP4 = new DataAccessLayer( "MYSQL", "./config/ConnexioERP4.txt", "root", "lpc1232001" );
+		m_bddMySqlERP4 = new DataAccessLayer( "MYSQL", "./config/ConnexioERP4.txt", "root", "Ibrahima_22" );
 		m_bddMySqlERP4.ShowInformacio( );
 	}
 }
@@ -42,7 +42,7 @@ public DataAccessLayer RetornaConnexioERPControlPlanta()
 {
 	if ( m_bddMySqlErpControlPlanta == null )
 	{
-		m_bddMySqlErpControlPlanta = new DataAccessLayer( "MYSQL", "./config/ConnexioERPControlplanta.txt", "root", "lpc1232001" );
+		m_bddMySqlErpControlPlanta = new DataAccessLayer( "MYSQL", "./config/ConnexioERPControlplanta.txt", "root", "Ibrahima_22" );
 		m_bddMySqlErpControlPlanta.ShowInformacio( );
 	}
 	return (m_bddMySqlErpControlPlanta);
@@ -62,7 +62,7 @@ public DataAccessLayer RetornaConnexioMySQLHistoricCP()
 {
 	if ( m_bddMySqlHistoricCP == null )
 	{
-		m_bddMySqlHistoricCP = new DataAccessLayer( "MYSQL", "./config/ConnexioMySQLHistoricCP.txt", "root", "lpc1232001" );
+		m_bddMySqlHistoricCP = new DataAccessLayer( "MYSQL", "./config/ConnexioMySQLHistoricCP.txt", "root", "Ibrahima_22" );
 		m_bddMySqlHistoricCP.ShowInformacio( );
 	}
 	return (m_bddMySqlHistoricCP);

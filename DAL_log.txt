@@ -1,0 +1,32 @@
+GestioBdd-Connecta(MYSQL)-Sat Mar 12 18:15:45 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sat Mar 12 18:22:42 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sat Mar 12 18:24:23 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sat Mar 12 18:25:45 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sat Mar 12 18:27:49 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sat Mar 12 18:28:28 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sun Mar 13 14:57:03 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+GestioBdd-Connecta(MYSQL)-Sun Mar 13 14:58:45 CET 2022
+	Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.

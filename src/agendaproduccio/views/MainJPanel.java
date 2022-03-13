@@ -7,9 +7,12 @@ import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import agendaproduccio.models.ControllerAgenda;
+import agendaproduccio.threads.ThreadsAutoActualitzacio;
 import agendaproduccio.utils.JPanelBuilder;
 import agendaproduccio.utils.JPanellCalendari;
 import agendaproduccio.utils.JScrollPaneTableGUI;
@@ -27,8 +30,10 @@ public class MainJPanel extends JPanel {
 	private ControllerAgenda m_controllerAgenda;
 	private Calendar l_dataInici;
 	private Calendar l_dataFinal;
-
-	public MainJPanel() {
+	private ThreadsAutoActualitzacio m_threadAct;
+	private JFrame m_parentFrame;
+	public MainJPanel(MainFrame p_mainFrame) {
+		this.m_parentFrame = p_mainFrame;
 		initVariables();
 		setLayout(new BorderLayout());
 		JPanel l_panelHeaders = JPanelBuilder.BuildHeader(this);
@@ -40,7 +45,25 @@ public class MainJPanel extends JPanel {
 		// this.addListenerButton(m_imprimir);
 		this.addListenerButton(m_refresh);
 		fillTable();
+		initThread();
+	}
 
+
+	public void initThread(){
+		m_threadAct = new ThreadsAutoActualitzacio(m_jtaula,m_controllerAgenda,m_refresh); 
+		m_threadAct.start();
+		m_parentFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				if (JOptionPane.showConfirmDialog(m_parentFrame, 
+					"Are you sure you want to close this window?", "Close Window?", 
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+					m_threadAct.parar();
+					System.exit(0);
+				}
+			}
+		});
 	}
 
 	private void initVariables() {
@@ -54,7 +77,7 @@ public class MainJPanel extends JPanel {
 		JPanelBuilder.m_imprimir = this.m_imprimir;
 		this.m_jButtonXml = new JButton();
 		JPanelBuilder.m_jButtonXml = this.m_jButtonXml;
-		this.m_jtextField = new MyJTextField("img_buscar.png", "Capcelera  \\  Màquina  \\  Paper ...");
+		this.m_jtextField = new MyJTextField("img_buscar.png", "Capcelera  \\  Mï¿½quina  \\  Paper ...");
 		JPanelBuilder.m_jtextField = this.m_jtextField;
 		this.m_refresh = new JButton();
 		JPanelBuilder.m_refresh = this.m_refresh;
@@ -96,5 +119,8 @@ public class MainJPanel extends JPanel {
 		l_dataFinal.set(Calendar.MINUTE, 59);
 		l_dataFinal.set(Calendar.SECOND, 59);
 	}
+
+
+
 
 }

@@ -1,5 +1,6 @@
 package agendaproduccio.threads;
 
+import java.time.LocalTime;
 import java.util.Calendar;
 import javax.swing.JButton;
 import agendaproduccio.models.ControllerAgenda;
@@ -12,31 +13,44 @@ public class ThreadsAutoActualitzacio extends Thread {
 	JButton m_jButonAct;
 	private Calendar l_dataInici;
 	private Calendar l_dataFinal;
-	ThreadsAutoActualitzacio (MyJTable p_jtable,ControllerAgenda p_controller,JButton p_jButonAct ){
+	private	boolean m_run;
+	public ThreadsAutoActualitzacio (MyJTable p_jtable,ControllerAgenda p_controller,JButton p_jButonAct ){
 		super();
 		this.m_jtable = p_jtable;
 		this.m_controller =p_controller;
 		this.m_jButonAct =p_jButonAct;
-		
-	}
-
-	@Override
-	public synchronized void start() {
-		// TODO Auto-generated method stub
-		//super.start();
+		this.m_run = true;
+		this.m_jButonAct.setText("<html> <font size = 2><b>" +LocalTime.now().toString()+" </b></font></html>");
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		fillTable();
+		while (this.m_run){
+			System.out.println("THREAD RUNNNING!!!!");
+			try {
+				sleep(9000);
+				System.currentTimeMillis();
+				fillTable();
+				this.m_jButonAct.setText("<html> <font size = 2><b>" +LocalTime.now().toString()+" </b></font></html>");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("STOPED THREADDDDDD!!!");
+		//slee
 	}
-	
+
 	private void fillTable() {
 		setDate();
 		m_jtable.buidarTaula();
 		m_controller.clearData();
 		m_controller.populateViewJTable(m_jtable, l_dataInici, l_dataFinal);
+	}
+
+	public void parar(){
+		this.m_run=false;
 	}
 
 	private void setDate() {

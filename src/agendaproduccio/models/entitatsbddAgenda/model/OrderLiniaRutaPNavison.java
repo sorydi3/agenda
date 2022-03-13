@@ -156,7 +156,7 @@ public class OrderLiniaRutaPNavison {
 		case "PR-RCTP":
 			this.m_tipus = Tipus.RCTP;
 			break;
-		case "PR-ALÇ":
+		case "PR-ALï¿½":
 			this.m_tipus = Tipus.ALC;
 			break;
 		case "PR-AR.IM":
@@ -379,20 +379,12 @@ public class OrderLiniaRutaPNavison {
 
 	public int GetEstat() {
 		if (isLanzada() && isComandes() && !isSignada()) {
-			System.out.println(isComandes() + " " + isComandes() + " !" + isSignada());
-			System.out.println(4);
 			return 4;
 		} else if (isLanzada()) {
-			System.out.println(isLanzada());
-			System.out.println(3);
 			return 3;
 		} else if (isComandes() && !isSignada()) {
-			System.out.println(isComandes() + " !" + isSignada());
-			System.out.println(1);
 			return 1;
 		} else if (isSignada() && !isLanzada()) {
-			System.out.println(isSignada() + " !" + isLanzada());
-			System.out.println(2);
 			return 2;
 		}
 		return 0;

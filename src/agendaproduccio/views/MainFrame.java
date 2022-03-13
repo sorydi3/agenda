@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
 	
 	/*****************ATTRIBUTS*******************/
 
-	private static final String MAIN_TITLE = "Agenda Producció v0.2";
+	private static final String MAIN_TITLE = "Agenda Producciï¿½ v0.2";
 	
 	/**
 	 * new won't work
@@ -92,7 +92,7 @@ public class MainFrame extends JFrame {
     		setTitle(MAIN_TITLE);
     		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             if(m_mainJpanel == null){
-                m_mainJpanel = new MainJPanel();
+                m_mainJpanel = new MainJPanel(this);
             }
                 add(m_mainJpanel);
     }
