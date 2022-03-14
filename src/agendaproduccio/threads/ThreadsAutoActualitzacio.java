@@ -13,33 +13,43 @@ public class ThreadsAutoActualitzacio extends Thread {
 	JButton m_jButonAct;
 	private Calendar l_dataInici;
 	private Calendar l_dataFinal;
-	private	boolean m_run;
-	public ThreadsAutoActualitzacio (MyJTable p_jtable,ControllerAgenda p_controller,JButton p_jButonAct ){
+	private boolean m_run;
+	private int m_timeIntervalRefresh;
+	public ThreadsAutoActualitzacio(MyJTable p_jtable, ControllerAgenda p_controller, JButton p_jButonAct) {
 		super();
 		this.m_jtable = p_jtable;
-		this.m_controller =p_controller;
-		this.m_jButonAct =p_jButonAct;
+		this.m_controller = p_controller;
+		this.m_jButonAct = p_jButonAct;
 		this.m_run = true;
-		this.m_jButonAct.setText("<html> <font size = 2><b>" +LocalTime.now().toString()+" </b></font></html>");
+		this.m_jButonAct.setText(getTime());
+		this.m_timeIntervalRefresh = 180000;
+	}
+
+	public String getTime() {
+		StringBuilder builder  = new StringBuilder();
+		String l_t = LocalTime.now().getHour() + ":" + LocalTime.now().getMinute() + ":" + LocalTime.now().getSecond();
+		builder.append("<html> <font size = 1.2 ><b>")
+		.append(l_t)
+		.append("</b></font></html>");
+		return builder.toString();
 	}
 
 	@Override
 	public void run() {
-		while (this.m_run){
+		while (this.m_run) {
 			System.out.println("THREAD RUNNNING!!!!");
 			try {
-				sleep(9000);
-				System.currentTimeMillis();
+				sleep(m_timeIntervalRefresh);
 				fillTable();
-				this.m_jButonAct.setText("<html> <font size = 2><b>" +LocalTime.now().toString()+" </b></font></html>");
+				this.m_jButonAct.setText(getTime());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		System.out.println("STOPED THREADDDDDD!!!");
-		//slee
+		System.out.println("THREADDDDDD STOPED!!!");
+		// slee
 	}
 
 	private void fillTable() {
@@ -49,8 +59,8 @@ public class ThreadsAutoActualitzacio extends Thread {
 		m_controller.populateViewJTable(m_jtable, l_dataInici, l_dataFinal);
 	}
 
-	public void parar(){
-		this.m_run=false;
+	public void parar() {
+		this.m_run = false;
 	}
 
 	private void setDate() {
@@ -64,6 +74,5 @@ public class ThreadsAutoActualitzacio extends Thread {
 		l_dataFinal.set(Calendar.MINUTE, 59);
 		l_dataFinal.set(Calendar.SECOND, 59);
 	}
-	
-	
+
 }

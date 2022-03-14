@@ -1,6 +1,8 @@
 package agendaproduccio.views.renderers.jtables;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -12,7 +14,7 @@ import agendaproduccio.views.renderers.IntegerRenderer;
 import agendaproduccio.views.renderers.StringRenderer;
 
 public class MyJTable extends JTableGUI {
-	// ATR
+	// ATR.
 	private final int m_pla = 0;
 	private final int m_com = 1;
 	private final int m_part = 2;
@@ -32,6 +34,7 @@ public class MyJTable extends JTableGUI {
 	private final int m_dse = 16;
 	private final int m_mae = 17;
 	private final int m_codColo = 18;
+	private final int m_pathComandaPdf = 19;
 	private final MyJTextField m_jtext;
 	private boolean m_color;
 
@@ -74,6 +77,7 @@ public class MyJTable extends JTableGUI {
 		m_fila[m_dse] = l_linia.getM_dse();
 		m_fila[m_mae] = l_linia.getM_mae();
 		m_fila[m_codColo] = l_linia.GetEstat();
+		m_fila[m_pathComandaPdf] = l_linia.getPathPdf();
 		m_model.addRow(m_fila);
 	}
 
@@ -84,7 +88,7 @@ public class MyJTable extends JTableGUI {
 	// MTD PRV
 	@Override
 	protected void ConfigurarTotalColumnes() {
-		TOTAL_COLUMNES = 19;
+		TOTAL_COLUMNES = 20;
 	}
 
 	@Override
@@ -92,12 +96,12 @@ public class MyJTable extends JTableGUI {
 		m_fila[m_pla] = "Pla.";
 		m_fila[m_com] = "Com.";
 		m_fila[m_part] = "Part.";
-		m_fila[m_capcelera] = "Capçelera";
+		m_fila[m_capcelera] = "Cap\\çelera";
 		m_fila[m_tir] = "Tir.";
-		m_fila[m_maq] = "Màq.";
+		m_fila[m_maq] = "M\\àq.";
 		m_fila[m_dh] = "D\\H";
 		m_fila[m_tirada] = "Tirada";
-		m_fila[m_pag] = "Pàg.";
+		m_fila[m_pag] = "P\\àg.";
 
 		m_fila[m_fp] = "F\\P";
 		m_fila[m_paper] = "Paper";
@@ -106,13 +110,14 @@ public class MyJTable extends JTableGUI {
 		m_fila[m_imp] = "IMP";
 
 		m_fila[m_enc] = "ENC";
-		m_fila[m_alc] = "ALÇ.";
+		m_fila[m_alc] = "AL\\Ç.";
 
 		m_fila[m_gll] = "GLL";
 		m_fila[m_dse] = "DSE";
 
 		m_fila[m_mae] = "MAE";
 		m_fila[m_codColo] = "Cod.Col.Comandes"; // amagat
+		m_fila[m_pathComandaPdf] = "PathPdf"; // amagat
 		DefaultTableModel l_model = new DefaultTableModel(m_fila, 0) {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -151,7 +156,7 @@ public class MyJTable extends JTableGUI {
 		m_model = l_model;
 		return l_model;
 	}
-	
+
 	public void buidarTaula() {
 		((DefaultTableModel) this.getModel()).setRowCount(0);
 	}
@@ -210,24 +215,27 @@ public class MyJTable extends JTableGUI {
 		getColumnModel().getColumn(m_dse).setPreferredWidth(l_max);
 		getColumnModel().getColumn(m_dse).setMinWidth(l_min);
 		getColumnModel().getColumn(m_dse).setMaxWidth(l_max);
-		
+
 		getColumnModel().getColumn(m_mae).setPreferredWidth(l_max);
 		getColumnModel().getColumn(m_mae).setMinWidth(l_min);
 		getColumnModel().getColumn(m_mae).setMaxWidth(l_max);
-		
-		
+
 		getColumnModel().getColumn(m_pag).setPreferredWidth(l_max);
 		getColumnModel().getColumn(m_pag).setMinWidth(l_min);
 		getColumnModel().getColumn(m_pag).setMaxWidth(l_max);
-		
-		
+
 		getColumnModel().getColumn(m_codColo).setPreferredWidth(30);
 		getColumnModel().getColumn(m_codColo).setMinWidth(0);
 		getColumnModel().getColumn(m_codColo).setMaxWidth(0);
-		
+
 		getColumnModel().getColumn(m_pla).setPreferredWidth(30);
 		getColumnModel().getColumn(m_pla).setMinWidth(0);
 		getColumnModel().getColumn(m_pla).setMaxWidth(0);
+
+//		getColumnModel().getColumn(m_pathComandaPdf).setPreferredWidth(30);
+//		getColumnModel().getColumn(m_pathComandaPdf).setMinWidth(0);
+//		getColumnModel().getColumn(m_pathComandaPdf).setMaxWidth(0);
+
 	}
 
 	@Override
@@ -236,4 +244,35 @@ public class MyJTable extends JTableGUI {
 		setDefaultRenderer(String.class, new StringRenderer());
 		setDefaultRenderer(Integer.class, new IntegerRenderer());
 	}
+
+	public void addClickListener() {
+		MyJTable l_context = this;
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int l_table_row = l_context.rowAtPoint(e.getPoint());
+					int l_table_col = l_context.columnAtPoint(e.getPoint());
+					int l_model_row = l_context.convertRowIndexToModel(l_table_row);
+					int l_model_col = l_context.convertRowIndexToModel(l_table_col);
+					showInfo(l_model_row, l_model_col);
+				}
+			}
+		});
+	}
+
+	private void showInfo(int row, int col) {
+		
+	}
+	
+	private void mostraComanda() {
+		
+	}
+	
+	
+//	private void mostraFitxa() {
+//		OrdreProduccioFitxaTecnica l_ordre = m_ordreProduccioFitxaTecnicaDAO.GetFromCP( p_LAN );
+//		m_generadorFitxaTecnicaHTML.ActualitzarFitxaTecnica( l_ordre );
+//	}
+//	//
 }

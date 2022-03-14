@@ -77,7 +77,7 @@ public class MainJPanel extends JPanel {
 		JPanelBuilder.m_imprimir = this.m_imprimir;
 		this.m_jButtonXml = new JButton();
 		JPanelBuilder.m_jButtonXml = this.m_jButtonXml;
-		this.m_jtextField = new MyJTextField("img_buscar.png", "Capcelera  \\  Mï¿½quina  \\  Paper ...");
+		this.m_jtextField = new MyJTextField("img_buscar.png", "Capcelera  \\  Màquina  \\  Paper ...");
 		JPanelBuilder.m_jtextField = this.m_jtextField;
 		this.m_refresh = new JButton();
 		JPanelBuilder.m_refresh = this.m_refresh;
@@ -95,6 +95,7 @@ public class MainJPanel extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				if (e.getClickCount() == 1) {
 					fillTable();
+					m_refresh.setText(m_threadAct.getTime());
 				}
 			}
 

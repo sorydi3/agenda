@@ -49,10 +49,15 @@ public class OrderLiniaRutaPNavison {
 	public String m_qualitatPaperMaquinaFulla_l;
 	public String m_CaraODorsMaquinaFulla_l;
 	public String m_GramatgePaperMaquinaFulla_l;
+	public String m_tipusProducteMaquinaFulla_l;
+
+	// COLUMNES TAULA COMANDES
 	public int m_idComanda_c;
+	public String m_Path_c;
+
 	private Tipus m_tipus;
 	private String m_ctp, m_imp, m_enc, m_alc, m_dse, m_mae, m_gll;
-	public String m_tipusProducteMaquinaFulla_l;
+	// public String
 
 	public OrderLiniaRutaPNavison() {
 		this.setDefault();
@@ -108,6 +113,7 @@ public class OrderLiniaRutaPNavison {
 
 		// COLUMNES TAULA COMANDES
 		m_idComanda_c = 0;
+		m_Path_c = "";
 
 		// ------- -------
 
@@ -156,7 +162,7 @@ public class OrderLiniaRutaPNavison {
 		case "PR-RCTP":
 			this.m_tipus = Tipus.RCTP;
 			break;
-		case "PR-ALï¿½":
+		case "PR-ALÇ":
 			this.m_tipus = Tipus.ALC;
 			break;
 		case "PR-AR.IM":
@@ -450,40 +456,20 @@ public class OrderLiniaRutaPNavison {
 		return this.m_nI_Cantidad_l;
 	}
 
-	public void setM_nI_Cantidad_l(String m_nI_Cantidad_l) {
-		this.m_nI_Cantidad_l = m_nI_Cantidad_l;
-	}
-
 	public String getM_nI_No_Planes_Totals_Tiratge_l() {
 		return !treballExterior() ? this.m_nI_No_Planes_Totals_Tiratge_l : "";
-	}
-
-	public void setM_nI_No_Planes_Totals_Tiratge_l(String m_nI_No_Planes_Totals_Tiratge_l) {
-		this.m_nI_No_Planes_Totals_Tiratge_l = m_nI_No_Planes_Totals_Tiratge_l;
 	}
 
 	public String getM_nI_Format_Tiratge_l() {
 		return this.m_nI_Format_Tiratge_l;
 	}
 
-	public void setM_nI_Format_Tiratge_l(String m_nI_Format_Tiratge_l) {
-		this.m_nI_Format_Tiratge_l = m_nI_Format_Tiratge_l;
-	}
-
 	public String getM_nI_Plegat_Tiratge_l() {
 		return !treballExterior() ? this.m_nI_Plegat_Tiratge_l : "";
 	}
 
-	public void setM_nI_Plegat_Tiratge_l(String m_nI_Plegat_Tiratge_l) {
-		this.m_nI_Plegat_Tiratge_l = m_nI_Plegat_Tiratge_l;
-	}
-
 	public String getM_nI_Codi_Grup_Producto_l() {
 		return this.m_nI_Codi_Grup_Producto_l;
-	}
-
-	public void setM_nI_Codi_Grup_Producto_l(String m_nI_Codi_Grup_Producto_l) {
-		this.m_nI_Codi_Grup_Producto_l = m_nI_Codi_Grup_Producto_l;
 	}
 
 	public boolean isM_planificat_l() {
@@ -492,10 +478,6 @@ public class OrderLiniaRutaPNavison {
 
 	public boolean getM_planificat_l() {
 		return this.m_planificat_l;
-	}
-
-	public void setM_planificat_l(boolean m_planificat_l) {
-		this.m_planificat_l = m_planificat_l;
 	}
 
 	public int getM_uI_Id_Lin_Ordre_P_Navision_l() {
@@ -514,48 +496,24 @@ public class OrderLiniaRutaPNavison {
 		return this.m_planificat_Manipulat_Extern_l;
 	}
 
-	public void setM_planificat_Manipulat_Extern_l(boolean m_planificat_Manipulat_Extern_l) {
-		this.m_planificat_Manipulat_Extern_l = m_planificat_Manipulat_Extern_l;
-	}
-
 	public String getM_dataEntregaManipuladorExtern_l() {
 		return this.m_dataEntregaManipuladorExtern_l;
-	}
-
-	public void setM_dataEntregaManipuladorExtern_l(String m_dataEntregaManipuladorExtern_l) {
-		this.m_dataEntregaManipuladorExtern_l = m_dataEntregaManipuladorExtern_l;
 	}
 
 	public String getM_nI_Tipus_Papel_Bobina_Entera_1_l() {
 		return this.m_nI_Tipus_Papel_Bobina_Entera_1_l;
 	}
 
-	public void setM_nI_Tipus_Papel_Bobina_Entera_1_l(String m_nI_Tipus_Papel_Bobina_Entera_1_l) {
-		this.m_nI_Tipus_Papel_Bobina_Entera_1_l = m_nI_Tipus_Papel_Bobina_Entera_1_l;
-	}
-
 	public String getM_nI_Tipus_Papel_Bobina_Entera_2_l() {
 		return this.m_nI_Tipus_Papel_Bobina_Entera_2_l;
-	}
-
-	public void setM_nI_Tipus_Papel_Bobina_Entera_2_l(String m_nI_Tipus_Papel_Bobina_Entera_2_l) {
-		this.m_nI_Tipus_Papel_Bobina_Entera_2_l = m_nI_Tipus_Papel_Bobina_Entera_2_l;
 	}
 
 	public String getM_nI_Tipus_Papel_Bobina_Entera_3_l() {
 		return this.m_nI_Tipus_Papel_Bobina_Entera_3_l;
 	}
 
-	public void setM_nI_Tipus_Papel_Bobina_Entera_3_l(String m_nI_Tipus_Papel_Bobina_Entera_3_l) {
-		this.m_nI_Tipus_Papel_Bobina_Entera_3_l = m_nI_Tipus_Papel_Bobina_Entera_3_l;
-	}
-
 	public String getM_qualitatPaperMaquinaFulla_l() {
 		return this.m_qualitatPaperMaquinaFulla_l;
-	}
-
-	public void setM_qualitatPaperMaquinaFulla_l(String m_qualitatPaperMaquinaFulla_l) {
-		this.m_qualitatPaperMaquinaFulla_l = m_qualitatPaperMaquinaFulla_l;
 	}
 
 	public void setColumn(Tipus tipus, String m_uI_Estado_r2) {
@@ -639,6 +597,10 @@ public class OrderLiniaRutaPNavison {
 		// TODO Auto-generated method stub
 		String str = "Part.";
 		return str;
+	}
+
+	public String getPathPdf() {
+		return this.m_Path_c;
 	}
 
 }

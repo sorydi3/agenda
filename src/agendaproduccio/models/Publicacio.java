@@ -71,6 +71,11 @@ public class Publicacio {
 						OrderLiniaRutaPNavison l_ordre_tipus_global = llista_tiratge_global.get(index_el_global);
 						tiratge.setColumn(tipus, l_ordre_tipus_global.getM_uI_Estado_r());
 						l_trobat = true;
+					}else {
+						System.out.println("NOT TROBA");
+						if(tipus == Tipus.ALC) {
+							System.out.println("hhshdhds");
+						}
 					}
 				}
 					l_index++;

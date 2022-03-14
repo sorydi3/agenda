@@ -15,7 +15,7 @@ public class OrdreLiniaRutaDAO {
 	private String m_sentencia;
 	private Object[][] m_camps;
 	private DataHora m_dh = DataHora.getInstance();
-	private final int NUM_FILAS = 34;
+	private final int NUM_FILAS = 35;
 	private final int NUM_COLUMNAS = 2;
 
 	private OrdreLiniaRutaDAO() {
@@ -58,6 +58,7 @@ public class OrdreLiniaRutaDAO {
 		m_camps[31][0] = "l.GramatgePaperMaquinaFulla";
 		m_camps[33][0] = "l.TipusProducteMaquinaFulla";
 		m_camps[32][0] = "c.Id";
+		m_camps[34][0] = "c.Path";
 		m_sentencia = "";
 		for (int i = 0; i < m_camps.length; i++) {
 			m_sentencia += i > 0 ? "," : " ";
@@ -73,8 +74,6 @@ public class OrdreLiniaRutaDAO {
 		return m_singleton;
 	}
 
-	
-	
 	public OrderLiniaRutaPNavison Fill(Object[] p_fila) {
 		OrderLiniaRutaPNavison l_res = new OrderLiniaRutaPNavison();
 		l_res.m_nI_Num_Orden_Produccion_o = p_fila[0] == null ? "" : (String) p_fila[0];
@@ -111,6 +110,7 @@ public class OrdreLiniaRutaDAO {
 		l_res.m_GramatgePaperMaquinaFulla_l = p_fila[31] == null ? "" : (String) p_fila[31];
 		l_res.m_idComanda_c = p_fila[32] == null ? 0 : Integer.parseInt((String) p_fila[32]);
 		l_res.m_tipusProducteMaquinaFulla_l = p_fila[33] == null ? " " : (String) p_fila[33];
+		l_res.m_Path_c = p_fila[34] == null ? " " : (String) p_fila[34];
 		l_res.setTipus();
 		return l_res;
 	}
