@@ -86,7 +86,7 @@ public class MainJPanel extends JPanel {
 		JPanelBuilder.DIMENTION_WIDTH_CALENDAR = this.getWidth();
 		this.m_jtaula = new MyJTable(m_jtextField);
 		m_jtextField.addJtable(m_jtaula);
-		this.m_controllerAgenda = ControllerAgenda.getInstance();
+		this.m_controllerAgenda = new ControllerAgenda();
 	}
 
 	private void addListenerButton(JButton button) {

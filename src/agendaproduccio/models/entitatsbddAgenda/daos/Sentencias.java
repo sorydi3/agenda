@@ -1,5 +1,7 @@
 package agendaproduccio.models.entitatsbddAgenda.daos;
 
+import java.util.Calendar;
+
 public class Sentencias {
 
 	public static String buildSentenciaJoinSELECT(String p_columnes, String l_strDini, String l_strDfin) {
@@ -44,5 +46,10 @@ public class Sentencias {
 //		.append(p_data_final)
 //		.append("'");
 		return l_builder.toString();
+	}
+
+	public static String BuildSelectFitxa(String l_sentenciaPart1, String p_dataInici, String p_dataFinal) {
+		
+		return null;
 	}
 }

@@ -2,7 +2,7 @@ package agendaproduccio.models.entitatsbddAgenda.model;
 
 import java.util.Calendar;
 
-public class OrdrePNavision
+public class OrdrePNavisionFitxaTecnica
 {
 	public int m_uI_Id_Ordre_P_Navision;
 	public String m_nM_Estado;
@@ -137,7 +137,7 @@ public class OrdrePNavision
 	public boolean m_jobTicketFet;
 	public Calendar m_dataJobTicketFet;
 
-	public OrdrePNavision()
+	public OrdrePNavisionFitxaTecnica()
 	{
 		this.SetDefault();
 	}

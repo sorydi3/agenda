@@ -1,18 +1,11 @@
 package agendaproduccio.views.renderers.jtables;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import agendaproduccio.models.ControllerAgenda;
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
 import agendaproduccio.utils.JTableGUI;
 import agendaproduccio.utils.MyJTextField;
@@ -42,8 +35,6 @@ public class MyJTable extends JTableGUI {
 	private final int m_mae = 17;
 	private final int m_codColo = 18;
 	private final int m_pathComandaPdf = 19;
-	private final int m_lan = 20;
-
 	private final MyJTextField m_jtext;
 	private boolean m_color;
 
@@ -53,8 +44,6 @@ public class MyJTable extends JTableGUI {
 		this.m_jtext = null;
 		this.configuraRenderers();
 		ConfigurarColumnes();
-		addClickListener();
-
 	}
 
 	public MyJTable(MyJTextField jtext) {
@@ -62,7 +51,6 @@ public class MyJTable extends JTableGUI {
 		m_jtext = jtext;
 		this.configuraRenderers();
 		ConfigurarColumnes();
-		addClickListener();
 	}
 
 	// ------------------------ Modificadors ----------------------------------
@@ -70,7 +58,6 @@ public class MyJTable extends JTableGUI {
 	public void AfegirFila(Object p_capcelera) {
 		BuidarFila();
 		OrderLiniaRutaPNavison l_linia = (OrderLiniaRutaPNavison) p_capcelera;
-		// System.out.println(l_linia);
 		m_fila[m_pla] = false;
 		m_fila[m_com] = l_linia.getIdComanda();
 		m_fila[m_part] = l_linia.getParte();
@@ -91,7 +78,6 @@ public class MyJTable extends JTableGUI {
 		m_fila[m_mae] = l_linia.getM_mae();
 		m_fila[m_codColo] = l_linia.GetEstat();
 		m_fila[m_pathComandaPdf] = l_linia.getPathPdf();
-		m_fila[m_lan] = l_linia.getM_nI_Num_Orden_Produccion_o();
 		m_model.addRow(m_fila);
 	}
 
@@ -102,7 +88,7 @@ public class MyJTable extends JTableGUI {
 	// MTD PRV
 	@Override
 	protected void ConfigurarTotalColumnes() {
-		TOTAL_COLUMNES = 21;
+		TOTAL_COLUMNES = 20;
 	}
 
 	@Override
@@ -132,8 +118,6 @@ public class MyJTable extends JTableGUI {
 		m_fila[m_mae] = "MAE";
 		m_fila[m_codColo] = "Cod.Col.Comandes"; // amagat
 		m_fila[m_pathComandaPdf] = "PathPdf"; // amagat
-		m_fila[m_codColo] = "Cod.Col.Comandes"; // amagat
-		m_fila[m_lan] = "LAN"; // amagat
 		DefaultTableModel l_model = new DefaultTableModel(m_fila, 0) {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -248,13 +232,9 @@ public class MyJTable extends JTableGUI {
 		getColumnModel().getColumn(m_pla).setMinWidth(0);
 		getColumnModel().getColumn(m_pla).setMaxWidth(0);
 
-		getColumnModel().getColumn(m_pathComandaPdf).setPreferredWidth(30);
-		getColumnModel().getColumn(m_pathComandaPdf).setMinWidth(0);
-		getColumnModel().getColumn(m_pathComandaPdf).setMaxWidth(0);
-
-		getColumnModel().getColumn(m_lan).setPreferredWidth(30);
-		getColumnModel().getColumn(m_lan).setMinWidth(0);
-		getColumnModel().getColumn(m_lan).setMaxWidth(0);
+//		getColumnModel().getColumn(m_pathComandaPdf).setPreferredWidth(30);
+//		getColumnModel().getColumn(m_pathComandaPdf).setMinWidth(0);
+//		getColumnModel().getColumn(m_pathComandaPdf).setMaxWidth(0);
 
 	}
 
@@ -265,7 +245,7 @@ public class MyJTable extends JTableGUI {
 		setDefaultRenderer(Integer.class, new IntegerRenderer());
 	}
 
-	private void addClickListener() {
+	public void addClickListener() {
 		MyJTable l_context = this;
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -282,37 +262,17 @@ public class MyJTable extends JTableGUI {
 	}
 
 	private void showInfo(int row, int col) {
-		if (col == m_com) {
-			mostraComanda(row);
-		}
-
-		if (col == m_part) {
-			mostraFitxa(row);
-		}
-
-		if (col == m_capcelera) {
-
-		}
-
+		
 	}
-
-	private void mostraComanda(int row) {
-		String l_path = this.getModel().getValueAt(row, m_pathComandaPdf).toString();
-		if (!l_path.equals(" ")) {
-			try {
-				File l_file = new File(l_path.replace("servidornavision", System.getProperty("ipNavision")));
-				Desktop.getDesktop().browse(new URI(l_file.toURI().toString().replace("file:////", "file://")));
-			} catch (Exception e) {
-				System.out.println("Error Ejecutar : " + e);
-				JOptionPane.showMessageDialog(this, " No es pot obrir la Comanda!");
-			}
-			System.gc();
-		}
+	
+	private void mostraComanda() {
+		
 	}
-
-	private void mostraFitxa(int row) {
-		String l_lan = this.getModel().getValueAt(row, m_pathComandaPdf).toString();
-        ControllerAgenda l_ordre = ControllerAgenda.getInstance();
-	}
-
+	
+	
+//	private void mostraFitxa() {
+//		OrdreProduccioFitxaTecnica l_ordre = m_ordreProduccioFitxaTecnicaDAO.GetFromCP( p_LAN );
+//		m_generadorFitxaTecnicaHTML.ActualitzarFitxaTecnica( l_ordre );
+//	}
+//	//
 }

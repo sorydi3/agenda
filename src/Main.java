@@ -14,7 +14,9 @@ public class Main {
 			e.printStackTrace();
 
 		}
-
+		
+		System.setProperty("ipNavision", "10.46.100.28");
+		System.setProperty("passdbControlPlanta", "lpc1232001");
 		MainFrame.getInstance().activate();
 	}
 }
