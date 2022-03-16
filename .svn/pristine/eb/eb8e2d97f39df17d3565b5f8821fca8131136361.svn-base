@@ -12,10 +12,8 @@ import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import agendaproduccio.controllers.controllerbdd.ControllerAgenda;
+import agendaproduccio.models.ControllerAgenda;
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
-import agendaproduccio.models.fitxatecnica.model.FitxaTecnicaHTMLHeidelberg;
-import agendaproduccio.models.fitxatecnica.model.OrdreProduccioFitxaTecnica;
 import agendaproduccio.utils.JTableGUI;
 import agendaproduccio.utils.MyJTextField;
 import agendaproduccio.views.renderers.HighlightRenderer;
@@ -134,6 +132,7 @@ public class MyJTable extends JTableGUI {
 		m_fila[m_mae] = "MAE";
 		m_fila[m_codColo] = "Cod.Col.Comandes"; // amagat
 		m_fila[m_pathComandaPdf] = "PathPdf"; // amagat
+		m_fila[m_codColo] = "Cod.Col.Comandes"; // amagat
 		m_fila[m_lan] = "LAN"; // amagat
 		DefaultTableModel l_model = new DefaultTableModel(m_fila, 0) {
 			@Override
@@ -305,18 +304,15 @@ public class MyJTable extends JTableGUI {
 				Desktop.getDesktop().browse(new URI(l_file.toURI().toString().replace("file:////", "file://")));
 			} catch (Exception e) {
 				System.out.println("Error Ejecutar : " + e);
-				JOptionPane.showMessageDialog(this, " Aquesta comanda no es pot obrir!");
+				JOptionPane.showMessageDialog(this, " No es pot obrir la Comanda!");
 			}
 			System.gc();
 		}
 	}
 
 	private void mostraFitxa(int row) {
-		FitxaTecnicaHTMLHeidelberg fitxa = new FitxaTecnicaHTMLHeidelberg();
-		String l_lan = this.getModel().getValueAt(row, m_lan).toString();
-		ControllerAgenda l_controller = ControllerAgenda.getInstance();
-		OrdreProduccioFitxaTecnica l_ordre = l_controller.getOrderFitxaTecnica(l_lan);
-		fitxa.ActualitzarFitxaTecnica(l_ordre);
+		String l_lan = this.getModel().getValueAt(row, m_pathComandaPdf).toString();
+        ControllerAgenda l_ordre = ControllerAgenda.getInstance();
 	}
 
 }

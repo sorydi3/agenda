@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import agendaproduccio.controllers.controllerbdd.ControllerAgenda;
+import agendaproduccio.models.ControllerAgenda;
 import agendaproduccio.threads.ThreadsAutoActualitzacio;
 import agendaproduccio.utils.JPanelBuilder;
 import agendaproduccio.utils.JPanellCalendari;
