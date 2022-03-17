@@ -57,7 +57,7 @@ public class ControllerAgenda {
 				m_ordres.get(l_key).afegirTiratge(l_idtiratge, l_tiratge);
 			} else {
 				m_ordres.get(l_key).afegirTiratge(l_idtiratge, l_tiratge);
-				
+
 			}
 		}
 	}
