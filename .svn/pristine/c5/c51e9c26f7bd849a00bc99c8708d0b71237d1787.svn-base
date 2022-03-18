@@ -18,7 +18,7 @@ public class ControllerAgenda {
 	private OrdreProduccioFitxaTecnicaDAO m_dadesBddFitxaDao;
 	private LogsModificacionsDAO m_logsDao;
 	private final Map<String, Publicacio> m_ordres;
-	private final Map<String, LogsModificacions> m_logsModifLinies;
+	private final Map<Integer, LogsModificacions> m_logsModifLinies;
 	public static ControllerAgenda m_instanceSingleton;
 
 	private ControllerAgenda() {
@@ -57,20 +57,18 @@ public class ControllerAgenda {
 				m_ordres.get(l_key).afegirTiratge(l_idtiratge, l_tiratge);
 			} else {
 				m_ordres.get(l_key).afegirTiratge(l_idtiratge, l_tiratge);
+
 			}
 		}
 	}
 
 	public void addLogsPublicacions() {
-		//millorar, nomes fer un selecte
-		for (Entry<String, Publicacio> l_llistaPublicacio : m_ordres.entrySet()) {
-			Publicacio l_publicacio = l_llistaPublicacio.getValue();
-			for (LogsModificacions l_log : m_logsDao.getEntrades(l_llistaPublicacio.getKey())) {
-				//System.out.println(l_log);
+		for (Entry<String, Publicacio> publicacio : m_ordres.entrySet()) {
+			Publicacio l_publicacio = publicacio.getValue();
+			for (LogsModificacions l_log : m_logsDao.getEntrades(publicacio.getKey())) {
 				l_publicacio.afegirLogModf(l_log);
 			}
 		}
-		System.out.println("hellow");
 	}
 
 	public OrdreProduccioFitxaTecnica getOrderFitxaTecnica(String p_lan) {
