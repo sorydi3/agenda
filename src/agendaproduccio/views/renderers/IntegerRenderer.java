@@ -1,4 +1,5 @@
 package agendaproduccio.views.renderers;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -16,7 +17,6 @@ public class IntegerRenderer extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 1L;
 
 	public IntegerRenderer() {
-
 		setHorizontalTextPosition(LEFT);
 	}
 
@@ -27,21 +27,21 @@ public class IntegerRenderer extends DefaultTableCellRenderer {
 		JLabel etiqueta = (JLabel) l_component;
 		m_table = table;
 		setOpaque(isSelected);
-		renderInteger(etiqueta,value,row,column);
+		renderInteger(etiqueta, value, row, column);
 		return this;
 	}
 
 	private void renderInteger(JLabel etiqueta, Object value, int row, int column) {
 		if (value instanceof Integer) {
-			renderColums(column,row,etiqueta);
+			setToolTipText(String.valueOf((Integer) value));
+			renderColums(column, row, etiqueta);
 		}
 	}
-	
-	public void renderColums(int column,int row,JLabel etiqueta) {
-		this.setOpaque( row % 2 == 0 );
-		etiqueta.setBackground( new Color( 235, 245,251) );
-	}
 
+	public void renderColums(int column, int row, JLabel etiqueta) {
+		this.setOpaque(row % 2 == 0);
+		etiqueta.setBackground(new Color(235, 245, 251));
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {

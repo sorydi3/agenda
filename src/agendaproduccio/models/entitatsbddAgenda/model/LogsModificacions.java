@@ -48,7 +48,7 @@ public class LogsModificacions {
 		builder.append(m_nomCamp);
 		builder.append("<br>");
 		builder.append("<b> Data: </b>");
-		builder.append(m_data.getTime());
+		builder.append(getData());
 		builder.append("<br>");
 		builder.append(" <b>Usuari: </b>");
 		builder.append(m_usuari);
@@ -77,6 +77,27 @@ public class LogsModificacions {
 
 	public int getIdLinia() {
 		return this.m_uI_Id_Lin_Ordre_P_Navision;
+	}
+
+	public String getVNou() {
+		return m_valor_Nou;
+	}
+
+	public String getVAntic() {
+		return m_valor_Antic;
+	}
+
+	public String getData() {
+		return DataHora.getInstance().CalendarToStringEuropeu(m_data);	
+	}
+	
+	
+	public String getDesc() {
+		return m_descripcio;
+	}
+
+	public String getConcepte() {
+		return m_nomCamp;
 	}
 
 }

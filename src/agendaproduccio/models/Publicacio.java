@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import agendaproduccio.models.entitatsbddAgenda.model.LogsModificacions;
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison.Tipus;
-import agendaproduccio.views.renderers.jtables.MyJTable;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
 
 public class Publicacio {
 	Map<Integer, List<OrderLiniaRutaPNavison>> m_tiratges;
@@ -117,7 +117,7 @@ public class Publicacio {
 		}
 	}
 
-	public void mostraTiratges(MyJTable view) {
+	public void mostraTiratges(JTableLinies view) {
 		postProcessing(); // OMPLE LES COLUMNES ctp | imp | enc | alc | gll | dse | mae |
 		for (Entry<Integer, List<OrderLiniaRutaPNavison>> publicacio : m_tiratges.entrySet()) {
 			if (publicacio.getKey() > 0) {

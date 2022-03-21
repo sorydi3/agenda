@@ -6,17 +6,17 @@ import javax.swing.JButton;
 
 import agendaproduccio.controllers.controllerbdd.ControllerAgenda;
 import agendaproduccio.utils.JPanelBuilder;
-import agendaproduccio.views.renderers.jtables.MyJTable;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
 
 public class ThreadsAutoActualitzacio extends Thread {
-	MyJTable m_jtable;
+	JTableLinies m_jtable;
 	ControllerAgenda m_controller;
 	JButton m_jButonAct;
 	private Calendar l_dataInici;
 	private Calendar l_dataFinal;
 	private boolean m_run;
 	private int m_timeIntervalRefresh;
-	public ThreadsAutoActualitzacio(MyJTable p_jtable, ControllerAgenda p_controller, JButton p_jButonAct) {
+	public ThreadsAutoActualitzacio(JTableLinies p_jtable, ControllerAgenda p_controller, JButton p_jButonAct) {
 		super();
 		this.m_jtable = p_jtable;
 		this.m_controller = p_controller;

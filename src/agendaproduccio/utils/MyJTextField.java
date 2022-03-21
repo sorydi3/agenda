@@ -24,10 +24,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
-import agendaproduccio.views.renderers.jtables.MyJTable;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
 
 public class MyJTextField extends JTextField implements FocusListener {
-	private MyJTable m_jtable;
+	private JTableLinies m_jtable;
 	private IconTextComponentHelper m_Helper = new IconTextComponentHelper(this);
 	private final String m_hint;
 
@@ -40,7 +40,7 @@ public class MyJTextField extends JTextField implements FocusListener {
 	}
 
 	public void addJtable(JTable jtable) {
-		this.m_jtable = (MyJTable) jtable;
+		this.m_jtable = (JTableLinies) jtable;
 	}
 
 	private IconTextComponentHelper getHelper() {

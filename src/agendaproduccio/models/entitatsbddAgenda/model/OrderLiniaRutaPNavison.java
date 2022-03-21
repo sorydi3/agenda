@@ -632,5 +632,10 @@ public class OrderLiniaRutaPNavison {
 	public void afegirModf(LogsModificacions modf) {
 		this.m_modfLinia.add(modf);
 	}
+	
+	
+	public List<LogsModificacions> getLogs() {
+		return m_modfLinia;
+	}
 
 }

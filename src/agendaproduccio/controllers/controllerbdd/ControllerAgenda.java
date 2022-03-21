@@ -11,7 +11,7 @@ import agendaproduccio.models.entitatsbddAgenda.model.LogsModificacions;
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
 import agendaproduccio.models.fitxatecnica.dao.OrdreProduccioFitxaTecnicaDAO;
 import agendaproduccio.models.fitxatecnica.model.OrdreProduccioFitxaTecnica;
-import agendaproduccio.views.renderers.jtables.MyJTable;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
 
 public class ControllerAgenda {
 	private OrdreLiniaRutaDAO m_dadesBddDao;
@@ -36,7 +36,7 @@ public class ControllerAgenda {
 		return m_instanceSingleton;
 	}
 
-	public void populateViewJTable(MyJTable view, Calendar p_dataInici, Calendar p_dataFinal) {
+	public void populateViewJTable(JTableLinies view, Calendar p_dataInici, Calendar p_dataFinal) {
 		this.retreaveDataBdd(p_dataInici, p_dataFinal);
 		addLogsPublicacions();
 		for (Entry<String, Publicacio> publicacio : m_ordres.entrySet()) {

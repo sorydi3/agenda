@@ -18,40 +18,42 @@ import agendaproduccio.models.fitxatecnica.model.FitxaTecnicaHTMLHeidelberg;
 import agendaproduccio.models.fitxatecnica.model.OrdreProduccioFitxaTecnica;
 import agendaproduccio.utils.JTableGUI;
 import agendaproduccio.utils.MyJTextField;
+import agendaproduccio.views.JFrameLogsLinies;
+import agendaproduccio.views.JPanelLogsLinies;
 import agendaproduccio.views.renderers.HighlightRenderer;
 import agendaproduccio.views.renderers.IntegerRenderer;
 import agendaproduccio.views.renderers.StringRenderer;
 
-public class MyJTable extends JTableGUI {
+public class JTableLinies extends JTableGUI {
 	// ATR.
-	private final int m_pla = 0;
-	private final int m_com = 1;
-	private final int m_part = 2;
-	private final int m_capcelera = 3;
-	private final int m_tir = 4;
-	private final int m_maq = 5;
-	private final int m_dh = 6;
-	private final int m_tirada = 7;
-	private final int m_pag = 8;
-	private final int m_fp = 9;
-	private final int m_paper = 10;
-	private final int m_ctp = 11;
-	private final int m_imp = 12;
-	private final int m_enc = 13;
-	private final int m_alc = 14;
-	private final int m_gll = 15;
-	private final int m_dse = 16;
-	private final int m_mae = 17;
-	private final int m_codColo = 18;
-	private final int m_pathComandaPdf = 19;
-	private final int m_lan = 20;
-	private final int m_ordreLiniaRuta = 21;
+	public static final int m_pla = 0;
+	public static final int m_com = 1;
+	public static final int m_part = 2;
+	public static final int m_capcelera = 3;
+	public static final int m_tir = 4;
+	public static final int m_maq = 5;
+	public static final int m_dh = 6;
+	public static final int m_tirada = 7;
+	public static final int m_pag = 8;
+	public static final int m_fp = 9;
+	public static final int m_paper = 10;
+	public static final int m_ctp = 11;
+	public static final int m_imp = 12;
+	public static final int m_enc = 13;
+	public static final int m_alc = 14;
+	public static final int m_gll = 15;
+	public static final int m_dse = 16;
+	public static final int m_mae = 17;
+	public static final int m_codColo = 18;
+	public static final int m_pathComandaPdf = 19;
+	public static final int m_lan = 20;
+	public static final int m_ordreLiniaRuta = 21;
 
 	private final MyJTextField m_jtext;
 	private boolean m_color;
 
 	// --------------------- Constructors -------------------------------------
-	public MyJTable() {
+	public JTableLinies() {
 		super();
 		this.m_jtext = null;
 		this.configuraRenderers();
@@ -60,7 +62,7 @@ public class MyJTable extends JTableGUI {
 
 	}
 
-	public MyJTable(MyJTextField jtext) {
+	public JTableLinies(MyJTextField jtext) {
 		super();
 		m_jtext = jtext;
 		this.configuraRenderers();
@@ -190,6 +192,9 @@ public class MyJTable extends JTableGUI {
 		int l_max = 40;
 		int l_min = 20;
 
+		int amagat_height = 30;
+		int amagat_width = 0;
+
 		getColumnModel().getColumn(m_capcelera).setPreferredWidth(400);
 		getColumnModel().getColumn(m_capcelera).setMinWidth(100);
 		getColumnModel().getColumn(m_capcelera).setMaxWidth(400);
@@ -246,25 +251,27 @@ public class MyJTable extends JTableGUI {
 		getColumnModel().getColumn(m_pag).setMinWidth(l_min);
 		getColumnModel().getColumn(m_pag).setMaxWidth(l_max);
 
-		getColumnModel().getColumn(m_codColo).setPreferredWidth(30);
-		getColumnModel().getColumn(m_codColo).setMinWidth(0);
-		getColumnModel().getColumn(m_codColo).setMaxWidth(0);
+		////////////// ------ /////////
 
-		getColumnModel().getColumn(m_pla).setPreferredWidth(30);
-		getColumnModel().getColumn(m_pla).setMinWidth(0);
-		getColumnModel().getColumn(m_pla).setMaxWidth(0);
+		getColumnModel().getColumn(m_codColo).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_codColo).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_codColo).setMaxWidth(amagat_width);
 
-		getColumnModel().getColumn(m_pathComandaPdf).setPreferredWidth(30);
-		getColumnModel().getColumn(m_pathComandaPdf).setMinWidth(0);
-		getColumnModel().getColumn(m_pathComandaPdf).setMaxWidth(0);
+		getColumnModel().getColumn(m_pla).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_pla).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_pla).setMaxWidth(amagat_width);
 
-		getColumnModel().getColumn(m_lan).setPreferredWidth(30);
-		getColumnModel().getColumn(m_lan).setMinWidth(0);
-		getColumnModel().getColumn(m_lan).setMaxWidth(0);
-		
-		getColumnModel().getColumn(m_ordreLiniaRuta).setPreferredWidth(30);
-		getColumnModel().getColumn(m_ordreLiniaRuta).setMinWidth(0);
-		getColumnModel().getColumn(m_ordreLiniaRuta).setMaxWidth(0);
+		getColumnModel().getColumn(m_pathComandaPdf).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_pathComandaPdf).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_pathComandaPdf).setMaxWidth(amagat_width);
+
+		getColumnModel().getColumn(m_lan).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_lan).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_lan).setMaxWidth(amagat_width);
+
+		getColumnModel().getColumn(m_ordreLiniaRuta).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_ordreLiniaRuta).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_ordreLiniaRuta).setMaxWidth(amagat_width);
 
 	}
 
@@ -276,7 +283,7 @@ public class MyJTable extends JTableGUI {
 	}
 
 	private void addClickListener() {
-		MyJTable l_context = this;
+		JTableLinies l_context = this;
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -301,9 +308,15 @@ public class MyJTable extends JTableGUI {
 		}
 
 		if (col == m_capcelera) {
-
+			mostraLogsModf(row);
 		}
 
+	}
+
+	private void mostraLogsModf(int p_row) {
+		JFrameLogsLinies.getInstance((OrderLiniaRutaPNavison) getModel().getValueAt(p_row, m_ordreLiniaRuta))
+				.activate();
+		;
 	}
 
 	private void mostraComanda(int row) {

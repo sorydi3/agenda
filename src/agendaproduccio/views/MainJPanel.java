@@ -18,10 +18,10 @@ import agendaproduccio.utils.JPanellCalendari;
 import agendaproduccio.utils.JScrollPaneTableGUI;
 import agendaproduccio.utils.MyJTextField;
 import agendaproduccio.views.renderers.HeaderRenderrer;
-import agendaproduccio.views.renderers.jtables.MyJTable;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
 
 public class MainJPanel extends JPanel {
-	private MyJTable m_jtaula;
+	private JTableLinies m_jtaula;
 	private MyJTextField m_jtextField;
 	private JPanellCalendari m_calendari_inici, m_calendari_final;
 	private JComboBox<String> m_jcombo;
@@ -84,7 +84,7 @@ public class MainJPanel extends JPanel {
 		this.m_jcombo = new JComboBox<>();
 		JPanelBuilder.m_jcombo = this.m_jcombo;
 		JPanelBuilder.DIMENTION_WIDTH_CALENDAR = this.getWidth();
-		this.m_jtaula = new MyJTable(m_jtextField);
+		this.m_jtaula = new JTableLinies(m_jtextField);
 		m_jtextField.addJtable(m_jtaula);
 		this.m_controllerAgenda = ControllerAgenda.getInstance();
 	}

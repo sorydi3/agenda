@@ -13,6 +13,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
 
 public class StringRenderer extends DefaultTableCellRenderer {
 	private JTable m_table;
@@ -34,13 +35,11 @@ public class StringRenderer extends DefaultTableCellRenderer {
 		m_table = table;
 		setOpaque(isSelected);
 		renderStrings(etiqueta, value, row, column);
-		int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
 		this.addMouseListener(new MouseAdapter() {
 
 			public void mouseEntered(MouseEvent me) {
 				ToolTipManager.sharedInstance().setDismissDelay(20000);
 			}
-
 			public void mouseExited(MouseEvent me) {
 				ToolTipManager.sharedInstance().setDismissDelay(0);
 			}
@@ -50,10 +49,10 @@ public class StringRenderer extends DefaultTableCellRenderer {
 
 	private void renderStrings(JLabel etiqueta, Object value, int row, int column) {
 		if (value instanceof String) {
-			if (column == 3) {
+			if (column == JTableLinies.m_capcelera) {
 				addTooltip(row);
 			}else {
-				///etToolTipText(); todooooo left heree
+				setToolTipText((String)value); 
 			}
 			renderPriColum(column, row, etiqueta);
 			renderAltresColum(column, row, etiqueta);
@@ -62,7 +61,7 @@ public class StringRenderer extends DefaultTableCellRenderer {
 
 	public void renderPriColum(int column, int row, JLabel etiqueta) {
 		int l_columnaCodiColors = 18;
-		if (column == 1) {
+		if (column == JTableLinies.m_com) {
 			if (m_table.getValueAt(row, l_columnaCodiColors) == null) {
 				this.setOpaque(row % 2 == 0);
 				etiqueta.setBackground(new Color(235, 245, 251));
@@ -93,7 +92,7 @@ public class StringRenderer extends DefaultTableCellRenderer {
 	}
 
 	public void renderAltresColum(int column, int row, JLabel etiqueta) {
-		if (column >= 2 && column <= 17) {
+		if (column >= JTableLinies.m_part && column <= JTableLinies.m_mae) {
 			if (m_table.getValueAt(row, column) == null) {
 
 				this.setOpaque(false);
