@@ -1,9 +1,7 @@
 package agendaproduccio.controllers.controllerbdd;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import agendaproduccio.models.Publicacio;
@@ -14,17 +12,18 @@ import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
 import agendaproduccio.models.fitxatecnica.dao.OrdreProduccioFitxaTecnicaDAO;
 import agendaproduccio.models.fitxatecnica.model.OrdreProduccioFitxaTecnica;
 import agendaproduccio.views.renderers.jtables.JTableLinies;
-import javafx.util.Pair;
 
 public class ControllerAgenda {
 	private OrdreLiniaRutaDAO m_dadesBddDao;
 	private OrdreProduccioFitxaTecnicaDAO m_dadesBddFitxaDao;
 	private LogsModificacionsDAO m_logsDao;
-	private final Map<String, Pair<Publicacio, List<LogsModificacions>>> m_ordres;
+	private final Map<String, Publicacio> m_ordres;
+	private final Map<String, LogsModificacions> m_logsModifLinies;
 	public static ControllerAgenda m_instanceSingleton;
 
 	private ControllerAgenda() {
 		this.m_ordres = new HashMap<>();
+		m_logsModifLinies = new HashMap<>();
 		m_dadesBddDao = OrdreLiniaRutaDAO.GetInstance();
 		m_dadesBddFitxaDao = OrdreProduccioFitxaTecnicaDAO.GetInstance();
 		m_logsDao = LogsModificacionsDAO.GetInstance();
@@ -38,10 +37,10 @@ public class ControllerAgenda {
 	}
 
 	public void populateViewJTable(JTableLinies view, Calendar p_dataInici, Calendar p_dataFinal) {
-		this.retreaveDataBddTaulaLinies(p_dataInici, p_dataFinal);
+		this.retreaveDataBdd(p_dataInici, p_dataFinal);
 		addLogsPublicacions();
-		for (Entry<String, Pair<Publicacio, List<LogsModificacions>>> publicacio : m_ordres.entrySet()) {
-			publicacio.getValue().getKey().mostraTiratges(view);
+		for (Entry<String, Publicacio> publicacio : m_ordres.entrySet()) {
+			publicacio.getValue().mostraTiratges(view);
 		}
 	}
 
@@ -49,32 +48,28 @@ public class ControllerAgenda {
 		this.m_ordres.clear();
 	}
 
-	private void retreaveDataBddTaulaLinies(Calendar p_dataInici, Calendar p_dataFinal) {
+	private void retreaveDataBdd(Calendar p_dataInici, Calendar p_dataFinal) {
 		for (OrderLiniaRutaPNavison l_tiratge : m_dadesBddDao.GetEntreDates(p_dataInici, p_dataFinal)) {
 			String l_key = l_tiratge.m_nI_Num_Orden_Produccion_o;
 			int l_idtiratge = l_tiratge.getM_nI_Identificador_Tiratge_l();
 			if (!m_ordres.containsKey(l_key)) {
-				m_ordres.put(l_key, new Pair<>(new Publicacio(), new ArrayList<>()));
-				m_ordres.get(l_key).getKey().afegirTiratge(l_idtiratge, l_tiratge);
+				m_ordres.put(l_key, new Publicacio());
+				m_ordres.get(l_key).afegirTiratge(l_idtiratge, l_tiratge);
 			} else {
-				m_ordres.get(l_key).getKey().afegirTiratge(l_idtiratge, l_tiratge);
+				m_ordres.get(l_key).afegirTiratge(l_idtiratge, l_tiratge);
 			}
 		}
 	}
 
 	public void addLogsPublicacions() {
-		// millorar, nomes fer un selecte
-		// for (Entry<String, Pair<Publicacio, LogsModificacions>> l_llistaPublicacio :
-		// m_ordres.entrySet()) {
-		// Publicacio l_publicacio = l_llistaPublicacio.getValue().getKey();
-		for (LogsModificacions l_log : m_logsDao.getEntrades("")) {
-			// System.out.println(l_log);
-			String l_lan = l_log.getLan().trim();
-			Pair<Publicacio, List<LogsModificacions>> l_ordre = m_ordres.get(l_lan);
-			l_ordre.getValue().add(l_log);
-			// l_publicacio.afegirLogModf(l_log);
+		//millorar, nomes fer un selecte
+		for (Entry<String, Publicacio> l_llistaPublicacio : m_ordres.entrySet()) {
+			Publicacio l_publicacio = l_llistaPublicacio.getValue();
+			for (LogsModificacions l_log : m_logsDao.getEntrades(l_llistaPublicacio.getKey())) {
+				//System.out.println(l_log);
+				l_publicacio.afegirLogModf(l_log);
+			}
 		}
-		// }
 		System.out.println("hellow");
 	}
 

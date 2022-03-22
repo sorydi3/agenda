@@ -48,7 +48,7 @@ public class LogsModificacions {
 		builder.append(m_nomCamp);
 		builder.append("<br>");
 		builder.append("<b> Data: </b>");
-		builder.append(DataHora.getInstance().CalendarToStringEuropeu(m_data));
+		builder.append(getData());
 		builder.append("<br>");
 		builder.append(" <b>Usuari: </b>");
 		builder.append(m_usuari);
@@ -78,45 +78,26 @@ public class LogsModificacions {
 	public int getIdLinia() {
 		return this.m_uI_Id_Lin_Ordre_P_Navision;
 	}
-	
-	
-	public String getLan() {
-		return m_nI_Num_Orden_Produccion;
-	}
 
 	public String getVNou() {
-		return formaStringSortida(m_valor_Nou);
+		return m_valor_Nou;
 	}
 
 	public String getVAntic() {
-		return formaStringSortida(m_valor_Antic);
+		return m_valor_Antic;
 	}
 
 	public String getData() {
-		return formaStringSortida(DataHora.getInstance().CalendarToStringEuropeu(m_data));
+		return DataHora.getInstance().CalendarToStringEuropeu(m_data);	
 	}
-
+	
+	
 	public String getDesc() {
-		return formaStringSortida(m_descripcio);
+		return m_descripcio;
 	}
 
 	public String getConcepte() {
-		return formaStringSortida(m_nomCamp);
-	}
-
-	public String getUsuari() {
-		// TODO Auto-generated method stub
-		return formaStringSortida(m_usuari);
-	}
-
-	private String formaStringSortida(String l_value) {
-		StringBuilder l_builder = new StringBuilder();
-		l_builder.append("<html>");
-		l_builder.append("<font size=4>");
-		l_builder.append(l_value);
-		l_builder.append("</font>");
-		l_builder.append("</html>");
-		return l_builder.toString();
+		return m_nomCamp;
 	}
 
 }

@@ -7,18 +7,15 @@ import javax.swing.table.DefaultTableModel;
 import agendaproduccio.models.entitatsbddAgenda.model.LogsModificacions;
 import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
 import agendaproduccio.utils.JTableGUI;
-import agendaproduccio.views.renderers.IntegerRendererLinies;
-import agendaproduccio.views.renderers.StringRendererTaulaLinies;
-import agendaproduccio.views.renderers.StringRendererTaulaLogs;
+import agendaproduccio.views.renderers.IntegerRenderer;
+import agendaproduccio.views.renderers.StringRenderer;
 
 public class JTableLogs extends JTableGUI {
 
 	public static final int m_data = 0;
-	public static final int m_usuari = 1;
-	public static final int m_concepte = 2;
+	public static final int m_concepte = 1;
+	public static final int m_vnou = 2;
 	public static final int m_vantic = 3;
-	public static final int m_vnou = 4;
-	public static final int m_vdesc = 5;
 
 	public JTableLogs() {
 		super();
@@ -28,29 +25,25 @@ public class JTableLogs extends JTableGUI {
 
 	@Override
 	protected void ConfigurarTotalColumnes() {
-		TOTAL_COLUMNES = 6;
+		TOTAL_COLUMNES = 4;
 	}
 
 	public void AfegirFila(Object p_logsModif) {
 		BuidarFila();
 		LogsModificacions l_logModf = (LogsModificacions) p_logsModif;
 		m_fila[m_data] = l_logModf.getData();
-		m_fila[m_usuari] = l_logModf.getUsuari();
 		m_fila[m_concepte] = l_logModf.getConcepte();
 		m_fila[m_vantic] = l_logModf.getVAntic();
 		m_fila[m_vnou] = l_logModf.getVNou();
-		m_fila[m_vdesc] = l_logModf.getDesc();
 		m_model.addRow(m_fila);
 	}
 
 	@Override
 	protected DefaultTableModel CrearModel() {
 		m_fila[m_data] = "Data";
-		m_fila[m_usuari] = "Usuari";
 		m_fila[m_concepte] = "Concepte";
 		m_fila[m_vantic] = "Valor Antic";
 		m_fila[m_vnou] = "Valor Nou";
-		m_fila[m_vdesc] = "Descripció";
 		DefaultTableModel l_model = new DefaultTableModel(m_fila, 0) {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
@@ -87,38 +80,42 @@ public class JTableLogs extends JTableGUI {
 	protected void ConfigurarColumnes() {
 		this.setBackground(Color.white);
 
-		int l_maxAnN = 150;
-		int l_minAnN = 130;
-
-//		getColumnModel().getColumn(m_vantic).setPreferredWidth(l_maxAnN);
-//		getColumnModel().getColumn(m_vantic).setMinWidth(l_minAnN);
-//		getColumnModel().getColumn(m_vantic).setMaxWidth(l_maxAnN);
+//		int l_max = 40;
+//		int l_min = 20;
 //
-//		getColumnModel().getColumn(m_vnou).setPreferredWidth(l_maxAnN);
-//		getColumnModel().getColumn(m_vnou).setMinWidth(l_minAnN);
-//		getColumnModel().getColumn(m_vnou).setMaxWidth(l_maxAnN);
-
-		getColumnModel().getColumn(m_usuari).setPreferredWidth(100);
-		getColumnModel().getColumn(m_usuari).setMinWidth(80);
-		getColumnModel().getColumn(m_usuari).setMaxWidth(100);
-
-//		getColumnModel().getColumn(m_vdesc).setPreferredWidth(150);
-//		getColumnModel().getColumn(m_vdesc).setMinWidth(90);
-//		getColumnModel().getColumn(m_vdesc).setMaxWidth(150);
-
-		getColumnModel().getColumn(m_data).setPreferredWidth(120);
-		getColumnModel().getColumn(m_data).setMinWidth(90);
-		getColumnModel().getColumn(m_data).setMaxWidth(120);
-
-//		getColumnModel().getColumn(m_concepte).setPreferredWidth(60);
-//		getColumnModel().getColumn(m_concepte).setMinWidth(40);
-//		getColumnModel().getColumn(m_concepte).setMaxWidth(60);
+//		int amagat_height = 30;
+//		int amagat_width = 0;
+//
+//		getColumnModel().getColumn().setPreferredWidth(400);
+//		getColumnModel().getColumn(m_capcelera).setMinWidth(100);
+//		getColumnModel().getColumn(m_capcelera).setMaxWidth(400);
+//
+//		getColumnModel().getColumn(m_pla).setPreferredWidth(l_max);
+//		getColumnModel().getColumn(m_pla).setMinWidth(l_min);
+//		getColumnModel().getColumn(m_pla).setMaxWidth(l_max);
+//
+//		getColumnModel().getColumn(m_part).setPreferredWidth(l_max);
+//		getColumnModel().getColumn(m_part).setMinWidth(l_min);
+//		getColumnModel().getColumn(m_part).setMaxWidth(l_max);
+//
+//		getColumnModel().getColumn(m_com).setPreferredWidth(l_max);
+//		getColumnModel().getColumn(m_com).setMinWidth(l_min);
+//		getColumnModel().getColumn(m_com).setMaxWidth(l_max);
+//
+//		getColumnModel().getColumn(m_tir).setPreferredWidth(l_max);
+//		getColumnModel().getColumn(m_tir).setMinWidth(l_min);
+//		getColumnModel().getColumn(m_tir).setMaxWidth(l_max);
+//
+//		getColumnModel().getColumn(m_maq).setPreferredWidth(150);
+//		getColumnModel().getColumn(m_maq).setMinWidth(20);
+//		getColumnModel().getColumn(m_maq).setMaxWidth(150);
 
 	}
 
 	@Override
 	protected void configuraRenderers() {
-		setDefaultRenderer(String.class, new StringRendererTaulaLogs());
+		// setDefaultRenderer(String.class, new StringRenderer());
+		// setDefaultRenderer(Integer.class, new IntegerRenderer());
 	}
 
 	public void buidarTaula() {

@@ -349,16 +349,15 @@ public class OrderLiniaRutaPNavison {
 
 	public String formaHTML(String content) {
 		StringBuilder builder = new StringBuilder();
-		String l_maquina = "";
+		String l_maquina = " - ";
 		if (this.m_tipusProducteMaquinaFulla_l.equals("Tiro-Retiro")) {
 			if (m_CaraODorsMaquinaFulla_l.equals("Cara")) {
-				l_maquina += " - Tiro";
+				l_maquina += "Tiro";
 			} else {
-				l_maquina += " - Retiro";
+				l_maquina += "Retiro";
 			}
 		} else {
-			l_maquina += this.m_CaraODorsMaquinaFulla_l.trim().equals("") ? "" : " - " + this.m_CaraODorsMaquinaFulla_l;
-
+			l_maquina += this.m_CaraODorsMaquinaFulla_l;
 		}
 		builder.append("<html>").append(content).append("<b>").append(l_maquina).append("</b>").append("</html>");
 		return builder.toString();
@@ -633,7 +632,8 @@ public class OrderLiniaRutaPNavison {
 	public void afegirModf(LogsModificacions modf) {
 		this.m_modfLinia.add(modf);
 	}
-
+	
+	
 	public List<LogsModificacions> getLogs() {
 		return m_modfLinia;
 	}

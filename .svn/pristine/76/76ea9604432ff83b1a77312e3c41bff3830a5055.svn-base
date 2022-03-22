@@ -21,8 +21,8 @@ import agendaproduccio.utils.MyJTextField;
 import agendaproduccio.views.JFrameLogsLinies;
 import agendaproduccio.views.JPanelLogsLinies;
 import agendaproduccio.views.renderers.HighlightRenderer;
-import agendaproduccio.views.renderers.IntegerRendererLinies;
-import agendaproduccio.views.renderers.StringRendererTaulaLinies;
+import agendaproduccio.views.renderers.IntegerRenderer;
+import agendaproduccio.views.renderers.StringRenderer;
 
 public class JTableLinies extends JTableGUI {
 	// ATR.
@@ -278,8 +278,8 @@ public class JTableLinies extends JTableGUI {
 	@Override
 	protected void configuraRenderers() {
 		setDefaultRenderer(String.class, new HighlightRenderer(m_jtext));
-		setDefaultRenderer(String.class, new StringRendererTaulaLinies());
-		setDefaultRenderer(Integer.class, new IntegerRendererLinies());
+		setDefaultRenderer(String.class, new StringRenderer());
+		setDefaultRenderer(Integer.class, new IntegerRenderer());
 	}
 
 	private void addClickListener() {
@@ -314,8 +314,9 @@ public class JTableLinies extends JTableGUI {
 	}
 
 	private void mostraLogsModf(int p_row) {
-		OrderLiniaRutaPNavison order = (OrderLiniaRutaPNavison) getModel().getValueAt(p_row, m_ordreLiniaRuta);
-		JFrameLogsLinies.getInstance(order).activate();
+		JFrameLogsLinies.getInstance((OrderLiniaRutaPNavison) getModel().getValueAt(p_row, m_ordreLiniaRuta))
+				.activate();
+		;
 	}
 
 	private void mostraComanda(int row) {

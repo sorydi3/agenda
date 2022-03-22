@@ -31,7 +31,7 @@ public class JPanelLogsLinies extends JPanel {
 
 	private JPanel getHeaderJPanel() {
 		JPanel l_jpanel = new JPanel();
-		JLabel l_jlabel = new JLabel("<html><font size = 7 ><b>Historial de canvis:</b></font></html>");
+		JLabel l_jlabel = new JLabel("Cambis fets:");
 		l_jpanel.add(l_jlabel);
 		return l_jpanel;
 	}
