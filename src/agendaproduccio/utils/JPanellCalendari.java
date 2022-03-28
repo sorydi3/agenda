@@ -257,7 +257,7 @@ public class JPanellCalendari extends JPanel {
 		if (m == 1)
 			mes = "Febrer";
 		if (m == 2)
-			mes = "Mar\\ç";
+			mes = "Març";
 		if (m == 3)
 			mes = "Abril";
 		if (m == 4)
