@@ -274,6 +274,7 @@ public class JTableLinies extends JTableGUI {
 	@Override
 	protected void configuraRenderers() {
 		setDefaultRenderer(String.class, new StringRendererTaulaLinies(m_jtext));
+		//setDefaultRenderer(String.class, new HighlightRenderer(m_jtext));
 		setDefaultRenderer(Integer.class, new IntegerRendererLinies());
 	}
 
@@ -286,7 +287,8 @@ public class JTableLinies extends JTableGUI {
 					int l_table_row = l_context.rowAtPoint(e.getPoint());
 					int l_table_col = l_context.columnAtPoint(e.getPoint());
 					int l_model_row = l_context.convertRowIndexToModel(l_table_row);
-					showInfo(l_model_row, l_table_col);
+					int l_model_col = l_context.convertRowIndexToModel(l_table_col);
+					showInfo(l_model_row, l_model_col);
 				}
 			}
 		});

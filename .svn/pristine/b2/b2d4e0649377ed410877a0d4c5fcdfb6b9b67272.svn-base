@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
 
 	/***************** ATTRIBUTS *******************/
 
-	private static final String MAIN_TITLE = "Agenda Producció v0.9";
+	private static final String MAIN_TITLE = "Agenda Producció v0.6";
 
 	/**
 	 * new won't work
