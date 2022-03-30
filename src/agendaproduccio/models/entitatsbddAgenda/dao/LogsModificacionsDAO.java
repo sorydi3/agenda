@@ -1,0 +1,84 @@
+package agendaproduccio.models.entitatsbddAgenda.dao;
+
+import connexioBDD.ConnexionsBdd;
+import connexioBDD.DataAccessLayer;
+import java.util.Vector;
+
+import agendaproduccio.models.entitatsbddAgenda.model.LogsModificacions;
+import agendaproduccio.utils.DataHora;
+import agendaproduccio.utils.Semaphor;
+
+public class LogsModificacionsDAO {
+	private static LogsModificacionsDAO m_singleton;
+	private DataAccessLayer m_bdd;
+	private String m_sentencia;
+	private String[][] m_camps;
+	private DataHora m_dh = DataHora.getInstance();
+	private Semaphor m_semaphoreMutex;
+
+	public static LogsModificacionsDAO GetInstance() {
+		if (m_singleton == null) {
+			m_singleton = new LogsModificacionsDAO();
+		}
+		return m_singleton;
+	}
+
+	private LogsModificacionsDAO() {
+		m_bdd = ConnexionsBdd.getInstance().m_bddMySqlControlPlanta;
+		this.m_semaphoreMutex = new Semaphor(1);
+
+		m_camps = new String[12][2];
+		m_camps[0][0] = "logs_modificacions.id";
+		m_camps[1][0] = "logs_modificacions.uI_Id_Lin_Ordre_P_Navision";
+		m_camps[2][0] = "logs_modificacions.nI_Num_Orden_Produccion";
+		m_camps[3][0] = "logs_modificacions.usuari";
+		m_camps[4][0] = "logs_modificacions.valor_Antic";
+		m_camps[5][0] = "logs_modificacions.valor_Nou";
+		m_camps[6][0] = "logs_modificacions.descripcio";
+		m_camps[7][0] = "logs_modificacions.data";
+		m_camps[8][0] = "logs_modificacions.numTiratge";
+		m_camps[9][0] = "logs_modificacions.nomCamp";
+		m_camps[10][0] = "logs_modificacions.validatPreimpressio";
+		m_camps[11][0] = "logs_modificacions.repasInformacio";
+
+		m_sentencia = "";
+		for (int i = 0; i < m_camps.length; i++) {
+			m_sentencia += i > 0 ? "," : "";
+			m_sentencia += m_camps[i][0];
+		}
+	}
+
+	private LogsModificacions Fill(String[] p_fila) {
+		LogsModificacions l_res = new LogsModificacions();
+		l_res.m_id = p_fila[0] == null ? 0 : Integer.parseInt(p_fila[0]);
+		l_res.m_uI_Id_Lin_Ordre_P_Navision = p_fila[1] == null ? 0 : Integer.parseInt(p_fila[1]);
+		l_res.m_nI_Num_Orden_Produccion = p_fila[2] == null ? "" : p_fila[2];
+		l_res.m_usuari = p_fila[3] == null ? "" : p_fila[3];
+		l_res.m_valor_Antic = p_fila[4] == null ? "" : p_fila[4];
+		l_res.m_valor_Nou = p_fila[5] == null ? "" : p_fila[5];
+		l_res.m_descripcio = p_fila[6] == null ? "" : p_fila[6];
+		l_res.m_data = p_fila[7] == null ? null : m_dh.MySQLFormatToCalendarFormat(p_fila[7]);
+		l_res.m_numTiratge = p_fila[8] == null ? 0 : Integer.parseInt(p_fila[8]);
+		l_res.m_nomCamp = p_fila[9] == null ? "" : p_fila[9];
+		l_res.m_validatPreimpressio = p_fila[10] == null ? false : p_fila[10].equals("1");
+		l_res.m_repasInformacio = p_fila[11] == null ? false : p_fila[11].equals("1");
+
+		return l_res;
+	}
+
+	public Vector<LogsModificacions> getEntrades(String p_lan) {
+		m_semaphoreMutex.acquire();
+		Vector<LogsModificacions> l_vRes = new Vector<>();
+		String l_query = Sentencias.BuildSelectLogs(m_sentencia);
+		if (m_bdd.executaSQLSELECT(l_query) > 0) {
+			String l_initialResult[][] = m_bdd.recuperaSQLSelect();
+			for (int i = 0; i < l_initialResult.length; i++) {
+
+				l_vRes.add(Fill(l_initialResult[i]));
+			}
+		}
+		m_semaphoreMutex.releaseConection();
+		return l_vRes;
+	}
+
+}

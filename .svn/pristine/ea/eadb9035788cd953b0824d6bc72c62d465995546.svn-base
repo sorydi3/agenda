@@ -1,4 +1,5 @@
-package agendaproduccio.models.entitatsbddAgenda.daos;
+package agendaproduccio.models.entitatsbddAgenda.dao;
+
 public class Sentencias {
 
 	public static String buildSentenciaJoinSELECT(String p_columnes, String l_strDini, String l_strDfin) {
@@ -28,7 +29,8 @@ public class Sentencias {
 	}
 
 	private static String condicions(String p_data_inici, String p_data_final) {
-		String condicion1 = "o.Terminada_Anna=0";
+		// String condicion1 = "o.Terminada_Anna=0";
+		String condicion1 = "1=1";
 		String nom_columna_data = " str_to_date(o.NI_Data_Prevista_Original,'%d/%m/%Y') ";
 		StringBuilder l_builder = new StringBuilder();
 		l_builder.append(condicion1).append(" AND ").append(nom_columna_data).append(" >= ")
@@ -36,16 +38,13 @@ public class Sentencias {
 				.append(formatStringToMySqlDate(p_data_final));
 		return l_builder.toString();
 	}
-	
-	
+
 	public static String formatStringToMySqlDate(String date) {
 		StringBuilder l_builder = new StringBuilder();
-		l_builder.append("str_to_date('")
-		.append(date)
-		.append("','%d-%m-%Y') ");
+		l_builder.append("str_to_date('").append(date).append("','%d-%m-%Y') ");
 		return l_builder.toString();
 	}
-	
+
 	public static String BuildSelectLogs(String l_sentencia) {
 		StringBuilder l_builder = new StringBuilder();
 		l_builder.append("SELECT ").append(l_sentencia).append(" FROM logs_modificacions").append(" ORDER BY")

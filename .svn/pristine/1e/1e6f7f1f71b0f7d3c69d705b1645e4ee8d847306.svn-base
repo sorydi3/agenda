@@ -1,4 +1,4 @@
-package agendaproduccio.models.entitatsbddAgenda.daos;
+package agendaproduccio.models.entitatsbddAgenda.dao;
 
 import java.util.Calendar;
 import java.util.Vector;
