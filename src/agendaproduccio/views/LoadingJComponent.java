@@ -16,7 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class LoadingFrame extends JComponent implements ItemListener {
+public class LoadingJComponent extends JComponent implements ItemListener {
 
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class LoadingFrame extends JComponent implements ItemListener {
 	private static final long serialVersionUID = 1L;
 	private Point point;
 
-	public LoadingFrame() {
+	public LoadingJComponent() {
 		super();
 		setLayout(new BorderLayout());
 		JLabel label = new JLabel(new ImageIcon("./img/Ajax-loader.gif"));
