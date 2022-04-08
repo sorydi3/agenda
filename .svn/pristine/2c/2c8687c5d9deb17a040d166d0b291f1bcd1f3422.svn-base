@@ -27,7 +27,7 @@ public class ThreadsAutoActualitzacio extends Thread {
 		this.m_jButonAct = p_jButonAct;
 		this.m_run = true;
 		this.m_jButonAct.setText(getTime());
-		this.m_timeIntervalRefresh = Integer.parseInt(System.getProperty("intervalAct"));
+		this.m_timeIntervalRefresh = 180000;
 	}
 
 	public String getTime() {
