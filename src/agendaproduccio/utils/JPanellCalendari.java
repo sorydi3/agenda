@@ -17,10 +17,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
+import agendaproduccio.controllers.controllerbdd.ControllerAgenda;
+import agendaproduccio.views.MainFrame;
+import agendaproduccio.views.renderers.jtables.JTableLinies;
+import javafx.util.Pair;
+
 public class JPanellCalendari extends JPanel {
-	private Vector<JButton> dies;
+	private Vector<Pair<JButton, Boolean>> dies;
 
 	private Calendar m_dataSeleccionada;
 	private Calendar m_dataTemporal;
@@ -29,20 +36,27 @@ public class JPanellCalendari extends JPanel {
 	private JLabel textMes;
 	private Color m_colorFons, m_colorSelected;
 	private Font m_font;
-	private String m_titol;
 	private JButton butMesSeguent, butMesAnterior;
 	private boolean m_permetDeseleccionarDia;
 	private JLabel m_labelTito;
 
+	private boolean isDone;
+
+	private Calendar l_dataInici;
+
+	private Calendar l_dataFinal;
+	private JTableLinies m_jtaula;
+
 	public JPanellCalendari() {
-		dies = new Vector<JButton>(5, 1);
+		isDone = true;
+		dies = new Vector<Pair<JButton, Boolean>>(5, 1);
 		setBackground(Color.green);
 		setLayout(new MiLayout());
-		setSize(new Dimension(145, 164)); 
+		setSize(new Dimension(145, 164));
 		setPreferredSize(new Dimension(145, 164));
 		setBorder(new EmptyBorder(0, 0, 0, 0));
 		setOpaque(false);
-
+		m_jtaula = null;
 		m_colorFons = new Color(61, 65, 69);
 		m_colorSelected = new Color(0, 128, 0);
 		m_font = new Font("Arial", Font.BOLD, 12);
@@ -51,7 +65,6 @@ public class JPanellCalendari extends JPanel {
 		m_labelTito.setLocation(0, 0);
 		m_labelTito.setForeground(Color.black);
 		m_labelTito.setFont(m_font);
-		//add(m_labelTito);
 
 		butMesAnterior = new JButton(new ImageIcon("./img/fletxaAEsquerra.gif"));
 		butMesAnterior.addMouseListener(new MouseAdapter() {
@@ -148,7 +161,7 @@ public class JPanellCalendari extends JPanel {
 						}
 					});
 					but.setVisible(false);
-					dies.add(dia - 1, but);
+					dies.add(dia - 1, new Pair<JButton, Boolean>(but, false));
 					add(but);
 				}
 				dia++;
@@ -209,6 +222,10 @@ public class JPanellCalendari extends JPanel {
 	private void ShowData() {
 		int numDies = m_dataTemporal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		int x = 0;
+		Date dat = new Date();
+		Calendar l_cal = new GregorianCalendar();
+		l_cal.setTime(dat);
+		int diaAct = l_cal.get(Calendar.DAY_OF_MONTH);
 		int numdia = m_dataTemporal.get(Calendar.DAY_OF_WEEK);
 		int l_setmana = m_dataTemporal.get(Calendar.WEEK_OF_YEAR);
 
@@ -220,16 +237,24 @@ public class JPanellCalendari extends JPanel {
 
 		int y = 0;
 		while (x < numDies) {
-			((JButton) dies.get(x)).setLocation(3 + (numdia - 1) * 20, 33 + y * 20);
-			((JButton) dies.get(x)).setVisible(true);
+			((JButton) dies.get(x).getKey()).setLocation(3 + (numdia - 1) * 20, 33 + y * 20);
+			((JButton) dies.get(x).getKey()).setVisible(true);
 
 			if (m_dataTemporal != null && m_dataSeleccionada != null
 					&& (m_dataTemporal.get(Calendar.MONTH) == m_dataSeleccionada.get(Calendar.MONTH))
 					&& (x + 1 == m_dataSeleccionada.get(Calendar.DAY_OF_MONTH))
 					&& (m_dataTemporal.get(Calendar.YEAR) == m_dataSeleccionada.get(Calendar.YEAR))) {
-				((JButton) dies.get(x)).setBackground(m_colorSelected);
+				((JButton) dies.get(x).getKey()).setBackground(m_colorSelected);
 			} else {
-				((JButton) dies.get(x)).setBackground(m_colorFons);
+				((JButton) dies.get(x).getKey()).setBackground(m_colorFons);
+			}
+			Boolean aux_ = dies.get(x).getValue();
+			if (x == diaAct - 1) {
+				((JButton) dies.get(x).getKey()).setBackground(Color.red);
+			} else if (aux_) {
+				((JButton) dies.get(x).getKey()).setBackground(m_colorSelected);
+			} else {
+				((JButton) dies.get(x).getKey()).setBackground(m_colorFons);
 			}
 
 			numdia++;
@@ -247,7 +272,7 @@ public class JPanellCalendari extends JPanel {
 		}
 
 		for (int z = x; z < 31; z++) {
-			((JButton) dies.get(z)).setVisible(false);
+			((JButton) dies.get(z).getKey()).setVisible(false);
 		}
 
 		String mes = new String("");
@@ -278,11 +303,12 @@ public class JPanellCalendari extends JPanel {
 			mes = "Decembre";
 
 		textMes.setText(mes + ", " + m_dataTemporal.get(Calendar.YEAR));
+		getllistaDatasSeleccionades();
 	}
 
 	protected void SltSeleccionarDia(MouseEvent e) {
 		JButton l_diaSeleccionat = (JButton) e.getComponent();
-
+		setBackGroundButtons(e);
 		if (m_dataSeleccionada == null) {
 			m_dataSeleccionada = new GregorianCalendar();
 			m_dataSeleccionada.set(m_dataTemporal.get(Calendar.YEAR), m_dataTemporal.get(Calendar.MONTH),
@@ -299,9 +325,20 @@ public class JPanellCalendari extends JPanel {
 		} else {
 			m_dataSeleccionada.set(m_dataTemporal.get(Calendar.YEAR), m_dataTemporal.get(Calendar.MONTH),
 					Integer.parseInt(l_diaSeleccionat.getName()), 0, 0, 0);
-		}
 
+			dies.get(Integer.parseInt(l_diaSeleccionat.getName()));
+			boolean isSelected = dies.get(Integer.parseInt(l_diaSeleccionat.getName()) - 1).getValue();
+			dies.remove(Integer.parseInt(l_diaSeleccionat.getName()) - 1);
+			dies.add(Integer.parseInt(l_diaSeleccionat.getName()) - 1,
+					new Pair<JButton, Boolean>(l_diaSeleccionat, isSelected ? false : true));
+		}
 		this.ShowData();
+		fillTable(JPanelBuilder.m_checkBox.isSelected());
+	}
+
+	private void setBackGroundButtons(MouseEvent e) {
+		JButton l_diaSeleccionat = (JButton) e.getComponent();
+		l_diaSeleccionat.setBackground(Color.red);
 	}
 
 	public void SetEnabled(boolean p_enabled) {
@@ -317,7 +354,7 @@ public class JPanellCalendari extends JPanel {
 		butMesAnterior.setEnabled(p_enabled);
 
 		for (int i = 0; i < dies.size(); i++) {
-			dies.get(i).setEnabled(p_enabled);
+			dies.get(i).getKey().setEnabled(p_enabled);
 		}
 
 		textMes.setEnabled(p_enabled);
@@ -325,9 +362,56 @@ public class JPanellCalendari extends JPanel {
 		this.updateUI();
 	}
 
+	private void fillTable(boolean filter) {
+		if (isDone) {
+			setDate();
+			m_jtaula.buidarTaula();
+			ControllerAgenda.getInstance().clearData();
+			SwingWorker<Void, Void> l_swingWorker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					isDone = false;
+					MainFrame.getInstance().getGlassPane().setVisible(true);
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							if (!getllistaDatasSeleccionades().isEmpty()) {
+								ControllerAgenda.getInstance().addpublicacionsWithData(getllistaDatasSeleccionades(),
+										m_jtaula);
+							} else {
+								Calendar dummyData = new GregorianCalendar();
+								ControllerAgenda.getInstance().populateViewJTable(m_jtaula, dummyData, dummyData,
+										filter, false);
+							}
+						}
+					});
+					return null;
+				}
+
+				@Override
+				protected void done() {
+					isDone = true;
+				}
+			};
+			l_swingWorker.execute();
+		}
+	}
+
+	private void setDate() {
+		l_dataInici = GetDataCalendarFormat();
+		l_dataInici.set(Calendar.HOUR_OF_DAY, 0);
+		l_dataInici.set(Calendar.MINUTE, 0);
+		l_dataInici.set(Calendar.SECOND, 0);
+
+		l_dataFinal = GetDataCalendarFormat();
+		l_dataFinal.set(Calendar.HOUR_OF_DAY, 23);
+		l_dataFinal.set(Calendar.MINUTE, 59);
+		l_dataFinal.set(Calendar.SECOND, 59);
+	}
+
 	/**
-	 * M�TODE: M�tode que mostra al calendari amb al data p_data.
-	 * Format p_data: AAAA-MM-DD
+	 * M�TODE: M�tode que mostra al calendari amb al data p_data. Format p_data:
+	 * AAAA-MM-DD
 	 */
 	public void SetData(String p_data) {
 		try {
@@ -358,8 +442,8 @@ public class JPanellCalendari extends JPanel {
 	}
 
 	/**
-	 * M�TODE: M�tode que mostra al calendari amb al data p_data.
-	 * Format p_data:DD/MM/AAAA
+	 * M�TODE: M�tode que mostra al calendari amb al data p_data. Format
+	 * p_data:DD/MM/AAAA
 	 */
 	public void SetDataDDMMAAAA(String p_data) {
 		try {
@@ -387,6 +471,19 @@ public class JPanellCalendari extends JPanel {
 		}
 
 		this.ShowData();
+	}
+
+	public Vector<Calendar> getllistaDatasSeleccionades() {
+		Vector<Calendar> lvec = new Vector<Calendar>();
+		for (Pair<JButton, Boolean> calendar : dies) {
+			Calendar cal = new GregorianCalendar();
+			cal.set(m_dataTemporal.get(Calendar.YEAR), m_dataTemporal.get(Calendar.MONTH),
+					Integer.parseInt(calendar.getKey().getName()));
+			if (calendar.getValue()) {
+				lvec.add(cal);
+			}
+		}
+		return lvec;
 	}
 
 	public void SetData(Calendar p_data) {
@@ -447,7 +544,6 @@ public class JPanellCalendari extends JPanel {
 
 	public String GetDataJavaFormat() {
 		String l_data = "";
-
 		if (m_dataSeleccionada == null) {
 			return null;
 		}
@@ -471,6 +567,9 @@ public class JPanellCalendari extends JPanel {
 	}
 
 	public void setTitle(String p_titol) {
-		this.m_titol = p_titol;
+	}
+
+	public void setJtable(JTableLinies m_jtaula2) {
+		this.m_jtaula = m_jtaula2;
 	}
 }

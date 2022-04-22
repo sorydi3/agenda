@@ -2,6 +2,9 @@ package agendaproduccio.threads;
 
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Vector;
+
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -68,8 +71,19 @@ public class ThreadsAutoActualitzacio extends Thread {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						m_controller.populateViewJTable(m_jtable, l_dataInici, l_dataFinal,
-								JPanelBuilder.m_checkBox.isSelected());
+						Vector<Calendar> llistaDatesSeleccionades = JPanelBuilder.m_calendari_final
+								.getllistaDatasSeleccionades();
+//						m_controller.addpublicacionsWithData(llistaDatesSeleccionades, m_jtable);
+//						m_controller.populateViewJTable(m_jtable, l_dataInici, l_dataFinal,
+//								JPanelBuilder.m_checkBox.isSelected(), false);
+						if (!llistaDatesSeleccionades.isEmpty()) {
+							System.out.println(llistaDatesSeleccionades.size());
+							ControllerAgenda.getInstance().addpublicacionsWithData(llistaDatesSeleccionades, m_jtable);
+						} else {
+							Calendar dummyData = new GregorianCalendar();
+							ControllerAgenda.getInstance().populateViewJTable(m_jtable, dummyData, dummyData,
+									JPanelBuilder.m_checkBox.isSelected(), false);
+						}
 					}
 				});
 				return null;

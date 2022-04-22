@@ -83,7 +83,7 @@ public class JPanelBuilder {
 		int hGap = 15;
 		JPanel l_panel = new JPanel(new FlowLayout(FlowLayout.CENTER, p_margin, hGap));// 20 calendar
 		l_panel.add(left);
-		l_panel.add(right);
+		//l_panel.add(right);
 		return l_panel;
 	}
 

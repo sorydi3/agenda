@@ -91,6 +91,8 @@ public class MainJPanel extends JPanel implements ItemListener {
 		this.m_jtaula = new JTableLinies(m_jtextField);
 		m_jtextField.addJtable(m_jtaula);
 		this.m_controllerAgenda = ControllerAgenda.getInstance();
+		m_calendari_inici.setJtable(m_jtaula);
+		m_calendari_final.setJtable(m_jtaula);
 	}
 
 	private void addListenerButton(JButton button) {
@@ -119,7 +121,8 @@ public class MainJPanel extends JPanel implements ItemListener {
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							m_controllerAgenda.populateViewJTable(m_jtaula, l_dataInici, l_dataFinal, filter);
+							
+							m_controllerAgenda.populateViewJTable(m_jtaula, l_dataInici, l_dataFinal, filter,false);
 						}
 					});
 					return null;
@@ -134,6 +137,8 @@ public class MainJPanel extends JPanel implements ItemListener {
 		}
 	}
 
+	
+	
 	private void setDate() {
 		l_dataInici = JPanelBuilder.m_calendari_inici.GetDataCalendarFormat();
 		l_dataInici.set(Calendar.HOUR_OF_DAY, 0);
@@ -145,6 +150,9 @@ public class MainJPanel extends JPanel implements ItemListener {
 		l_dataFinal.set(Calendar.MINUTE, 59);
 		l_dataFinal.set(Calendar.SECOND, 59);
 	}
+	
+	
+	//private void
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {

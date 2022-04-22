@@ -39,7 +39,7 @@ public class LoadingJComponent extends JComponent implements ItemListener {
 			{
 
 				// Consume the event, now the input is blocked
-
+				
 				me.consume();
 
 				// Create beep sound, when mouse is pressed

@@ -2,12 +2,15 @@ package agendaproduccio.controllers.controllerbdd;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import javax.swing.SwingWorker;
+
 import agendaproduccio.models.Publicacio;
 import agendaproduccio.models.entitatsbddAgenda.dao.LogsModificacionsDAO;
 import agendaproduccio.models.entitatsbddAgenda.dao.OrdreLiniaRutaDAO;
@@ -42,10 +45,25 @@ public class ControllerAgenda {
 		return m_instanceSingleton;
 	}
 
-	public void populateViewJTable(JTableLinies view, Calendar p_dataInici, Calendar p_dataFinal, boolean filter) {
+	public void populateViewJTable(JTableLinies view, Calendar p_dataInici, Calendar p_dataFinal, boolean filter,
+			boolean dateFilter) {
+		if (dateFilter)
+			m_dadesBddDao.activateFilterByDate();
 		retreaveDataBddTaulaLinies(p_dataInici, p_dataFinal);
 		mostraLinies(view, filter);
 		addLogsPublicacions(view);
+		if (dateFilter)
+			m_dadesBddDao.deactivateFilterByDate();
+
+	}
+
+	public void populateOrdres(JTableLinies view, Calendar p_dataInici, Calendar p_dataFinal, boolean filter,
+			boolean dateFilter) {
+		if (dateFilter)
+			m_dadesBddDao.activateFilterByDate();
+		retreaveDataBddTaulaLinies(p_dataInici, p_dataFinal);
+		if (dateFilter)
+			m_dadesBddDao.deactivateFilterByDate();
 
 	}
 
@@ -98,10 +116,8 @@ public class ControllerAgenda {
 				view.Buidar();
 				mostraLinies(view, JPanelBuilder.m_checkBox.isSelected());
 			}
-
 		};
 		l_swingWorkerLogs.execute();
-
 	}
 
 	public OrdreProduccioFitxaTecnica getOrderFitxaTecnica(String p_lan) {
@@ -114,4 +130,22 @@ public class ControllerAgenda {
 			l_swingWorkerLogs.cancel(true);
 		}
 	}
+
+	public void removePublicacionsWithData(Calendar m_dataSeleccionada) {
+		for (Entry<String, Pair<Publicacio, List<LogsModificacions>>> publicacio : m_ordres.entrySet()) {
+			publicacio.getValue().getKey().removePublicacionsWithData(m_dataSeleccionada);
+		}
+	}
+
+	public void addpublicacionsWithData(Vector<Calendar> vectorDatesSeleccionades, JTableLinies view) {
+		Calendar notUset = new GregorianCalendar(); // Case when we want to fetch all data from the dataBase
+		boolean filterBydate = false;
+		populateOrdres(view, notUset, notUset, JPanelBuilder.m_checkBox.isSelected(), filterBydate);
+		for (Entry<String, Pair<Publicacio, List<LogsModificacions>>> publicacio_ : m_ordres.entrySet()) {
+			publicacio_.getValue().getKey().removeAllExcept(vectorDatesSeleccionades);
+		}
+		mostraLinies(view, JPanelBuilder.m_checkBox.isSelected());
+		addLogsPublicacions(view);
+	}
+
 }

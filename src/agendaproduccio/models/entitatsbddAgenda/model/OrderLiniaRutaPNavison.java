@@ -23,7 +23,6 @@ public class OrderLiniaRutaPNavison {
 		CHOCO, GREEN, RED, YELLOW, WHITE
 	}
 
-	private boolean m_mostra;;
 	// ----- COLUMNES ORDER_P_NAVISION
 	private List<LogsModificacions> m_modfLinia;
 
@@ -294,6 +293,17 @@ public class OrderLiniaRutaPNavison {
 			l_dataFormated = m_format.format(m_DataPrevistaInterior_o.getTime());
 		}
 		return l_dataFormated;
+	}
+	
+	
+	public Calendar getDataCalendar() {
+		Calendar l_data = null;
+		if (m_DataPrevistaCobertes_o != null) {
+			l_data = m_DataPrevistaCobertes_o;
+		} else {
+			l_data = m_DataPrevistaInterior_o;
+		}
+		return l_data;
 	}
 
 	public String getDataCovertes() {

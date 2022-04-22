@@ -17,6 +17,7 @@ public class OrdreLiniaRutaDAO {
 	private DataHora m_dh = DataHora.getInstance();
 	private final int NUM_FILAS = 39;
 	private final int NUM_COLUMNAS = 2;
+	private boolean m_filterByDate;
 
 	private OrdreLiniaRutaDAO() {
 		this.m_semaphoreMutex = new Semaphor(1);
@@ -69,9 +70,18 @@ public class OrdreLiniaRutaDAO {
 			m_sentencia += i > 0 ? "," : " ";
 			m_sentencia += m_camps[i][0];
 		}
-
+		
+		m_filterByDate =false;
 	}
 
+	public void activateFilterByDate() {
+		m_filterByDate=true;
+	}
+	
+	public void deactivateFilterByDate() {
+		m_filterByDate=false;
+	}
+	
 	public static OrdreLiniaRutaDAO GetInstance() {
 		if (m_singleton == null) {
 			m_singleton = new OrdreLiniaRutaDAO();
@@ -132,13 +142,14 @@ public class OrdreLiniaRutaDAO {
 		if (p_dataInici != null && p_dataFinal != null) {
 			String l_strDini = getSubstringData(m_dh.CalendarToStringEuropeu(p_dataInici));
 			String l_strDfin = getSubstringData(m_dh.CalendarToStringEuropeu(p_dataFinal));
-			String l_query = Sentencias.buildSentenciaJoinSELECT(m_sentencia, l_strDini, l_strDfin);
-			// System.out.println(l_query);
+			String l_query = Sentencias.buildSentenciaJoinSELECT(m_sentencia, l_strDini, l_strDfin,m_filterByDate);
+			System.out.println(l_query);
 			m_semaphoreMutex.acquire();
 			if (m_bdd.executaSQLSELECT(l_query) > 0) {
 				String l_initialResult[][] = m_bdd.recuperaSQLSelect();
+				//System.out.println("lenght ---->"+ l_initialResult[0].length );
 				for (int i = 0; i < l_initialResult.length; i++) {
-
+					
 					l_vRes.add(Fill(l_initialResult[i]));
 				}
 			}

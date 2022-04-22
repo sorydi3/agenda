@@ -2,7 +2,8 @@ package agendaproduccio.models.entitatsbddAgenda.dao;
 
 public class Sentencias {
 
-	public static String buildSentenciaJoinSELECT(String p_columnes, String l_strDini, String l_strDfin) {
+	public static String buildSentenciaJoinSELECT(String p_columnes, String l_strDini, String l_strDfin,
+			boolean m_filterByDate) {
 		// TAULAS
 		String taula_lin_ordre_p_navision = "lin_ordre_p_navision l";
 		String taula_rutes_ordre_p_navision = "rutes_ordre_p_navision r";
@@ -22,23 +23,36 @@ public class Sentencias {
 				.append(" LEFT JOIN ").append(taula_rutes_ordre_p_navision).append(" ON ").append(compare_taula_l_and_r) //
 				.append(" LEFT JOIN ").append(taula_ordre_p_navision).append(" ON ").append(compare_taula_l_and_o) //
 				.append(" LEFT JOIN ").append(taula_ordre_comanda).append(" ON ").append(compare_taula_o_and_c)
-				.append(" WHERE ").append(condicions(l_strDini, l_strDfin)).append(" ORDER BY ").append(ordering)
-				.append(" ASC");
+				.append(" WHERE ").append(condicions(l_strDini, l_strDfin, m_filterByDate)).append(" ORDER BY ")
+				.append(ordering).append(" ASC");
 		l_sentencia = builder.toString();
 		return l_sentencia;
 	}
 
-	private static String condicions(String p_data_inici, String p_data_final) {
+	private static String condicions(String p_data_inici, String p_data_final, boolean m_filterByDate) {
 		String condicion1 = "o.Terminada_Anna=0";
 		String nom_columna_dataInteriors = "o.DataPrevistaInterior";
 		String nom_columna_dataCoberters = "o.DataPrevistaCobertes";
 		StringBuilder l_builder = new StringBuilder();
 		l_builder.append(condicion1);
-		l_builder.append(" AND ( ");
-		l_builder.append(condicioColumnaData(nom_columna_dataInteriors, p_data_inici, p_data_final));
-		l_builder.append(" OR ");
-		l_builder.append(condicioColumnaData(nom_columna_dataCoberters, p_data_inici, p_data_final));
-		l_builder.append(" ) ");
+		if (m_filterByDate) {
+			l_builder.append(" AND ( ");
+			l_builder.append(condicioColumnaDataInterval(nom_columna_dataInteriors, p_data_inici, p_data_final));
+			l_builder.append(" OR ");
+			l_builder.append(condicioColumnaDataInterval(nom_columna_dataCoberters, p_data_inici, p_data_final));
+			l_builder.append(" ) ");
+		}
+		return l_builder.toString();
+	}
+
+	public static String condicioColumnaDataInterval(String nomColumna, String p_data_inici, String p_data_final) {
+		String l_data = " DATE(" + nomColumna + ") ";
+		StringBuilder l_builder = new StringBuilder();
+		l_builder.append("(");
+		l_builder.append(nomColumna + " IS NOT NULL ");
+		l_builder.append(" AND ").append(l_data).append(" >= ").append(formatStringToMySqlDate(p_data_inici))
+				.append(" AND ").append(l_data).append(" <= ").append(formatStringToMySqlDate(p_data_final));
+		l_builder.append(")");
 		return l_builder.toString();
 	}
 

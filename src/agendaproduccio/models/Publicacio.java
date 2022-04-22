@@ -1,9 +1,12 @@
 package agendaproduccio.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Vector;
 import java.util.Map.Entry;
 
 import agendaproduccio.models.entitatsbddAgenda.model.LogsModificacions;
@@ -135,5 +138,56 @@ public class Publicacio {
 
 	public String getLanPublicacio() {
 		return this.m_tiratges.size() == 0 ? " " : this.m_tiratges.get(0).get(0).getM_nI_Num_Orden_Produccion_l();
+	}
+
+	public void removePublicacionsWithData(Calendar data) {
+		for (Entry<Integer, List<OrderLiniaRutaPNavison>> publicacio : m_tiratges.entrySet()) {
+			ListIterator<OrderLiniaRutaPNavison> iter = publicacio.getValue().listIterator();
+			while (iter.hasNext()) {
+				OrderLiniaRutaPNavison ordre = iter.next();
+				if (ordre.esImpressio()) {
+					if (ordre.getDataCalendar().equals(data)) {
+						iter.remove();
+					}
+				}
+			}
+		}
+	}
+
+	public void removeAllExcept(Vector<Calendar> vectorDatesSeleccionades) {
+		Vector<OrderLiniaRutaPNavison> removed = new Vector<OrderLiniaRutaPNavison>();
+		for (Entry<Integer, List<OrderLiniaRutaPNavison>> publicacio : m_tiratges.entrySet()) {
+			ListIterator<OrderLiniaRutaPNavison> iter = publicacio.getValue().listIterator();
+			while (iter.hasNext()) {
+				OrderLiniaRutaPNavison ordre = iter.next();
+				if (!esUnadeLesDates(ordre, vectorDatesSeleccionades, removed)) {
+					iter.remove();
+				}
+			}
+		}
+	}
+
+	private boolean esUnadeLesDates(OrderLiniaRutaPNavison linies, Vector<Calendar> vectorDatesSeleccionades,
+			Vector<OrderLiniaRutaPNavison> removed) {
+		boolean trobat = false;
+		ListIterator<Calendar> it = vectorDatesSeleccionades.listIterator();
+		while (!trobat && it.hasNext()) {
+			Calendar aux = it.next();
+			if (compareCalendarDates(linies.getDataCalendar(), aux)) {
+				trobat = true;
+			}
+		}
+
+		return trobat;
+	}
+
+	private boolean compareCalendarDates(Calendar cal1, Calendar cal2) {
+		boolean result = false;
+		if (cal1 != null && cal2 != null) {
+			result = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+					&& cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)
+					&& cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+		}
+		return result;
 	}
 }
