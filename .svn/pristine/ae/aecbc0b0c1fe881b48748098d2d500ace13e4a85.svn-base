@@ -1,0 +1,357 @@
+package agendaproduccio.views.renderers.jtables;
+
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.net.URI;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import agendaproduccio.controllers.controllerbdd.ControllerAgenda;
+import agendaproduccio.models.entitatsbddAgenda.model.OrderLiniaRutaPNavison;
+import agendaproduccio.models.fitxatecnica.model.FitxaTecnicaHTMLHeidelberg;
+import agendaproduccio.models.fitxatecnica.model.OrdreProduccioFitxaTecnica;
+import agendaproduccio.utils.JTableGUI;
+import agendaproduccio.utils.MyJTextField;
+import agendaproduccio.views.JDialogsLogsLinies;
+import agendaproduccio.views.renderers.IntegerRendererLinies;
+import agendaproduccio.views.renderers.StringRendererTaulaLinies;
+
+public class JTableLinies extends JTableGUI {
+	// ATR.
+	public static final int m_pla = 0;
+	public static final int m_com = 1;
+	public static final int m_part = 2;
+	public static final int m_lan = 3;
+	public static final int m_capcelera = 4;
+	public static final int m_dataUltimCanvi = 5;
+	public static final int m_dataDataJobTicket = 6;
+	public static final int m_tir = 7;
+	public static final int m_maq = 8;
+	public static final int m_dh = 9;
+	public static final int m_tirada = 10;
+	public static final int m_pag = 11;
+	public static final int m_fp = 12;
+	public static final int m_paper = 13;
+	public static final int m_ctp = 14;
+	public static final int m_imp = 15;
+	public static final int m_enc = 16;
+	public static final int m_alc = 17;
+	public static final int m_gll = 18;
+	public static final int m_dse = 19;
+	public static final int m_mae = 20;
+	public static final int m_pathComandaPdf = 21;
+	public static final int m_ordreLiniaRuta = 22;
+
+	private final MyJTextField m_jtext;
+	private boolean m_color;
+
+	// --------------------- Constructors -------------------------------------
+	public JTableLinies() {
+		super();
+		this.m_jtext = null;
+		this.configuraRenderers();
+		ConfigurarColumnes();
+		addClickListener();
+
+	}
+
+	public JTableLinies(MyJTextField jtext) {
+		super();
+		m_jtext = jtext;
+		this.configuraRenderers();
+		ConfigurarColumnes();
+		addClickListener();
+	}
+
+	// ------------------------ Modificadors ----------------------------------
+
+	public void AfegirFila(Object p_capcelera) {
+		BuidarFila();
+		OrderLiniaRutaPNavison l_linia = (OrderLiniaRutaPNavison) p_capcelera;
+		m_fila[m_pla] = false;
+		m_fila[m_com] = l_linia.getIdComanda();
+		m_fila[m_part] = l_linia.getParte();
+		m_fila[m_lan] = l_linia.getM_nI_Num_Orden_Produccion_o();
+		m_fila[m_capcelera] = l_linia.getDescription();
+		m_fila[m_dataUltimCanvi] = l_linia.getDataUltimCanvi();// l_linia.m_nI_Identificador_Tiratge_l;
+		m_fila[m_dataDataJobTicket] = l_linia.getDataJobTicket();// l_linia.getM_nI_Nom_Maquina_l();
+		m_fila[m_tir] = l_linia.m_nI_Identificador_Tiratge_l;
+		m_fila[m_maq] = l_linia.getM_nI_Nom_Maquina_l();
+		m_fila[m_dh] = l_linia.getDataHora();
+		m_fila[m_tirada] = l_linia.getTirada();
+		m_fila[m_pag] = l_linia.getM_nI_No_Planes_Totals_Tiratge_l();
+		m_fila[m_fp] = l_linia.getFormatPlegat();
+		m_fila[m_paper] = l_linia.getPaper();
+		m_fila[m_ctp] = l_linia.getM_ctp();
+		m_fila[m_imp] = l_linia.getM_imp();
+		m_fila[m_enc] = l_linia.getM_enc();
+		m_fila[m_alc] = l_linia.getM_alc();
+		m_fila[m_gll] = l_linia.getM_gll();
+		m_fila[m_dse] = l_linia.getM_dse();
+		m_fila[m_mae] = l_linia.getM_mae();
+		m_fila[m_pathComandaPdf] = l_linia.getPathPdf();
+		m_fila[m_ordreLiniaRuta] = l_linia;
+		m_model.addRow(m_fila);
+	}
+
+	public void activateColorBackground() {
+		this.m_color = true;
+	}
+
+	// MTD PRV
+	@Override
+	protected void ConfigurarTotalColumnes() {
+		TOTAL_COLUMNES = 23;
+	}
+
+	@Override
+	protected DefaultTableModel CrearModel() {
+		m_fila[m_pla] = "Pla.";
+		m_fila[m_com] = "Com.";
+		m_fila[m_part] = "Part.";
+		m_fila[m_capcelera] = "Capçelera";
+		m_fila[m_dataUltimCanvi] = "Dta.ùlt.modf.";// l_linia.m_nI_Identificador_Tiratge_l;
+		m_fila[m_dataDataJobTicket] = "Dta.job.ticket";// l_linia.getM_nI_Nom_Maquina_l();
+		m_fila[m_tir] = "Tir.";
+		m_fila[m_maq] = "Màq.";
+		m_fila[m_dh] = "D\\H Interiors o Covertes";
+		m_fila[m_tirada] = "Tirada";
+		m_fila[m_pag] = "Pàg.";
+		m_fila[m_fp] = "F\\P";
+		m_fila[m_paper] = "Paper";
+
+		m_fila[m_ctp] = "CTP";
+		m_fila[m_imp] = "IMP";
+
+		m_fila[m_enc] = "ENC";
+		m_fila[m_alc] = "ALÇ.";
+
+		m_fila[m_gll] = "GLL";
+		m_fila[m_dse] = "DSE";
+
+		m_fila[m_mae] = "MAE";
+		m_fila[m_pathComandaPdf] = "PathPdf"; // amagat
+		m_fila[m_lan] = "LAN"; // amagat
+		m_fila[m_ordreLiniaRuta] = "OrdreLiniaRuta"; // amagat
+		DefaultTableModel l_model = new DefaultTableModel(m_fila, 0) {
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				switch (columnIndex) {
+				case m_pla:
+					return Boolean.class;
+				case m_tir:
+					return Integer.class;
+				case m_ordreLiniaRuta:
+					return OrderLiniaRutaPNavison.class;
+				default:
+					return String.class;
+				}
+
+			};
+
+			public boolean isCellEditable(int p_row, int p_col) {
+				return false;
+			}
+
+			public void setValueAt(Object p_obj, int p_row, int p_col) {
+				super.setValueAt(p_obj, p_row, p_col);
+			}
+
+			public Object getValueAt(int p_row, int p_col) {
+				return (super.getValueAt(p_row, p_col));
+			}
+
+			@Override
+			public int getColumnCount() {
+				return super.getColumnCount();
+			}
+
+		};
+		m_model = l_model;
+		return l_model;
+	}
+
+	public void buidarTaula() {
+		((DefaultTableModel) this.getModel()).setRowCount(0);
+	}
+
+	@Override
+	protected void ConfigurarColumnes() {
+		this.setBackground(Color.white);
+
+		int l_max = 40;
+		int l_min = 20;
+
+		int amagat_height = 30;
+		int amagat_width = 0;
+
+		getColumnModel().getColumn(m_pla).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_pla).setMinWidth(l_min);
+		getColumnModel().getColumn(m_pla).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_part).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_part).setMinWidth(l_min);
+		getColumnModel().getColumn(m_part).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_com).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_com).setMinWidth(l_min);
+		getColumnModel().getColumn(m_com).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_tir).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_tir).setMinWidth(l_min);
+		getColumnModel().getColumn(m_tir).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_maq).setPreferredWidth(150);
+		getColumnModel().getColumn(m_maq).setMinWidth(20);
+		getColumnModel().getColumn(m_maq).setMaxWidth(150);
+
+		getColumnModel().getColumn(m_ctp).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_ctp).setMinWidth(l_min);
+		getColumnModel().getColumn(m_ctp).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_imp).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_imp).setMinWidth(l_min);
+		getColumnModel().getColumn(m_imp).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_enc).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_enc).setMinWidth(l_min);
+		getColumnModel().getColumn(m_enc).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_alc).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_alc).setMinWidth(l_min);
+		getColumnModel().getColumn(m_alc).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_gll).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_gll).setMinWidth(l_min);
+		getColumnModel().getColumn(m_gll).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_dse).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_dse).setMinWidth(l_min);
+		getColumnModel().getColumn(m_dse).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_mae).setPreferredWidth(l_max);
+		getColumnModel().getColumn(m_mae).setMinWidth(l_min);
+		getColumnModel().getColumn(m_mae).setMaxWidth(l_max);
+
+		getColumnModel().getColumn(m_pag).setPreferredWidth(l_max + 5);
+		getColumnModel().getColumn(m_pag).setMinWidth(l_min + 5);
+		getColumnModel().getColumn(m_pag).setMaxWidth(l_max + 5);
+
+		int sum = 20;
+		getColumnModel().getColumn(m_fp).setPreferredWidth(l_max + sum);
+		getColumnModel().getColumn(m_fp).setMinWidth(l_min + sum);
+		getColumnModel().getColumn(m_fp).setMaxWidth(l_max + sum);
+
+		getColumnModel().getColumn(m_tirada).setPreferredWidth(l_max + sum);
+		getColumnModel().getColumn(m_tirada).setMinWidth(l_min + sum);
+		getColumnModel().getColumn(m_tirada).setMaxWidth(l_max + sum);
+
+		getColumnModel().getColumn(m_lan).setPreferredWidth(l_max + 50);
+		getColumnModel().getColumn(m_lan).setMinWidth(l_min + 50);
+		getColumnModel().getColumn(m_lan).setMaxWidth(l_max + 50);
+		////////////// ------ /////////
+
+		getColumnModel().getColumn(m_pla).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_pla).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_pla).setMaxWidth(amagat_width);
+
+		getColumnModel().getColumn(m_pathComandaPdf).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_pathComandaPdf).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_pathComandaPdf).setMaxWidth(amagat_width);
+
+		getColumnModel().getColumn(m_ordreLiniaRuta).setPreferredWidth(amagat_height);
+		getColumnModel().getColumn(m_ordreLiniaRuta).setMinWidth(amagat_width);
+		getColumnModel().getColumn(m_ordreLiniaRuta).setMaxWidth(amagat_width);
+
+		/// ----------------- DATAS ---------------------///
+		int aux = 4;
+		getColumnModel().getColumn(m_dh).setPreferredWidth(l_max * aux);
+		getColumnModel().getColumn(m_dh).setMinWidth(l_min * aux);
+		getColumnModel().getColumn(m_dh).setMaxWidth(l_max * aux);
+
+		getColumnModel().getColumn(m_dataDataJobTicket).setPreferredWidth(l_max * aux);
+		getColumnModel().getColumn(m_dataDataJobTicket).setMinWidth(l_min * aux);
+		getColumnModel().getColumn(m_dataDataJobTicket).setMaxWidth(l_max * aux);
+
+		getColumnModel().getColumn(m_dataUltimCanvi).setPreferredWidth(l_max * aux);
+		getColumnModel().getColumn(m_dataUltimCanvi).setMinWidth(l_min * aux);
+		getColumnModel().getColumn(m_dataUltimCanvi).setMaxWidth(l_max * aux);
+
+		getColumnModel().getColumn(m_paper).setPreferredWidth(l_max * aux);
+		getColumnModel().getColumn(m_paper).setMinWidth(l_min * aux);
+		getColumnModel().getColumn(m_paper).setMaxWidth(l_max * aux);
+
+	}
+
+	@Override
+	protected void configuraRenderers() {
+		setDefaultRenderer(String.class, new StringRendererTaulaLinies(m_jtext));
+		setDefaultRenderer(Integer.class, new IntegerRendererLinies());
+	}
+
+	private void addClickListener() {
+		JTableLinies l_context = this;
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					int l_table_row = l_context.rowAtPoint(e.getPoint());
+					int l_table_col = l_context.columnAtPoint(e.getPoint());
+					int l_model_row = l_context.convertRowIndexToModel(l_table_row);
+					showInfo(l_model_row, l_table_col);
+				}
+			}
+		});
+	}
+
+	private void showInfo(int row, int col) {
+		if (col == m_com) {
+			mostraComanda(row);
+		}
+
+		if (col == m_part) {
+			mostraFitxa(row);
+		}
+
+		if (col == m_capcelera) {
+			mostraLogsModf(row);
+		}
+
+		OrderLiniaRutaPNavison order = (OrderLiniaRutaPNavison) getModel().getValueAt(row, m_ordreLiniaRuta);
+
+	}
+
+	private void mostraLogsModf(int p_row) {
+		OrderLiniaRutaPNavison order = (OrderLiniaRutaPNavison) getModel().getValueAt(p_row, m_ordreLiniaRuta);
+		JDialogsLogsLinies.getInstance(order).activate();
+	}
+
+	private void mostraComanda(int row) {
+		String l_path = this.getModel().getValueAt(row, m_pathComandaPdf).toString();
+		if (!l_path.equals(" ")) {
+			try {
+				File l_file = new File(l_path.replace("servidornavision", System.getProperty("ipNavision")));
+				Desktop.getDesktop().browse(new URI(l_file.toURI().toString().replace("file:////", "file://")));
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this,
+						"<html><font size = 4><b>Aquesta comanda no es pot obrir!</b></font></html>");
+			}
+			System.gc();
+		} else {
+			System.out.println("Path is empty");
+		}
+	}
+
+	private void mostraFitxa(int row) {
+		FitxaTecnicaHTMLHeidelberg fitxa = new FitxaTecnicaHTMLHeidelberg();
+		String l_lan = this.getModel().getValueAt(row, m_lan).toString();
+		ControllerAgenda l_controller = ControllerAgenda.getInstance();
+		OrdreProduccioFitxaTecnica l_ordre = l_controller.getOrderFitxaTecnica(l_lan);
+		fitxa.ActualitzarFitxaTecnica(l_ordre);
+	}
+
+}

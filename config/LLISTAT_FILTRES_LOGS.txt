@@ -1,0 +1,17 @@
+------- FILTRES PER LA SENTENCIA LOG -- fitxer: Sentencias.java -- 
+-Format filtres:
+-	 --> %xxxxxx% per << LIKE >>. Ej: LIKE '%Ampla%' o LIKE '%Ampla' o LIKE 'Ampla%'
+-	 --> Entrada normal << = >> Ej: NomCamp = 'Planes Publicació'
+------------------------------------------------------------------
+Enquadernat 
+Mida Pàgina
+Planes Publicació
+Distribució de tiratges
+Quantitat total tiratges 
+%Ampla%
+%Paper% 
+%Quantitat planes tiratges%
+%Màquina% 
+%Plegat Komori%
+%Planes del tiratge%
+%Pestanya%

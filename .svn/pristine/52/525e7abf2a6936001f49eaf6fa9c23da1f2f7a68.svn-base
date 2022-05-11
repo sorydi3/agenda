@@ -1,0 +1,568 @@
+package agendaproduccio.models.entitatsbddAgenda.model;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import agendaproduccio.utils.Semaphor;
+
+public class OrderLiniaRutaPNavison {
+	public enum Tipus {
+		IMPRESSIO, RCTP, ENCART, GUILL, TDIGITAL, ALC, IMPREVISTOS, FLEJAR, RECOLL, ALTRES, EXTERIOR, MAE, DSE
+	}
+
+	public enum Colors {
+		CHOCO, GREEN, RED, YELLOW, WHITE
+	}
+
+	// ----- COLUMNES ORDER_P_NAVISION
+	private List<LogsModificacions> m_modfLinia;
+
+	public String m_nI_Num_Orden_Produccion_o;
+	public String m_nI_Descripcion_2_o;
+	public String m_nI_Data_Prevista_Original_o;
+	public String m_nI_Hora_Prevista_Original_o;
+	public String m_nI_Ample_Bobina_o;
+	public boolean m_terminada_Navision_o;
+	public String m_uI_Estado_CP_o;
+	public boolean m_nM_Repas_Informacio_o;
+	public boolean m_numComandes_o;
+	public boolean m_signada_o;
+	public String m_nI_Data_Prevista_Cobertes_o;
+	public String m_nI_Hora_Prevista_Cobertes_o;
+	public Calendar m_DataPrevistaInterior_o, m_DataPrevistaCobertes_o;
+	public Calendar m_DataJobTicketFet_o;
+	// ----- COLUMNES TAULA RUTA_ORDER_P_NAVISION
+
+	public String m_uI_Estado_r;
+	public String m_NI_Num_Centro_Trabajo_r;
+
+	// ----- COLUMNES TAULA LINIA_ORDER_P_NAVISION
+	public int m_IdLinia_l;
+	public String m_nI_Num_Orden_Produccion_l;
+	public int m_nI_Identificador_Tiratge_l;
+	public String m_nI_Cantidad_l;
+	public String m_nI_No_Planes_Totals_Tiratge_l;
+	public String m_nI_Format_Tiratge_l;
+	public String m_nI_Plegat_Tiratge_l;
+	public String m_nI_Nom_Maquina_l;
+	public String m_nI_Codi_Grup_Producto_l;
+	public boolean m_planificat_l;
+	public int m_uI_Id_Lin_Ordre_P_Navision_l;
+	public boolean m_planificat_Manipulat_Extern_l;
+	public String m_dataEntregaManipuladorExtern_l;
+	public String m_nI_Tipus_Papel_Bobina_Entera_1_l;
+	public String m_nI_Tipus_Papel_Bobina_Entera_2_l;
+	public String m_nI_Tipus_Papel_Bobina_Entera_3_l;
+	public String m_qualitatPaperMaquinaFulla_l;
+	public String m_CaraODorsMaquinaFulla_l;
+	public String m_GramatgePaperMaquinaFulla_l;
+	public String m_tipusProducteMaquinaFulla_l;
+	private Semaphor m_semaphoreMutex;
+
+	// COLUMNES TAULA COMANDES
+	public int m_idComanda_c;
+	public String m_Path_c;
+
+	private Tipus m_tipus;
+	private String m_ctp, m_imp, m_enc, m_alc, m_dse, m_mae, m_gll;
+	// public String
+
+	private SimpleDateFormat m_format;
+
+	public OrderLiniaRutaPNavison() {
+		m_semaphoreMutex = new Semaphor(1);
+		this.setDefault();
+	}
+
+	public OrderLiniaRutaPNavison(Tipus p_tipus, String p_ordentProduccio) {
+		this.setDefault();
+		this.m_tipus = p_tipus;
+		this.m_nI_Num_Orden_Produccion_o = p_ordentProduccio;
+	}
+
+	public String getNLogs() {
+		m_semaphoreMutex.acquire();
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html>");
+		builder.append("<b>");
+		builder.append(m_nI_Descripcion_2_o);
+		builder.append("</b>");
+		builder.append(" | Dta últim canvi: ");
+		builder.append("<b> ");
+		builder.append(getDataUltimCanvi());
+		builder.append("</b>");
+		int n = 3;
+		if (m_modfLinia.size() > n) {
+			for (int i = 0; i < n; i++) {
+				builder.append(m_modfLinia.get(i));
+			}
+		} else {
+			m_modfLinia.forEach((log) -> builder.append(log));
+		}
+		builder.append("</html>");
+		m_semaphoreMutex.releaseConection();
+		return builder.toString();
+	}
+
+	public void setDefault() {
+		// COLUMNES TAULA ORDER_P_NAVISION
+		m_modfLinia = new Vector<LogsModificacions>();
+		m_format = new SimpleDateFormat("EEE,d MMM yyyy HH:mm");
+		m_nI_Num_Orden_Produccion_o = "";
+		m_nI_Descripcion_2_o = "";
+		m_nI_Data_Prevista_Original_o = "";
+		m_nI_Hora_Prevista_Original_o = "";
+		m_nI_Ample_Bobina_o = "";
+		m_terminada_Navision_o = false;
+		m_uI_Estado_CP_o = "";
+		m_nM_Repas_Informacio_o = false;
+		m_numComandes_o = false;
+		m_signada_o = false;
+		m_nI_Data_Prevista_Cobertes_o = "";
+		m_nI_Hora_Prevista_Cobertes_o = "";
+
+		// ----- COLUMNES TAULA RUTA_ORDER_P_NAVISION
+
+		m_uI_Estado_r = "";
+
+		// ----- COLUMNES TAULA LINIA_ORDER_P_NAVISION
+		m_nI_Num_Orden_Produccion_l = "";
+		m_nI_Identificador_Tiratge_l = 0;
+		m_nI_Cantidad_l = "";
+		m_nI_No_Planes_Totals_Tiratge_l = "";
+		m_nI_Format_Tiratge_l = "";
+		m_nI_Plegat_Tiratge_l = "";
+		m_nI_Nom_Maquina_l = "";
+		m_nI_Codi_Grup_Producto_l = "";
+		m_planificat_l = false;
+		m_uI_Id_Lin_Ordre_P_Navision_l = 0;
+		m_dataEntregaManipuladorExtern_l = "";
+		m_planificat_Manipulat_Extern_l = false;
+		m_nI_Tipus_Papel_Bobina_Entera_1_l = "";
+		m_nI_Tipus_Papel_Bobina_Entera_2_l = "";
+		m_nI_Tipus_Papel_Bobina_Entera_3_l = "";
+		m_qualitatPaperMaquinaFulla_l = "";
+		m_NI_Num_Centro_Trabajo_r = "";
+		m_CaraODorsMaquinaFulla_l = "";
+		m_GramatgePaperMaquinaFulla_l = "";
+		m_tipusProducteMaquinaFulla_l = "";
+
+		// COLUMNES TAULA COMANDES
+		m_idComanda_c = 0;
+		m_Path_c = "";
+
+		// ------- -------
+
+		m_ctp = "";
+		m_imp = "";
+		m_enc = "";
+		m_alc = "";
+		m_dse = "";
+		m_mae = "";
+		m_gll = "";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(m_nI_Num_Orden_Produccion_o, m_tipus);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof OrderLiniaRutaPNavison))
+			return false;
+		OrderLiniaRutaPNavison other = (OrderLiniaRutaPNavison) obj;
+		return other.m_tipus == this.m_tipus && m_nI_Num_Orden_Produccion_o.equals(other.m_nI_Num_Orden_Produccion_o);
+
+	}
+
+	public void setTipus() {
+		switch (this.m_nI_Codi_Grup_Producto_l) {
+		case "PR-SUB.IM":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-FLEJAR":
+			this.m_tipus = Tipus.FLEJAR;
+			break;
+		case "PR-TDIG":
+			this.m_tipus = Tipus.TDIGITAL;
+			break;
+		case "PR-AR.AL":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-IMPREV":
+			this.m_tipus = Tipus.IMPREVISTOS;
+			break;
+		case "PR-RCTP":
+			this.m_tipus = Tipus.RCTP;
+			break;
+		case "PR-ALÇ":
+			this.m_tipus = Tipus.ALC;
+			break;
+		case "PR-AR.IM":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-RECOLL":
+			this.m_tipus = Tipus.RECOLL;
+			break;
+		case "PR-IMPR":
+			this.m_tipus = Tipus.IMPRESSIO;
+			break;
+		case "PR-SUB.MAN":
+			this.m_tipus = Tipus.MAE;
+			break;
+		case "PR-PREP.BO":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-GUILL":
+			this.m_tipus = Tipus.GUILL;
+			break;
+		case "PR-DSENC":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-MMAN":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-ENC":
+			this.m_tipus = Tipus.ENCART;
+			break;
+		case "PR-REFDIS":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-AR.PLE":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		case "PR-PLEGAR":
+			this.m_tipus = Tipus.ALTRES;
+			break;
+		default:
+			this.m_tipus = Tipus.ALTRES;
+			break;
+
+		}
+	}
+
+	public boolean esImpressio() {
+		return this.m_nI_Codi_Grup_Producto_l.equalsIgnoreCase("PR-IMPR");
+	}
+
+	public String getPaper() {
+		StringBuilder l_builder = new StringBuilder();
+
+		if (this.matcher("KOMORI?", this.m_nI_Nom_Maquina_l) || this.matcher("KBA?", this.m_nI_Nom_Maquina_l)) {
+			String l_paper = "";
+			if (!this.m_nI_Tipus_Papel_Bobina_Entera_1_l.isEmpty()) {
+				l_paper = this.m_nI_Tipus_Papel_Bobina_Entera_1_l;
+			} else if (!this.m_nI_Tipus_Papel_Bobina_Entera_2_l.isEmpty()) {
+				l_paper = this.m_nI_Tipus_Papel_Bobina_Entera_2_l;
+			} else {
+				l_paper = this.m_nI_Tipus_Papel_Bobina_Entera_3_l;
+			}
+			l_builder.append(l_paper).append("");
+			String bobina = this.m_nI_Ample_Bobina_o;
+			String str_aux = bobina;
+			if (!l_paper.isEmpty()) {
+				str_aux = bobina.substring(bobina.indexOf(' ') != -1 ? bobina.indexOf(' ') : 0, bobina.length());
+			}
+			l_builder.append(str_aux);
+		} else if (this.matcher("HEIDELBERG?", this.m_nI_Nom_Maquina_l)) {
+			l_builder.append(this.m_qualitatPaperMaquinaFulla_l).append("_").append(this.m_GramatgePaperMaquinaFulla_l);
+		} else {
+
+		}
+
+		return l_builder.toString();
+	}
+
+	public String getData() {
+		String l_dataFormated = " ";
+		if (m_DataPrevistaCobertes_o != null) {
+			l_dataFormated = m_format.format(m_DataPrevistaCobertes_o.getTime());
+		} else {
+			l_dataFormated = m_format.format(m_DataPrevistaInterior_o.getTime());
+		}
+		return l_dataFormated;
+	}
+	
+	
+	public Calendar getDataCalendar() {
+		Calendar l_data = null;
+		if (m_DataPrevistaCobertes_o != null) {
+			l_data = m_DataPrevistaCobertes_o;
+		} else {
+			l_data = m_DataPrevistaInterior_o;
+		}
+		return l_data;
+	}
+
+	public String getDataCovertes() {
+		String l_dataFormated = " ";
+		if (m_DataPrevistaCobertes_o != null) {
+			l_dataFormated = m_format.format(m_DataPrevistaCobertes_o.getTime());
+		}
+		return l_dataFormated;
+	}
+
+	public String getDataInteriors() {
+		String l_dataFormated = " ";
+		if (m_DataPrevistaInterior_o != null) {
+			l_dataFormated = m_format.format(m_DataPrevistaInterior_o.getTime());
+		}
+		return l_dataFormated;
+	}
+
+	public String getDataJobTicket() {
+		String l_dataFormated = " ";
+		if (m_DataJobTicketFet_o != null) {
+			l_dataFormated = m_format.format(m_DataJobTicketFet_o.getTime());
+		}
+		return l_dataFormated;
+	}
+
+	public String getDataUltimCanvi() {
+		Calendar l_data = getDataUltimCanviCalendar();
+		String l_strData = "";
+		if (l_data != null)
+			l_strData = m_format.format(l_data.getTime());
+		return l_strData;
+	}
+
+	public Calendar getDataUltimCanviCalendar() {
+		Calendar l_data = m_modfLinia.size() > 0 ? m_modfLinia.get(0).getDataCalendar() : null;
+		return l_data;
+	}
+
+	public String getMHora() {
+		return m_nI_Hora_Prevista_Original_o;
+	}
+
+	public String getDataHora() {
+		return new StringBuilder().append(this.getData()).append(" ").append("").toString();
+
+	}
+
+	private boolean matcher(String p_regex, String p_str) {
+		Pattern l_p = Pattern.compile(p_regex);
+		Matcher l_m = l_p.matcher(p_str);
+		return l_m.find();
+	}
+
+	public String getM_uI_Estado_r() {
+		return m_uI_Estado_r.length() > 4 ? m_uI_Estado_r.substring(0, 4) + "." : m_uI_Estado_r;
+	}
+
+	public int getM_nI_Identificador_Tiratge_l() {
+		return m_nI_Identificador_Tiratge_l;
+	}
+
+	public String getDescription() {
+		return formaHTML(this.m_nI_Descripcion_2_o);
+	}
+
+	public String formaHTML(String content) {
+		StringBuilder builder = new StringBuilder();
+		String l_maquina = "";
+		l_maquina += this.m_tipusProducteMaquinaFulla_l.trim().equals("") ? ""
+				: " - " + this.m_tipusProducteMaquinaFulla_l;
+		builder.append("<html>").append(content).append("<b>").append(l_maquina).append("</b>").append("</html>");
+		return builder.toString();
+	}
+
+	public String getM_nI_Nom_Maquina_l() {
+		String l_str = m_nI_Nom_Maquina_l;
+		return l_str;
+	}
+
+	public String getTirada() {
+		final DecimalFormat decimalFormat = new DecimalFormat("###,###,###",
+				DecimalFormatSymbols.getInstance(Locale.GERMANY));
+		BigDecimal l_bd = new BigDecimal(Double.parseDouble(this.m_nI_Cantidad_l) * 1000);
+		BigDecimal str = l_bd.setScale(0, BigDecimal.ROUND_HALF_EVEN);
+		return String.valueOf(decimalFormat.format((int) str.doubleValue()));
+	}
+
+	public String getM_nI_Num_Orden_Produccion_o() {
+		return this.m_nI_Num_Orden_Produccion_o;
+	}
+
+	public String getM_nI_Data_Prevista_Original_o() {
+		return this.m_nI_Data_Prevista_Original_o;
+	}
+
+	public String getM_nI_Hora_Prevista_Original_o() {
+		return this.m_nI_Hora_Prevista_Original_o;
+	}
+
+	public boolean isLanzada() {
+		return this.m_uI_Estado_CP_o.equalsIgnoreCase("Lanzada");
+	}
+
+	public Colors GetEstat() {
+		if (isLanzada() && isComandes() && !isSignada()) {
+			return Colors.RED;
+		} else if (isLanzada()) {
+			return Colors.GREEN;
+		} else if (isComandes() && !isSignada()) {
+			return Colors.YELLOW;
+		} else if (isSignada() && !isLanzada()) {
+			return Colors.CHOCO;
+		}
+		return Colors.WHITE;
+	}
+
+	public boolean isComandes() {
+		return this.m_numComandes_o;
+	}
+
+	public boolean isSignada() {
+		return this.m_signada_o;
+	}
+
+	public String getM_nI_Num_Orden_Produccion_l() {
+		return this.m_nI_Num_Orden_Produccion_l;
+	}
+
+	public String getM_nI_No_Planes_Totals_Tiratge_l() {
+		return this.m_nI_No_Planes_Totals_Tiratge_l;
+	}
+
+	public String getM_nI_Format_Tiratge_l() {
+		return this.m_nI_Format_Tiratge_l;
+	}
+
+	public String getM_nI_Plegat_Tiratge_l() {
+		return this.m_nI_Plegat_Tiratge_l;
+	}
+
+	public String getFormatPlegat() {
+		StringBuilder l_builder = new StringBuilder();
+		l_builder.append(m_nI_Plegat_Tiratge_l).append(m_nI_Format_Tiratge_l.trim() == "" ? ""
+				: m_nI_Plegat_Tiratge_l.trim() != m_nI_Format_Tiratge_l.trim() ? "" : "/" + m_nI_Format_Tiratge_l);
+		return l_builder.toString();
+	}
+
+	public void setColumn(Tipus tipus, String m_uI_Estado_r2) {
+		switch (tipus) {
+		case ENCART: { // #Tiratge =0 or #Tiratge>=90
+			this.m_enc = m_uI_Estado_r2;
+		}
+			break;
+		case RCTP:
+			this.m_ctp = m_uI_Estado_r2;
+			break;
+
+		case GUILL: // Tiratge
+			this.m_gll = m_uI_Estado_r2;
+			break;
+
+		case IMPRESSIO:
+			this.m_imp = this.m_uI_Estado_r;
+			break;
+
+		case MAE: { // #Tiratge == 0 or #Tiratge>=90
+			this.m_mae = "Ext.";
+		}
+			break;
+
+		case DSE: // Tiratge
+			break;
+
+		case ALC: { // #Tiratge == 0 or #Tiratge>=90
+			this.m_alc = m_uI_Estado_r2;
+		}
+			break;
+
+		default:
+			break;
+		}
+		// IMPRESSIO,RCTP,ENCART,GUILL,TDIGITAL,ALC,IMPREVISTOS,FLEJAR,RECOLL,ALTRES,EXTERIOR,
+		// MAE, DSE
+	}
+
+	public String getM_ctp() {
+		return m_ctp;
+	}
+
+	public String getM_imp() {
+		return m_imp.substring(0, 4) + ".";
+	}
+
+	public String getM_enc() {
+		return m_enc;
+	}
+
+	public String getM_alc() {
+		return m_alc;
+	}
+
+	public String getM_dse() {
+		return m_dse;
+	}
+
+	public String getM_mae() {
+		return m_mae;
+	}
+
+	public Tipus getM_tipus() {
+		return m_tipus;
+	}
+
+	public String getM_gll() {
+		return this.m_gll;
+	}
+
+	public String getIdComanda() {
+		return this.m_idComanda_c == 0 ? " " : "Com.";
+	}
+
+	public String getParte() {
+		String str = "Part.";
+		return str;
+	}
+
+	public String getPathPdf() {
+		return this.m_Path_c;
+	}
+
+	public int getIdLinia() {
+		return this.m_IdLinia_l;
+	}
+
+	public void afegirModf(LogsModificacions modf) {
+		this.m_modfLinia.add(modf);
+	}
+
+	public List<LogsModificacions> getLogs() {
+		return m_modfLinia;
+	}
+
+	public String getToolTipDataHora() {
+		StringBuilder l_builder = new StringBuilder();
+		l_builder.append("<html>");
+		l_builder.append("<b>").append("Data Covertes: ").append("</b>").append(getDataCovertes());
+		l_builder.append("<br>");
+		l_builder.append("<b>").append("Data Interiors: ").append("</b>").append(getDataInteriors());
+		l_builder.append("</html>");
+		return l_builder.toString();
+	}
+
+	public boolean esMenorDtaJobTicket() {
+		Calendar l_data = getDataUltimCanviCalendar();
+		if (l_data != null) {
+			return m_DataJobTicketFet_o.before(getDataUltimCanviCalendar());
+		}
+		return false;
+	}
+
+}
